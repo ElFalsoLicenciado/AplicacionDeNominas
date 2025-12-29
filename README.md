@@ -11,3 +11,17 @@ La ultima vez que lo hice fue de 3 semanas 1-21 Dic y lo que sacaba de lo que se
 
 
 # Cosas por hacer:
+
+1. Entregar un PDF con el siguiente formato:    
+   Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
+   Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
+   Día/Mes/Año: Entrada-Salida  Horas  Sueldo
+
+2. Dependiendo del número de semenas del periodo, hacer un tipo tabla semejante a el widget del calendario.
+
+        
+    ![1766980567245](image/README/1766980567245.png)
+
+3. Guardar de alguna forma cada usuario y sus registros de chamba en JSON.
+4. Poder crear, editar, leer y borrar usuarios (SOFT DELETE).
+5. 
