@@ -35,4 +35,36 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 3. Guardar de alguna forma cada usuario y sus registros de chamba en JSON.
 4. Poder crear, editar, leer y borrar usuarios (SOFT DELETE).
-5. 
+
+src/
+└── main/
+    └── java/
+        └── com/
+            └── albalatro/
+                │
+                ├── Main.java                <-- Punto de entrada (extiende Application)
+                │
+                ├── 📦 controller/           <-- EL CEREBRO (Conecta FXML con Java)
+                │   ├── MainController.java
+                │   └── EmpleadoDetalleController.java (Lógica del calendario)
+                │
+                ├── 📦 model/                <-- LOS DATOS (Lógica pura, sin UI)
+                │   ├── Empleado.java        <-- POJO (Nombre, ID, pagoPorHora)
+                │   └── RegistroHoras.java   <-- Clase para manejar las fechas/horas
+                │
+                └── 📦 service/              <-- LA MAQUINARIA (Cálculos y JSON)
+                    ├── JsonService.java     <-- Usa Jackson para guardar/leer .json
+                    └── NominaService.java   <-- Calcula sueldos e impuestos
+
+src/
+└── main/
+    └── resources/
+        ├── 🖼️ view/                 <-- TUS PANTALLAS (.fxml)
+        │   ├── MainView.fxml        (Lista de empleados)
+        │   └── EmpleadoView.fxml    (Vista individual con Calendario)
+        │
+        ├── 🎨 css/                  <-- ESTILOS
+        │   └── styles.css           (Para poner bonitos los cuadritos del calendario)
+        │
+        └── 📷 images/               <-- ICONOS
+                └── user_placeholder.png
