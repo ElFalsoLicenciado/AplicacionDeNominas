@@ -1,4 +1,4 @@
-package com.albalatro.Controller;
+package com.albalatro.controller;
 
 public class placeholder {
     

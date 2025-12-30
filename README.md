@@ -53,9 +53,9 @@ src/
                 │   ├── Empleado.java        <-- POJO (Nombre, ID, pagoPorHora)
                 │   └── RegistroHoras.java   <-- Clase para manejar las fechas/horas
                 │
-                └── 📦 service/              <-- LA MAQUINARIA (Cálculos y JSON)
-                    ├── JsonService.java     <-- Usa Jackson para guardar/leer .json
-                    └── NominaService.java   <-- Calcula sueldos e impuestos
+                └── 📦 service/              <-- LA MAQUINARIA (Cálculos y JSON).
+                    ├── JsonService.java     <-- Usa GSON y JSON simple para guardar/leer .json.
+                    └── NominaService.java   <-- Calcula sueldos e impuestos.
 
 src/
 └── main/
