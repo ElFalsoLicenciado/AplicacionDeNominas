@@ -36,6 +36,7 @@ también muestre las horas de entrada y de salida (de ese día claro)
 3. Guardar de alguna forma cada usuario y sus registros de chamba en JSON.
 4. Poder crear, editar, leer y borrar usuarios (SOFT DELETE).
 
+```text
 src/
 └── main/
     └── java/
@@ -68,3 +69,4 @@ src/
         │
         └── 📷 images/               <-- ICONOS
                 └── user_placeholder.png
+```
