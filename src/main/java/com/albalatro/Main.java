@@ -11,6 +11,6 @@ public class Main {
         System.out.println("albalatro moment");
         // Empleado alberto = new com.albalatro.model.Empleado();
         Utils.innitJSON(FOLDER, JSON);
-        JSONService.setFILE(String.format("%s%s.json",FOLDER, JSON));
+        JSONService.setFILE(String.format("%s/%s.json",FOLDER, JSON));
     }
 }

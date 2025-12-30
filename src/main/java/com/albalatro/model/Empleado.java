@@ -1,6 +1,5 @@
 package com.albalatro.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,21 +18,30 @@ import com.albalatro.utils.Utils;
  *
  * */
 
-public class Empleado implements Serializable{
+public class Empleado implements java.io.Serializable{
     private String nombre;
     private String apellidoP;
     private String apellidoM;
-    private Map<LocalDate, Double> horasRegistradasPorDia = new HashMap<>();
+    private Map<LocalDate, Double> horasRegistradasPorDia;
     private ArrayList<String> observaciones;
 
 
     public Empleado() {}
 
-    public Empleado(String nombre, String apellidoP, String apellidoM, Map<LocalDate, Double> horasRegistradas) {
+    public Empleado(String nombre, String apellidoP, String apellidoM) {
+        this.nombre = nombre;
+        this.apellidoM = apellidoM;
+        this.apellidoP = apellidoP;
+        horasRegistradasPorDia  = new HashMap<>();
+        observaciones = new ArrayList<>();
+    }
+
+    public Empleado(String nombre, String apellidoP, String apellidoM, Map<LocalDate, Double> horasRegistradas, ArrayList<String> observaciones) {
         this.nombre = nombre;
         this.apellidoM = apellidoM;
         this.apellidoP = apellidoP;
         this.horasRegistradasPorDia = horasRegistradas;
+        this.observaciones = observaciones;
     }
     
     
@@ -94,7 +102,16 @@ public class Empleado implements Serializable{
         this.horasRegistradasPorDia = horasRegistradas;
     }
 
-    /** 
+
+    public ArrayList<String> getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(ArrayList<String> observaciones) {
+        this.observaciones = observaciones;
+    }
+
+        /** 
      * @return String
      */
     @Override
@@ -107,5 +124,6 @@ public class Empleado implements Serializable{
                 ", observaciones= '" + Utils.stringArrayToString(observaciones) + '\'' +
                 '}';
     }
+
     
 }
