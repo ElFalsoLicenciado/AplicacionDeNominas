@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("albalatro moment");
         // Empleado alberto = new com.albalatro.model.Empleado();
-        Utils.innitJSON(FOLDER, JSON);
+        Utils.innitStuff(FOLDER, JSON);
         JSONService.setFILE(String.format("%s/%s.json",FOLDER, JSON));
     }
 }
