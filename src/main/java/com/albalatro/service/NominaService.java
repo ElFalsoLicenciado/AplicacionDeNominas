@@ -9,8 +9,10 @@ import java.util.Map;
 
 import com.albalatro.model.Dia;
 import com.albalatro.utils.Utils;
-
 public class NominaService {
+
+    private static final double TARIFA_ENTRE_SEMANA = 40.0;
+    private static final double TARIFA_DOMINGO = 50.0;
     
     public static Map<LocalDate, Double> getHoursWorked(Map<LocalDate, Dia> entriesLog) {
         Map<LocalDate, Double> hoursMap = new HashMap<>();
@@ -39,6 +41,26 @@ public class NominaService {
     }
 
     public static Map<LocalDate, Double> getWage(Map<LocalDate, Double> hoursMap) {
-        
+        Map<LocalDate, Double> wageMap = new HashMap<>();
+
+        for (LocalDate date : hoursMap.keySet()) {
+            Double hours = hoursMap.get(date);
+            Double wage = 0.0;
+
+            //En caso de que sea domingo
+            if (date.getDayOfWeek().getValue() == 7) { // Domingo
+                wage = hours * TARIFA_DOMINGO;
+            } else { // Entre semana
+                wage = hours * TARIFA_ENTRE_SEMANA;
+            }
+
+            //Redondear a dos decimales
+            wage = BigDecimal.valueOf(wage)
+            .setScale(2, RoundingMode.HALF_UP)
+            .doubleValue();
+            wageMap.put(date, wage);
+        }
+
+        return wageMap;
     }
 }
