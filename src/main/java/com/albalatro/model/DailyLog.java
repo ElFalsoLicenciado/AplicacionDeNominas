@@ -1,36 +1,21 @@
 package com.albalatro.model;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-
-/**
- * <h1> Clase {@code DailyLog}</h1>
- * <p> POJO del DailyLog, contiene los siguientes atributos:</p>
- * <ul>
- *     <li> LocalDate {@link #date} : Atributo para guardar la fecha del registro diario. </li>
- *     <li> LocalTime {@link #entryTime} : Atributo para guardar la hora de entrada del empleado en ese día. </li>
- *     <li> LocalTime {@link #exitTime} : Atributo para guardar la hora de salida del empleado en ese día. </li>
- *     <li> Double {@link #hoursWorked} : Atributo para guardar la cantidad de horas trabajadas en ese día. </li>
- * </ul>
- */
 
 //El dailylog ayuda a reducir el uso de tantos mapas y poder condensar la informacion diaria en un solo objeto
 public class DailyLog {
     private LocalDate date;
-    private LocalTime entryTime;
-    private LocalTime exitTime;
-    private Double hoursWorked;
-    private ArrayList<String> observaciones;
-    
-    public DailyLog() {}
+    private ArrayList<Periodo> periodos;
+    private Long totalMinutosTrabajados;
+    private Double totalPagoDia;
 
-    public DailyLog(LocalDate date, LocalTime entryTime, LocalTime exitTime, Double hoursWorked, ArrayList<String> observaciones) {
+    public DailyLog() { }
+
+    public DailyLog(LocalDate date, ArrayList<Periodo> periodos) {
         this.date = date;
-        this.entryTime = entryTime;
-        this.exitTime = exitTime;
-        this.hoursWorked = hoursWorked;
-        this.observaciones = observaciones;
+        this.periodos = periodos;
     }
 
     public LocalDate getDate() {
@@ -41,46 +26,53 @@ public class DailyLog {
         this.date = date;
     }
 
-    public LocalTime getEntryTime() {
-        return entryTime;
+    public ArrayList<Periodo> getPeriodos() {
+        return periodos;
     }
 
-    public void setEntryTime(LocalTime entryTime) {
-        this.entryTime = entryTime;
+    public void setPeriodos(ArrayList<Periodo> periodos) {
+        this.periodos = periodos;
     }
 
-    public LocalTime getExitTime() {
-        return exitTime;
+    public void addPeriodo(Periodo periodo) {
+        this.periodos.add(periodo);
     }
 
-    public void setExitTime(LocalTime exitTime) {
-        this.exitTime = exitTime;
+    public void removePeriodo(Periodo periodo) {
+        this.periodos.remove(periodo);
     }
 
-    public Double getHoursWorked() {
-        return hoursWorked;
+    public void calculateTotalMinutosTrabajados() {
+        Long total = 0L;
+        for (Periodo periodo : periodos) {
+            total += periodo.getMinutosTrabajados();
+        }
+        totalMinutosTrabajados = total;
     }
 
-    public void setHoursWorked(Double hoursWorked) {
-        this.hoursWorked = hoursWorked;
+    public Long getTotalMinutosTrabajados() {
+        calculateTotalMinutosTrabajados();
+        return totalMinutosTrabajados;
     }
 
-    public ArrayList<String> getObservaciones() {
-        return observaciones;
+    public void calculateTotalPagoDia() {
+        if (periodos.isEmpty()) { // no hay periodos
+            totalPagoDia = 0.0;
+        }
+
+        if (date == null) { // la fecha no está establecida
+            totalPagoDia = 0.0;
+        }
+
+        if (date.getDayOfWeek() == DayOfWeek.SUNDAY) { // Domingo
+            totalPagoDia = (getTotalMinutosTrabajados() / 60.0) * 50.0;
+        } else { // Entre semana
+            totalPagoDia = (getTotalMinutosTrabajados() / 60.0) * 40.0;
+        }
     }
 
-    public void setObservaciones(ArrayList<String> observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    @Override
-    public String toString() {
-        return "DailyLog{" +
-                "date=" + date +
-                ", entryTime=" + entryTime +
-                ", exitTime=" + exitTime +
-                ", hoursWorked=" + hoursWorked +
-                ", observaciones=" + observaciones +
-                '}';
+    public Double getTotalPagoDia () {
+        calculateTotalPagoDia();
+        return totalPagoDia;
     }
 }

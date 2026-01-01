@@ -36,4 +36,8 @@ public class Log {
     public void removeDailyLog(LocalDate date) {
         this.logs.remove(date);
     }
+
+    public DailyLog getDailyLog(String date) {
+        return this.logs.get(LocalDate.parse(date));
+    }
 }

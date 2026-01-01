@@ -1,9 +1,6 @@
 package com.albalatro.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import com.albalatro.utils.Utils;
@@ -25,9 +22,6 @@ public class Empleado implements java.io.Serializable{
     private String apellidoP;
     private String apellidoM;
     private Log log;
-    private Map<LocalDate, Dia> entradasYSalidasPorDia;
-    private Map<LocalDate, Double> horasRegistradasPorDia;
-    private Map<LocalDate, Double> salarioPorDia;
     private ArrayList<String> observaciones;
     
     public Empleado() {}
@@ -37,20 +31,16 @@ public class Empleado implements java.io.Serializable{
         this.nombre = nombre;
         this.apellidoM = apellidoM;
         this.apellidoP = apellidoP;
-        entradasYSalidasPorDia = new HashMap<>();
-        horasRegistradasPorDia  = new HashMap<>();
-        salarioPorDia = new HashMap<>();
         observaciones = new ArrayList<>();
     }
-    
-    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Map<LocalDate, Dia> entradasYSalidasPorDia ,Map<LocalDate, Double> horasRegistradas, Map<LocalDate, Double> salarioPorDia, ArrayList<String> observaciones) {
+
+    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log,
+            ArrayList<String> observaciones) {
         this.id = id;
         this.nombre = nombre;
-        this.apellidoM = apellidoM;
         this.apellidoP = apellidoP;
-        this.entradasYSalidasPorDia = entradasYSalidasPorDia;
-        this.horasRegistradasPorDia = horasRegistradas;
-        this.salarioPorDia = salarioPorDia;
+        this.apellidoM = apellidoM;
+        this.log = log;
         this.observaciones = observaciones;
     }
     
@@ -104,44 +94,21 @@ public class Empleado implements java.io.Serializable{
     public void setApellidoM(String apellidoM) {
         this.apellidoM = apellidoM;
     }
-    
-    public Map<LocalDate, Dia> getEntradasYSalidasPorDia() {
-        return entradasYSalidasPorDia;
-    }
-    
-    public void setEntradasYSalidasPorDia(Map<LocalDate, Dia> entradasYSalidasPorDia) {
-        this.entradasYSalidasPorDia = entradasYSalidasPorDia;
-    }
-    
-    /** 
-    * @return Map{@code <LocalDate, Double>}
-    */
-    public Map<LocalDate, Double> getHorasRegistradasPorDia() {
-        return horasRegistradasPorDia;
-    }
-    
-    /** 
-    * @param horasRegistradas
-    */
-    public void setHorasRegistradasPorDia(Map<LocalDate, Double> horasRegistradas) {
-        this.horasRegistradasPorDia = horasRegistradas;
-    }
-    
-    public Map<LocalDate, Double> getSalarioPorDia() {
-        return salarioPorDia;
-    }
-    
-    public void setSalarioPorDia(Map<LocalDate, Double> salarioPorDia) {
-        this.salarioPorDia = salarioPorDia;
-    }
-    
-    
+
     public ArrayList<String> getObservaciones() {
         return observaciones;
     }
     
     public void setObservaciones(ArrayList<String> observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public Log getLog() {
+        return log;
+    }
+
+    public void setLog(Log log) {
+        this.log = log;
     }
     
     /** 
@@ -153,7 +120,6 @@ public class Empleado implements java.io.Serializable{
         "nombre= '" + nombre + '\'' +
         ", apellidoP= '" + apellidoP + '\'' +
         ", apellidoM= '" + apellidoM + '\'' +
-        ", horasRegistradasPorDia= " + horasRegistradasPorDia +
         ", observaciones= '" + Utils.stringArrayToString(observaciones) + '\'' +
         '}';
     }

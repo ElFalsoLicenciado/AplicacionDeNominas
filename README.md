@@ -70,3 +70,16 @@ src/
         └── 📷 images/               <-- ICONOS
                 └── user_placeholder.png
 ```
+
+# Aportes de Cande
+
+Hice un revamp a la clase empleado. 
+Cree las clases `DailyLog`, `Log` y `Periodo`. 
+
+La clase DailyLog es la que gestiona las entradas y salidas de un empleado en un mismo dia. Puede haber varios periodos en un solo dia, por lo que la clase periodo tiene unicamente los tiempos de entrada, salida, y el tiempo total. 
+
+La clase DailyLog tiene un arraylist con los periodos totales, y calcula el total de minutos que se trabajo ese dia, asi que tambien puede calcular el pago del dia.    
+
+La clase Log tiene un mapa `<LocalDate, DailyLog>`, y es el que permitira enlazar todos los DailyLogs a un solo empleado. De igual manera, pretendo a partir de eso poder leer y manipular la informacion de los pagos con el metodo `getDailyLog()`.   
+
+Para poder utilizar esos metodos se hara con los controllers, pero para eso necesito tambien la GUI y poder leer los json
