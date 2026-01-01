@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import com.albalatro.utils.Utils;
 
-
 /** <h1> Clase {@code Empleado}</h1>
 *  <p> POJO del Empleado, contiene los siguientes atributos:</p>
 *  <ul>
@@ -25,11 +24,11 @@ public class Empleado implements java.io.Serializable{
     private String nombre;
     private String apellidoP;
     private String apellidoM;
+    private Log log;
     private Map<LocalDate, Dia> entradasYSalidasPorDia;
     private Map<LocalDate, Double> horasRegistradasPorDia;
     private Map<LocalDate, Double> salarioPorDia;
     private ArrayList<String> observaciones;
-    
     
     public Empleado() {}
     

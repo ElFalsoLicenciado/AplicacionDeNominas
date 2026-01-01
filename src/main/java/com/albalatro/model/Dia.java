@@ -7,11 +7,13 @@ import java.util.ArrayList;
 *  <p> POJO del Dia, contiene los siguientes atributos:</p>
 *  <ul>
 *      <li> LocalDate {@link #fecha} </li>
-*      <li> ArrayList{@code <String>} {@link #entradas}:  Un arreglo que guarda   las horas de entrada del empleado en ese dia.</li>
+*      <li> ArrayList{@code <String>} {@link #entradas}:  Un arreglo que guarda las horas de entrada del empleado en ese dia.</li>
 *  </ul>
-*      <li> ArrayList{@code <String>} {@link #salidas}:  n arreglo que guarda   las horas de salida del empleado en ese dia.</li>
+*      <li> ArrayList{@code <String>} {@link #salidas}:  Un arreglo que guarda las horas de salida del empleado en ese dia.</li>
 *  </ul>
 * */
+
+//TODO: en todo caso, Dia se puede combinar con las clases de Log y DailyLog para gestionar todo lo de un día teniendo en consideracion multiples horas de entrada y multiples horas de salida para un solo empleado
 public class Dia implements java.io.Serializable{
 
     private LocalDate fecha;
