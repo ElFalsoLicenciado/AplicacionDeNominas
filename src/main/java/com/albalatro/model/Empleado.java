@@ -23,6 +23,7 @@ public class Empleado implements java.io.Serializable{
     private String apellidoM;
     private Log log;
     private ArrayList<String> observaciones;
+    private Status status;
     
     public Empleado() {}
     
@@ -32,6 +33,7 @@ public class Empleado implements java.io.Serializable{
         this.apellidoM = apellidoM;
         this.apellidoP = apellidoP;
         observaciones = new ArrayList<>();
+        status = Status.ALTA;
     }
 
     public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log,

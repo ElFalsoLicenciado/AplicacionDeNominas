@@ -97,7 +97,4 @@ public class Utils {
     public static DayOfWeek getDayOfWeek(String name) {
         return daysOfTheWeek.get(name);
     }
-        
-
-    
 }

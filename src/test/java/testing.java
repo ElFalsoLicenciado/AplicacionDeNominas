@@ -126,7 +126,7 @@ public class testing {
 
         logMap.put(date.minusDays(1),day);
         
-        emp1.setEntradasYSalidasPorDia(logMap);
+        //emp1.setEntradasYSalidasPorDia(logMap);
 
         Map<LocalDate, Double> horasMap = NominaService.getHoursWorked(logMap);
 
@@ -134,7 +134,7 @@ public class testing {
         // horasMap.put(LocalDate.of(2005, 12, 31),1.5);
         // horasMap.put(date.minusDays(1),13.0);
         
-        emp1.setHorasRegistradasPorDia(horasMap);
+        //emp1.setHorasRegistradasPorDia(horasMap);
         
         ArrayList<String> observaciones = new ArrayList<>();
         for (int i = 0; i < 3; i++) {

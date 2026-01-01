@@ -1,0 +1,14 @@
+com\albalatro\model\Log.class
+com\albalatro\model\Periodo.class
+com\albalatro\model\DailyLog.class
+com\albalatro\service\JSONService.class
+com\albalatro\model\Empleado.class
+com\albalatro\utils\LocalDateTypeAdapter.class
+com\albalatro\controller\HomeController.class
+com\albalatro\model\Dia.class
+com\albalatro\controller\MainController.class
+com\albalatro\service\NominaService.class
+com\albalatro\Main.class
+com\albalatro\utils\Navigation.class
+com\albalatro\utils\Utils.class
+com\albalatro\model\Status.class
