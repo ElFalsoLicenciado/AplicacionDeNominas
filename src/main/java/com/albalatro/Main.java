@@ -40,6 +40,8 @@ public class Main extends Application {
         Utils.innitStuff(FOLDER, JSON);
         JSONService.setFILE(String.format("%s/%s.json",FOLDER, JSON));
 
+        //TODO: Cargar el objeto salario desde un JSON y a partir de ahi modificar el salario. Posible singleton
+
         launch(args);
     }
 }
