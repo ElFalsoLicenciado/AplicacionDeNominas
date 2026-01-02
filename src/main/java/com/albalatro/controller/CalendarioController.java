@@ -177,6 +177,10 @@ public class CalendarioController {
         celda.setOnMouseEntered(e -> celda.setStyle("-fx-border-color: #aaa; -fx-background-color: #f0f0f0;"));
         celda.setOnMouseExited(e -> celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + finalColor + ";"));
 
+        celda.setOnMouseClicked(event -> {
+            //TODO: Abrir otra view (nueva y no sob♫e el mismo ) para agregar los reportes del dia
+        });
+
         return celda;
     }
 }
