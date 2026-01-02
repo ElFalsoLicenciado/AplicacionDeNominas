@@ -150,26 +150,30 @@ public class CalendarioController {
     }
 
     private VBox crearCeldaDia(int numeroDia, String textoHoras, String colorHex) {
-        VBox celda = new VBox(5);
+        VBox celda = new VBox(2); 
         celda.setAlignment(Pos.TOP_LEFT);
-        celda.setPadding(new javafx.geometry.Insets(5));
+        
+        celda.setPadding(new javafx.geometry.Insets(3));
         
         celda.setMaxHeight(Double.MAX_VALUE); 
-        
         celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + colorHex + ";");
 
-        // Número del día
+        // Número del día 
         Label lblDia = new Label(String.valueOf(numeroDia));
         lblDia.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         
-        // Horas trabajadas
+        // Horas trabajadas 
         Label lblHoras = new Label(textoHoras);
-        lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-size: 12px;"); 
+        // Si hay horas, le ponemos fondo blanco para resaltar sobre el verde, o negrita
+        if (!textoHoras.isEmpty()) {
+             lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold; -fx-font-size: 13px;");
+        } else {
+             lblHoras.setStyle("-fx-font-size: 1px;"); // Truco: si no hay horas, que no ocupe espacio
+        }
 
         celda.getChildren().addAll(lblDia, lblHoras);
         
-        // Efecto hover
-        final String finalColor = colorHex; // Variable final para usar en lambda
+        final String finalColor = colorHex; 
         celda.setOnMouseEntered(e -> celda.setStyle("-fx-border-color: #aaa; -fx-background-color: #f0f0f0;"));
         celda.setOnMouseExited(e -> celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + finalColor + ";"));
 
