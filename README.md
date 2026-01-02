@@ -86,7 +86,6 @@ La clase Log tiene un mapa `<LocalDate, DailyLog>`, y es el que permitira enlaza
 Para poder utilizar esos metodos se hara con los controllers, pero para eso necesito tambien la GUI y poder leer los json
 
 ## GUI PITERA
-
 Hice gran parte de la GUI aunq está toda pitera. cuando la termine toda añadiré un CSS global para darle estilos mas lindos.    
 Falta por hacer la ventana emergente que saldrá al presionar cada día del calendario en donde se seleccionarán las horas de entrada y salida.
 

@@ -82,6 +82,7 @@ public class ListaEmpleadosController {
             Session.setEmpleadoSeleccionado(emp);
             
             System.out.println("Seleccionado: " + emp.getNombreCompleto());
+            System.out.println("Hola");
             Navigation.cambiarVista("/View/CalendarioView.fxml");
         });
         return btn;
