@@ -5,8 +5,11 @@ import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+
 import java.util.ArrayList;
 import java.util.UUID; // Para generar ID único
 
@@ -15,8 +18,28 @@ public class CrearEmpleadoController {
     @FXML private TextField txtNombre;
     @FXML private TextField txtApellidoP;
     @FXML private TextField txtApellidoM;
-    @FXML private TextField txtTarifa;
     @FXML private Label lblError;
+    @FXML private Button btnGuardar;
+
+    @FXML
+    public void initialize() {
+        // Navegación con Enter, QoL
+        txtNombre.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                txtApellidoP.requestFocus();
+        });
+
+        txtApellidoP.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                txtApellidoM.requestFocus();
+        });
+
+        txtApellidoM.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                //Suponiendo que llenó todos los campos, se hace el intento por guardar. De todas formas, si falta algo, se mostrará el error correspondiente.
+                btnGuardar.fire();
+        });
+    }
 
     @FXML
     public void guardar() {
@@ -25,13 +48,13 @@ public class CrearEmpleadoController {
             String apellidoP = txtApellidoP.getText();
             String apellidoM = txtApellidoM.getText();
 
-            if (nombre.isEmpty()) {
+            if (nombre.isEmpty() || apellidoP.isEmpty() || apellidoM.isEmpty()) {
                 mostrarError("Por favor llena todos los campos.");
                 return;
             }
 
             Empleado nuevoEmpleado = new Empleado();
-            nuevoEmpleado.setId(UUID.randomUUID().toString()); // Generamos ID único
+            nuevoEmpleado.setId(UUID.randomUUID().toString());
             nuevoEmpleado.setNombre(nombre);
             nuevoEmpleado.setApellidoP(apellidoP);
             nuevoEmpleado.setApellidoM(apellidoM);

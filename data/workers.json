@@ -1,0 +1,18 @@
+[
+  {
+    "id": "8005b8f1-3c00-4fee-be85-b0f89eb2d6e7",
+    "nombre": "cande",
+    "apellidoP": "ortega",
+    "apellidoM": "martinez",
+    "observaciones": [],
+    "status": "ALTA"
+  },
+  {
+    "id": "890285d4-7ebf-437e-a016-fbfa4f3e15c5",
+    "nombre": "albeto",
+    "apellidoP": "montoya",
+    "apellidoM": "arriaga",
+    "observaciones": [],
+    "status": "ALTA"
+  }
+]

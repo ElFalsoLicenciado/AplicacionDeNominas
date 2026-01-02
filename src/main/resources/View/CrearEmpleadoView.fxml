@@ -59,7 +59,7 @@
         
         <Button onAction="#cancelar" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #E0E0E0; -fx-text-fill: #333; -fx-cursor: hand; -fx-font-weight: bold;" text="Cancelar" />
                 
-        <Button onAction="#guardar" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" text="Guardar Empleado" />
+        <Button fx:id="btnGuardar" onAction="#guardar" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" text="Guardar Empleado" />
     </HBox>
 
 </VBox>

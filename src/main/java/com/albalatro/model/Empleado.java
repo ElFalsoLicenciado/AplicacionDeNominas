@@ -115,6 +115,18 @@ public class Empleado implements java.io.Serializable{
     public void setLog(Log log) {
         this.log = log;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getNombreCompleto() {
+        return nombre + " " + apellidoP + " " + apellidoM;
+    }
     
     /** 
     * @return String

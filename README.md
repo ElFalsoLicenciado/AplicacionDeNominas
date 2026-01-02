@@ -83,3 +83,11 @@ La clase DailyLog tiene un arraylist con los periodos totales, y calcula el tota
 La clase Log tiene un mapa `<LocalDate, DailyLog>`, y es el que permitira enlazar todos los DailyLogs a un solo empleado. De igual manera, pretendo a partir de eso poder leer y manipular la informacion de los pagos con el metodo `getDailyLog()`.   
 
 Para poder utilizar esos metodos se hara con los controllers, pero para eso necesito tambien la GUI y poder leer los json
+
+## GUI PITERA
+
+Hice gran parte de la GUI aunq está toda pitera. cuando la termine toda añadiré un CSS global para darle estilos mas lindos.    
+Falta por hacer la ventana emergente que saldrá al presionar cada día del calendario en donde se seleccionarán las horas de entrada y salida.
+
+## DUDA
+los empleados registrarán sus propias horas de entrada y salida o solo el dueño super admin? Si cada quien ingresa su hora de entrada y salida entonces necesitamos incluir un log in y toda esa shit ff 

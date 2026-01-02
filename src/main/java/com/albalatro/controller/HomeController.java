@@ -8,9 +8,6 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        // ALERTA: Esto es lo que soluciona tu problema.
-        // Al entrar al Home, borramos el historial para eliminar el rastro
-        // de la pantalla "Cargando..." y ocultar el botón "Atrás".
         Navigation.clearHistory();
     }
 

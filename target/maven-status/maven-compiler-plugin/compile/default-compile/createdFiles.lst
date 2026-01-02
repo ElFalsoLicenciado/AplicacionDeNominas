@@ -1,3 +1,4 @@
+com\albalatro\utils\LocalTimeTypeAdapter.class
 com\albalatro\model\Log.class
 com\albalatro\model\Periodo.class
 com\albalatro\model\DailyLog.class
@@ -6,7 +7,9 @@ com\albalatro\model\Empleado.class
 com\albalatro\utils\LocalDateTypeAdapter.class
 com\albalatro\controller\HomeController.class
 com\albalatro\model\Dia.class
+com\albalatro\controller\CrearEmpleadoController.class
 com\albalatro\controller\MainController.class
+com\albalatro\service\JSONService$1.class
 com\albalatro\service\NominaService.class
 com\albalatro\Main.class
 com\albalatro\utils\Navigation.class

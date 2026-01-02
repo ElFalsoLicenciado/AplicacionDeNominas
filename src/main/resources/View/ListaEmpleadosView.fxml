@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.albalatro.controller.ListaEmpleadosController"
+      style="-fx-background-color: #f4f4f4;">
+
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <Label text="Empleados Registrados" textFill="#333333">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <StackPane VBox.vgrow="ALWAYS">
+        
+        <Label fx:id="lblSinEmpleados" text="Aún no hay empleados registrados." 
+               textFill="#888888" visible="false">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+
+        <ScrollPane fx:id="scrollContainer" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <content>
+                <VBox fx:id="vboxLista" spacing="10.0" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="10.0" bottom="10.0" left="10.0" right="10.0"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+        
+    </StackPane>
+</VBox>

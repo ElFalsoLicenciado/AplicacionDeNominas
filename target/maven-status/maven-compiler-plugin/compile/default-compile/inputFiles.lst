@@ -1,3 +1,4 @@
+c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\controller\CrearEmpleadoController.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\controller\HomeController.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\controller\MainController.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\Main.java
@@ -10,5 +11,6 @@ c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\model\Status
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\service\JSONService.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\service\NominaService.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\utils\LocalDateTypeAdapter.java
+c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\utils\LocalTimeTypeAdapter.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\utils\Navigation.java
 c:\Users\cande\code\AplicacionDeNominas\src\main\java\com\albalatro\utils\Utils.java
