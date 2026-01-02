@@ -25,7 +25,10 @@ public class Empleado implements java.io.Serializable{
     private ArrayList<String> observaciones;
     private Status status;
     
-    public Empleado() {}
+    public Empleado() {
+        observaciones = new ArrayList<>();
+        status = Status.ALTA;
+    }
     
     public Empleado(String nombre, String apellidoP, String apellidoM) {
         this.id = UUID.randomUUID().toString().replace("-", "").substring(0,10);

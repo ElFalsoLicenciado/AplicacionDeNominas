@@ -1,81 +1,62 @@
 package com.albalatro.service;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.albalatro.model.Empleado;
 import com.albalatro.utils.LocalDateTypeAdapter;
+import com.albalatro.utils.LocalTimeTypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 public class JSONService {
     public static String FILE = "";
-    
-    
+
     public static void setFILE(String FILE) {
         JSONService.FILE = FILE;
     }
-    
-    @SuppressWarnings("CallToPrintStackTrace")
-    public static ArrayList<Empleado> readWorkers() {
-        ArrayList<Empleado> workers = new ArrayList<>();
-        
-        try {
-            String result;
-            try (BufferedReader br = new BufferedReader(new FileReader(FILE))) {
-                result = "";
-                String line;
-                while ((line = br.readLine()) != null) {
-                    result += line;
-                }
-            }
-            
-            JSONParser parser = new JSONParser();
-            JSONArray array = (JSONArray) parser.parse(result);
-            Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .create();
-            
-            for (Object object : array) {
-                Empleado worker = gson.fromJson(object.toString(), Empleado.class);
-                workers.add(worker);
-            }
-            
-        }catch (JsonSyntaxException | IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        
-        return workers;
+
+    // Configuración centralizada de Gson para no repetir código
+    private static Gson createGson() {
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter()) 
+                .create();
     }
-    
-    
-    @SuppressWarnings("CallToPrintStackTrace")
+
+    public static ArrayList<Empleado> readWorkers() {
+        //Si el archivo no existe o está vacío, retornamos lista nueva.
+        File archivo = new File(FILE);
+        if (!archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
+            Gson gson = createGson();
+            
+            // Leer listas genericas
+            Type listType = new TypeToken<ArrayList<Empleado>>(){}.getType();
+            ArrayList<Empleado> workers = gson.fromJson(reader, listType);
+
+            // Si el archivo contenía "null" o estaba corrupto, devolvemos lista vacía
+            return workers != null ? workers : new ArrayList<>();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public static boolean writeWorkers(ArrayList<Empleado> workers) {
-        try {
-            Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .create();
-            String json = gson.toJson(workers);
-            
-            try (BufferedWriter bw = new BufferedWriter(
-                new FileWriter(FILE)
-            )) {
-                bw.write(json);
-            }
-            
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE))) {
+            Gson gson = createGson();
+            gson.toJson(workers, writer);
             return true;
-            
         } catch (IOException e) {
             e.printStackTrace();
             return false;

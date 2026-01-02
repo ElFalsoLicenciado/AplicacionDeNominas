@@ -13,37 +13,32 @@ import java.util.UUID; // Para generar ID único
 public class CrearEmpleadoController {
 
     @FXML private TextField txtNombre;
+    @FXML private TextField txtApellidoP;
+    @FXML private TextField txtApellidoM;
     @FXML private TextField txtTarifa;
     @FXML private Label lblError;
 
     @FXML
     public void guardar() {
         try {
-            // 1. Obtener datos
             String nombre = txtNombre.getText();
-            String tarifaStr = txtTarifa.getText();
+            String apellidoP = txtApellidoP.getText();
+            String apellidoM = txtApellidoM.getText();
 
-            // 2. Validaciones básicas
-            if (nombre.isEmpty() || tarifaStr.isEmpty()) {
+            if (nombre.isEmpty()) {
                 mostrarError("Por favor llena todos los campos.");
                 return;
             }
 
-            // 3. Crear el objeto Empleado
-            // Asumo que tu clase Empleado tiene un constructor así o setters
             Empleado nuevoEmpleado = new Empleado();
             nuevoEmpleado.setId(UUID.randomUUID().toString()); // Generamos ID único
             nuevoEmpleado.setNombre(nombre);
-            // nuevoEmpleado.setHistorial(new HashMap<>()); // Si hace falta inicializar
+            nuevoEmpleado.setApellidoP(apellidoP);
+            nuevoEmpleado.setApellidoM(apellidoM);
 
-            // 4. Guardar usando JSONService
-            // PASO A: Leer los que ya existen
             ArrayList<Empleado> listaActual = JSONService.readWorkers();
             
-            // PASO B: Agregar el nuevo
             listaActual.add(nuevoEmpleado);
-
-            // PASO C: Guardar todo
             boolean exito = JSONService.writeWorkers(listaActual);
 
             if (exito) {
