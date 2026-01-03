@@ -1,5 +1,7 @@
 package com.albalatro.controller;
 
+import java.util.ArrayList;
+
 import com.albalatro.model.Empleado;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
@@ -11,8 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
 
 public class ListaEmpleadosController {
 
@@ -82,7 +82,7 @@ public class ListaEmpleadosController {
             Session.setEmpleadoSeleccionado(emp);
             
             System.out.println("Seleccionado: " + emp.getNombreCompleto());
-            System.out.println("Hola");
+            // System.out.println("Hola");
             Navigation.cambiarVista("/View/CalendarioView.fxml");
         });
         return btn;

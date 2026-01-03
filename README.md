@@ -13,6 +13,8 @@ La ultima vez que lo hice fue de 3 semanas 1-21 Dic y lo que sacaba de lo que se
 ## Cosas que debe hacer el código:
 - Calcular el salario en base a las horas trabajadas y el salario total a pagar.
 - Calcular las horas trabajadas del día en base a las horas de entrada y salida a lo largo de cada semana.
+- Permitir poner un salario fijo por día, aumento de salario general o un amuento de salario individual.
+- Al editar un empleado, este sea un borrador, ya el usuario pueda elgir si guardar y deshacer los cambios.
 - Poder modificar cuantas semanas se van a pagar, es decir, el periodo de paga (se me ocurrió después de ver tu propuesta).
 - Permitir imprimir las horas, días trabajados (como la propuesta que me mandaste pero que se pueda imprimir).
 - En el formato de paga aparte de venir el nombre del trabajador, sus horas trabajadas y su salario, también que venga un apartado donde diga cuanto gano en esa semana (algo así como una columna extra después del Domingo donde diga cuanto gano el trabajador esa semana de lunes a sábado y si trabajo el domingo, que le sume lo que gano el domingo y lo agregue al total de esa semana).

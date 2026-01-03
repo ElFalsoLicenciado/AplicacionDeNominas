@@ -1,11 +1,12 @@
 package com.albalatro.utils;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Button;
 import java.io.IOException;
 import java.util.Stack;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 
 public class Navigation {
 
