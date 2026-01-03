@@ -132,7 +132,7 @@ public class CalendarioController {
             }
 
             // --- Crear la celda visual ---
-            VBox celda = crearCeldaDia(i, textoHoras, colorFondo);
+            VBox celda = crearCeldaDia(i, fechaDia, textoHoras, colorFondo);
             
             // Añadir al grid
             gridCalendario.add(celda, columna, fila);
@@ -149,7 +149,7 @@ public class CalendarioController {
         lblTotalSueldo.setText(String.format("$%.2f", totalSueldoMes));
     }
 
-    private VBox crearCeldaDia(int numeroDia, String textoHoras, String colorHex) {
+    private VBox crearCeldaDia(int numeroDia, LocalDate fechaExacta, String textoHoras, String colorHex) {
         VBox celda = new VBox(2); 
         celda.setAlignment(Pos.TOP_LEFT);
         
@@ -171,7 +171,25 @@ public class CalendarioController {
              lblHoras.setStyle("-fx-font-size: 1px;"); // Truco: si no hay horas, que no ocupe espacio
         }
 
-        celda.getChildren().addAll(lblDia, lblHoras);
+        DailyLog logDelDia = null;
+        double montoPago = 0.0;
+
+        // Verificar si un empleado tiene logs
+        if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
+            logDelDia = empleado.getLog().getLogs().get(fechaExacta); 
+        }
+
+        // Si tiene logs, verificar que un log de un día exacto exista
+        if (logDelDia != null) {
+            montoPago = logDelDia.getTotalPagoDia();
+            Label lblPago = new Label(String.format("$%.2f", montoPago));
+            
+            lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;");
+            celda.getChildren().addAll(lblDia, lblHoras, lblPago);
+        } else { // Si no tiene log de un dia específico, no se muestra información de pago ese dia.
+            celda.getChildren().addAll(lblDia, lblHoras);
+
+        }
         
         final String finalColor = colorHex; 
         celda.setOnMouseEntered(e -> celda.setStyle("-fx-border-color: #aaa; -fx-background-color: #f0f0f0;"));
