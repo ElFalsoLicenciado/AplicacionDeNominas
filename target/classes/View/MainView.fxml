@@ -12,7 +12,7 @@
             fx:controller="com.albalatro.controller.MainController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #333; -fx-padding: 15;">
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="top-bar">
             <Button fx:id="btnAtras" text="← Atrás" onAction="#regresar" visible="false"
                     style="-fx-background-color: white; -fx-cursor: hand;"/>
             

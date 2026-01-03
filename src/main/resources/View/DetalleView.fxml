@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="500.0" prefWidth="400.0" 
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.albalatro.controller.DetalleController"
+            style="-fx-background-color: white;">
+
+    <top>
+        <HBox alignment="CENTER" spacing="15.0" style="-fx-padding: 15; -fx-background-color: #f4f4f4; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;">
+            <Button text="◀" onAction="#diaAnterior" styleClass="button, button-ghost" />
+            <Label fx:id="lblFechaActual" text="DOMINGO 12 OCT" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Button text="▶" onAction="#diaSiguiente" styleClass="button, button-ghost" />
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox spacing="10.0">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                
+                <Label text="Periodos Trabajados" textFill="#666" style="-fx-font-weight: bold;"/>
+                
+                <VBox fx:id="containerPeriodos" spacing="10.0" />
+
+                <Button text="+ Agregar Entrada/Salida" onAction="#agregarNuevoPeriodo" 
+                        maxWidth="Infinity" styleClass="button, button-secondary" />
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <VBox spacing="10.0" style="-fx-padding: 15; -fx-background-color: #f9f9f9; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
+            <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                <Label text="Total del Día:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="lblTotalDinero" text="\$0.00" styleClass="label-money" />
+            </HBox>
+            
+            <Button text="GUARDAR CAMBIOS" onAction="#guardarCambios" 
+                    maxWidth="Infinity" prefHeight="40.0" 
+                    styleClass="button, button-primary" />
+        </VBox>
+    </bottom>
+
+</BorderPane>

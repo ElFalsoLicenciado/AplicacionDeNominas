@@ -7,11 +7,14 @@ import com.albalatro.utils.Session;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -27,13 +30,18 @@ public class CalendarioController {
     @FXML private Label lblTotalSueldo;
     @FXML private Label lblMesAno;
     @FXML private GridPane gridCalendario;
+    @FXML private Button btnGestionar;
 
     private YearMonth mesActual;
     private Empleado empleado;
 
+    private Stage stageDetalle = null;
+    private DetalleController controllerDetalle = null;
+
     @FXML
     public void initialize() {
         // Obtener el empleado de la sesión
+        lblTotalSueldo.setText("$0.00");
         empleado = Session.getEmpleadoSeleccionado();
 
         // Llenar los datos de cabecera
@@ -65,6 +73,16 @@ public class CalendarioController {
     @FXML
     public void regresar() {
         Navigation.goBack();
+    }
+
+    // TODO: Crear una nueva vista para poder acceder al panel de edicion del empleado.
+    // TODO: Tras haber creado la vista, hacer que este evento invoque a la nueva vista.
+    // TODO: Añadir sus respectivos eventos y funcoinalidad a la vista de editar empleado.
+    // Para lograr lo de arriba se puede copiar el codigo de #abrirVentanaDetalle() 
+    // TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
+    @FXML
+    public void gestionarPressed() {
+        System.out.println("Gestionando empleado " + empleado.getNombre());
     }
 
     private void actualizarVista() {
@@ -131,7 +149,6 @@ public class CalendarioController {
                 }
             }
 
-            // --- Crear la celda visual ---
             VBox celda = crearCeldaDia(i, fechaDia, textoHoras, colorFondo);
             
             // Añadir al grid
@@ -151,12 +168,10 @@ public class CalendarioController {
 
     private VBox crearCeldaDia(int numeroDia, LocalDate fechaExacta, String textoHoras, String colorHex) {
         VBox celda = new VBox(2); 
+        celda.getStyleClass().add("calendar-cell");
         celda.setAlignment(Pos.TOP_LEFT);
-        
         celda.setPadding(new javafx.geometry.Insets(3));
-        
         celda.setMaxHeight(Double.MAX_VALUE); 
-        celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + colorHex + ";");
 
         // Número del día 
         Label lblDia = new Label(String.valueOf(numeroDia));
@@ -166,7 +181,7 @@ public class CalendarioController {
         Label lblHoras = new Label(textoHoras);
         // Si hay horas, le ponemos fondo blanco para resaltar sobre el verde, o negrita
         if (!textoHoras.isEmpty()) {
-             lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold; -fx-font-size: 13px;");
+             lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold; -fx-font-size: 15px;");
         } else {
              lblHoras.setStyle("-fx-font-size: 1px;"); // Truco: si no hay horas, que no ocupe espacio
         }
@@ -183,12 +198,11 @@ public class CalendarioController {
         if (logDelDia != null) {
             montoPago = logDelDia.getTotalPagoDia();
             Label lblPago = new Label(String.format("$%.2f", montoPago));
-            
-            lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+            lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 15px; -fx-font-weight: bold;");
             celda.getChildren().addAll(lblDia, lblHoras, lblPago);
         } else { // Si no tiene log de un dia específico, no se muestra información de pago ese dia.
             celda.getChildren().addAll(lblDia, lblHoras);
-
         }
         
         final String finalColor = colorHex; 
@@ -196,9 +210,48 @@ public class CalendarioController {
         celda.setOnMouseExited(e -> celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + finalColor + ";"));
 
         celda.setOnMouseClicked(event -> {
-            //TODO: Abrir otra view (nueva y no sob♫e el mismo ) para agregar los reportes del dia
+            abrirVentanaDetalle(fechaExacta);
         });
 
         return celda;
+    }
+
+    private void abrirVentanaDetalle(LocalDate fecha) {
+        try {
+            // Crear ventana si no existe
+            if (stageDetalle == null || !stageDetalle.isShowing()) {
+                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource("/View/DetalleView.fxml")
+                );
+                Parent root = loader.load();
+                
+                controllerDetalle = loader.getController();
+                
+                controllerDetalle.setOnDatosGuardados(() -> {
+                    System.out.println("Datos actualizados desde detalle. Refrescando calendario...");
+                    this.actualizarVista(); 
+                });
+
+                stageDetalle = new javafx.stage.Stage();
+                stageDetalle.setScene(new javafx.scene.Scene(root));
+                stageDetalle.setTitle("Gestión de Día");
+                stageDetalle.setResizable(false);
+                
+                // Hacer que aparezca siempre encima
+                stageDetalle.setAlwaysOnTop(true); 
+                
+                stageDetalle.show();
+            } else {
+                // Traer al frente si ya existe
+                stageDetalle.toFront();
+            }
+
+            if (controllerDetalle != null) {
+                controllerDetalle.cargarDatosDia(fecha, this.empleado);
+            }
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 }

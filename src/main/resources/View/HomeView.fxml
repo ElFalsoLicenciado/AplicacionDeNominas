@@ -10,6 +10,6 @@
       
     <Label text="Bienvenido" style="-fx-font-size: 24px;"/>
     
-    <Button text="Crear Empleado" onAction="#irACrear" prefWidth="200" prefHeight="50"/>
     <Button text="Ver Lista" onAction="#irAVer" prefWidth="200" prefHeight="50"/>
+    <Button text="Nuevo Empleado" onAction="#irACrear" prefWidth="200" prefHeight="50"/>
 </VBox>

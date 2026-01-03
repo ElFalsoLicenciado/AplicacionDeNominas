@@ -3,33 +3,33 @@ package com.albalatro.model;
 import java.time.*;
 
 public class Periodo {
-    private LocalTime inicio;
-    private LocalTime fin;
+    private LocalTime entrada;
+    private LocalTime salida;
 
     public Periodo() { }
 
     public Periodo(LocalTime inicio, LocalTime fin, Long minutosTrabajados) {
-        this.inicio = inicio;
-        this.fin = fin;
+        this.entrada = inicio;
+        this.salida = fin;
     }
 
-    public LocalTime getInicio() {
-        return inicio;
+    public LocalTime getEntrada() {
+        return entrada;
     }
 
-    public void setInicio(LocalTime inicio) {
-        this.inicio = inicio;
+    public void setEntrada(LocalTime inicio) {
+        this.entrada = inicio;
     }
 
-    public LocalTime getFin() {
-        return fin;
+    public LocalTime getSalida() {
+        return salida;
     }
 
-    public void setFin(LocalTime fin) {
-        this.fin = fin;
+    public void setSalida(LocalTime fin) {
+        this.salida = fin;
     }
 
     public Long getMinutosTrabajados() {
-        return Duration.between(inicio, fin).toMinutes();
+        return Duration.between(entrada, salida).toMinutes();
     }
 }

@@ -12,6 +12,22 @@
     "nombre": "albeto",
     "apellidoP": "montoya",
     "apellidoM": "arriaga",
+    "log": {
+      "logs": {
+        "2026-01-07": {
+          "date": "2026-01-07",
+          "periodos": [],
+          "totalMinutosTrabajados": 0,
+          "totalPagoDia": 0.0
+        },
+        "2026-01-01": {
+          "date": "2026-01-01",
+          "periodos": [],
+          "totalMinutosTrabajados": 0,
+          "totalPagoDia": 0.0
+        }
+      }
+    },
     "observaciones": [],
     "status": "ALTA"
   }

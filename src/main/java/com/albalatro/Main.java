@@ -17,6 +17,7 @@ public class Main extends Application {
     public void start (Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/MainView.fxml")));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/CSS/styles.css").toExternalForm());
 
         try {
             Image icon = new Image(getClass().getResourceAsStream("/Images/icon.png"));
@@ -40,8 +41,13 @@ public class Main extends Application {
         Utils.innitStuff(FOLDER, JSON);
         JSONService.setFILE(String.format("%s/%s.json",FOLDER, JSON));
 
-        //TODO: Cargar el objeto salario desde un JSON y a partir de ahi modificar el salario. Posible singleton
-
         launch(args);
+
+        // todos provenientes de CalendarioController.java
+        // TODO: Crear una nueva vista para poder acceder al panel de edicion del empleado.
+        // TODO: Tras haber creado la vista, hacer que este evento invoque a la nueva vista.
+        // TODO: Añadir sus respectivos eventos y funcoinalidad a la vista de editar empleado.
+        // Para lograr lo de arriba se puede copiar el codigo de #abrirVentanaDetalle() 
+        // TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
     }
 }
