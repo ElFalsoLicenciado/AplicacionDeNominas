@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import com.albalatro.model.Empleado;
 import com.albalatro.utils.LocalDateTypeAdapter;
 import com.albalatro.utils.LocalTimeTypeAdapter;
+import com.albalatro.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -68,5 +70,14 @@ public class JSONService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static boolean importJSON() {
+        return true;
+    }
+
+    public static void exportJSON(String folder) {
+        Path path = Utils.createFolder(folder);
+        Utils.createJSON(path, "copia");
     }
 }

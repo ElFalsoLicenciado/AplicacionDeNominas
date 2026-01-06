@@ -75,14 +75,16 @@ public class CalendarioController {
         Navigation.goBack();
     }
 
-    // TODO: Crear una nueva vista para poder acceder al panel de edicion del empleado.
-    // TODO: Tras haber creado la vista, hacer que este evento invoque a la nueva vista.
-    // TODO: Añadir sus respectivos eventos y funcoinalidad a la vista de editar empleado.
+    // TODONT: Crear una nueva vista para poder acceder al panel de edicion del empleado.
+    // TODONT: Tras haber creado la vista, hacer que este evento invoque a la nueva vista.
+    // TODONT: Añadir sus respectivos eventos y funcoinalidad a la vista de editar empleado.
+    // TODO: Editar el sueldo individual del empleado, sea pagar por día o sepa.
     // Para lograr lo de arriba se puede copiar el codigo de #abrirVentanaDetalle() 
-    // TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
+    // TODONT: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
     @FXML
     public void gestionarPressed() {
         System.out.println("Gestionando empleado " + empleado.getNombre());
+        Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
     }
 
     private void actualizarVista() {

@@ -70,7 +70,7 @@ public class Utils {
 
 
     @SuppressWarnings("CallToPrintStackTrace")
-    private static Path createFolder(String name){
+    public static Path createFolder(String name){
         
         Path folderPath = Paths.get(name); // relative path
         
@@ -84,7 +84,7 @@ public class Utils {
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
-    private static void createJSON(Path folder, String name){
+    public static void createJSON(Path folder, String name){
         Path jsonFile = folder.resolve(name+".json");
 
         try{

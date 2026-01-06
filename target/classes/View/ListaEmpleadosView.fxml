@@ -13,14 +13,13 @@
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
-    <Label text="Empleados Registrados" styleClass="label-header" />
+    <Label styleClass="label-header" text="Empleados Registrados" />
 
-    <Button mnemonicParsing="false" onAction="#mostrarEmpleadosBaja" 
-            text="Cambiar a antiguos empleados" styleClass="button, button-secondary" />
+    <Button fx:id="btnCambiarStatus" mnemonicParsing="false" onAction="#cambiarStatus" styleClass="button, button-secondary" text="Cambiar a empleados inactivos" />
 
     <StackPane VBox.vgrow="ALWAYS">
         
-        <Label fx:id="lblSinEmpleados" text="Aún no hay empleados registrados." textFill="#888888" visible="false" styleClass="label-subheader">
+        <Label fx:id="lblSinEmpleados" styleClass="label-subheader" text="Aún no hay empleados registrados." textFill="#888888" visible="false">
             </Label>
 
         <ScrollPane fx:id="scrollContainer" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
