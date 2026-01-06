@@ -18,4 +18,6 @@ public class Session {
     public static Empleado getEmpleadoEditando(){
         return empleadoEditando;
     }
+
+    // 01/05/25 : Skill issue (ALBERTO), no sabe pensar.
 }

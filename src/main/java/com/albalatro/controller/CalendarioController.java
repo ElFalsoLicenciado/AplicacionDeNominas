@@ -1,5 +1,10 @@
 package com.albalatro.controller;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import com.albalatro.model.DailyLog;
 import com.albalatro.model.Empleado;
 import com.albalatro.utils.Navigation;
@@ -7,6 +12,7 @@ import com.albalatro.utils.Session;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -14,12 +20,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class CalendarioController {
 
@@ -72,6 +72,7 @@ public class CalendarioController {
 
     @FXML
     public void regresar() {
+        Session.setEmpleadoSeleccionado(null);
         Navigation.goBack();
     }
 
@@ -82,7 +83,7 @@ public class CalendarioController {
     // TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
     @FXML
     public void gestionarPressed() {
-        System.out.println("Gestionando empleado " + empleado.getNombre());
+        Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
     }
 
     private void actualizarVista() {
