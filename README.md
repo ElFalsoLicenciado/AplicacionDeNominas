@@ -38,12 +38,8 @@ también muestre las horas de entrada y de salida (de ese día claro)
 3. Guardar de alguna forma cada usuario y sus registros de chamba en JSON.
 4. Poder crear, editar, leer y borrar usuarios (SOFT DELETE).
 5. Agregar manera de cambiar el salario para todos.
-6. todos provenientes de CalendarioController.java:
-   1. TODO: Crear una nueva vista para poder acceder al panel de edicion del empleado.
-   2. TODO: Tras haber creado la vista, hacer que este evento invoque a la nueva vista.
-   3. TODO: Añadir sus respectivos eventos y funcoinalidad a la vista de editar empleado.
-      1. Para lograr lo de arriba se puede copiar el codigo de #abrirVentanaDetalle() 
-   4. TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
+6. TODO: Añadir capacidad del programa para poder exportar un archivo JSON al directorio deseado por el usuario, para que sirva como respaldo.
+7. TODO: Añadir boton en la view principal para poder importar informacion de un archivo JSON (***AÑADIR MAS NO REESCRIBIR AL JSON ACTUAL CON EL QUE SE TRABAJA***) para trabajar con más empleados. Para seleccionar tambien se debe utilizar Windows File Explorer (o el explorador de archivos nativo del OS).
 
 ```text
 src/
