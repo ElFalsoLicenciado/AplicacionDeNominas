@@ -28,6 +28,7 @@ public class Navigation {
     /**
      * Navegar a una nueva vista (FXML) estándar
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void cambiarVista(String fxmlPath) {
         try {
             // 1. Si ya hay una vista mostrándose, la guardamos en el historial
@@ -89,6 +90,7 @@ public class Navigation {
      * Método Especial: Al guardar un empleado, reinicia el historial, pone Home de fondo
      * y muestra el Calendario del empleado.
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void empleadoGuardadoCustomHistory(Empleado empleado) {
         try {
             Session.setEmpleadoSeleccionado(empleado);
@@ -109,7 +111,7 @@ public class Navigation {
             mainLayout.setCenter(calendarioView);
             actualizarBotonAtras();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -117,6 +119,7 @@ public class Navigation {
     /**
      * Método Especial: Al dar de Alta, reinicia historial y lleva a la Lista.
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void irAListaEmpleados() {
         try {
             // 1. Limpiar historial

@@ -72,7 +72,6 @@ public class CalendarioController {
 
     @FXML
     public void regresar() {
-        Session.setEmpleadoSeleccionado(null);
         Navigation.goBack();
     }
 
@@ -83,7 +82,7 @@ public class CalendarioController {
     // TODO: refactorizar el codigo para abrir una nueva ventana en un metodo nuevo para evitar duplicidad y redundancia
     @FXML
     public void gestionarPressed() {
-        Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
+        System.out.println("Gestionando empleado " + empleado.getNombre());
     }
 
     private void actualizarVista() {
@@ -217,6 +216,7 @@ public class CalendarioController {
         return celda;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private void abrirVentanaDetalle(LocalDate fecha) {
         try {
             // Crear ventana si no existe

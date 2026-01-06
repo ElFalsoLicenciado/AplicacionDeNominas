@@ -1,6 +1,11 @@
 package com.albalatro.service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,6 +34,7 @@ public class JSONService {
                 .create();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static ArrayList<Empleado> readWorkers() {
         //Si el archivo no existe o está vacío, retornamos lista nueva.
         File archivo = new File(FILE);
@@ -52,6 +58,7 @@ public class JSONService {
         }
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public static boolean writeWorkers(ArrayList<Empleado> workers) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE))) {
             Gson gson = createGson();

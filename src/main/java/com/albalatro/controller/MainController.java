@@ -1,6 +1,7 @@
 package com.albalatro.controller;
 
 import com.albalatro.utils.Navigation;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
