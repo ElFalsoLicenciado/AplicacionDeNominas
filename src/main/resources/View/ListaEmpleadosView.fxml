@@ -15,7 +15,7 @@
 
     <Label text="Empleados Registrados" styleClass="label-header" />
 
-    <Button mnemonicParsing="false" onAction="#mostrarEmpleadosBaja" 
+    <Button mnemonicParsing="false" onAction="#cambiarStatus" 
             text="Cambiar a antiguos empleados" styleClass="button, button-secondary" />
 
     <StackPane VBox.vgrow="ALWAYS">

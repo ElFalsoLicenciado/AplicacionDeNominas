@@ -53,14 +53,9 @@ public class ListaEmpleadosController {
     
     @FXML
     public void cambiarStatus() {
-        if(status ==  Status.ALTA) {
-            status = Status.BAJA;
-            btnCambiarStatus.setText("Cambiar a emplados activos");
-        }
-        else {
-            status = Status.ALTA;
-            btnCambiarStatus.setText("Cambiar a empleados inactivos");
-        }
+        System.out.print("Status cambiado de " + status);
+        status = (status == Status.ALTA) ? Status.BAJA : Status.ALTA;
+        System.out.println(" a " + status);
 
         mostrarEmpleados(empleados);
     }
@@ -113,12 +108,12 @@ public class ListaEmpleadosController {
         return btn;
     }
 
-    private void importar() {
+    // private void importar() {
 
-        JSONService.importJSON();
-    }
+    //     JSONService.importJSON();
+    // }
 
-    private void exportar() {
-        JSONService.exportJSON(folder);
-    }
+    // private void exportar() {
+    //     JSONService.exportJSON(folder);
+    // }
 }
