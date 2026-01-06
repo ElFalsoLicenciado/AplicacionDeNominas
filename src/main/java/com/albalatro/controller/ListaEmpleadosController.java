@@ -51,7 +51,6 @@ public class ListaEmpleadosController {
         }
     }
     
-    
     @FXML
     public void cambiarStatus() {
         if(status ==  Status.ALTA) {
@@ -112,5 +111,14 @@ public class ListaEmpleadosController {
         });
         
         return btn;
+    }
+
+    private void importar() {
+
+        JSONService.importJSON();
+    }
+
+    private void exportar() {
+        JSONService.exportJSON(folder);
     }
 }

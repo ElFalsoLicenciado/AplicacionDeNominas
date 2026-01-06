@@ -72,12 +72,16 @@ public class JSONService {
         }
     }
 
-    public static boolean importJSON() {
+    public static boolean importJSON(String file) {
         return true;
     }
 
-    public static void exportJSON(String folder) {
+    public static boolean exportJSON(String folder) {
         Path path = Utils.createFolder(folder);
         Utils.createJSON(path, "copia");
+
+        
+
+        return true;
     }
 }
