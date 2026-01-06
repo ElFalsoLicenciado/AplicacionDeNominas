@@ -1,15 +1,16 @@
 package com.albalatro;
 
+import java.util.Objects;
+
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Utils;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
-import java.util.Objects;
+import javafx.stage.Stage;
 
 public class Main extends Application {
 
@@ -20,7 +21,7 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/CSS/styles.css").toExternalForm());
 
         try {
-            Image icon = new Image(getClass().getResourceAsStream("/Images/icon.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/Images/joker.png"));
             primaryStage.getIcons().add(icon);
         } catch (Exception e) {
             System.out.println("No se pudo cargar el ícono: " + e.getMessage());
