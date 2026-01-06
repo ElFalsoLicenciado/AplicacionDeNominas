@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
-public class ListaEmpleadosController {
+public class ListaEmpleadosBajaController {
 
     @FXML private VBox vboxLista;
     @FXML private Label lblSinEmpleados;
@@ -34,7 +34,7 @@ public class ListaEmpleadosController {
             
             //Generar botones dinámicamente
             for (Empleado emp : empleados) {
-                if (emp.getStatus() == Status.ALTA) {
+                if (emp.getStatus() == Status.BAJA) {
                     Button btn = crearBotonEmpleado(emp);
                     vboxLista.getChildren().add(btn);
                 }
@@ -43,8 +43,8 @@ public class ListaEmpleadosController {
     }
 
     @FXML
-    public void mostrarEmpleadosBaja() {
-        Navigation.cambiarVista("/View/ListaEmpleadosBajaView.fxml");
+    public void volver() {
+        Navigation.goBack();
     }
 
     private Button crearBotonEmpleado(Empleado emp) {
@@ -89,7 +89,7 @@ public class ListaEmpleadosController {
             
             System.out.println("Seleccionado: " + emp.getNombreCompleto());
             // System.out.println("Hola");
-            Navigation.cambiarVista("/View/CalendarioView.fxml");
+            Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
         });
         
         return btn;

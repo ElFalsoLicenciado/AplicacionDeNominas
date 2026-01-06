@@ -14,52 +14,55 @@
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
-    <Label text="Registrar Nuevo Empleado" textFill="#333333">
-        <font>
-            <Font name="System Bold" size="22.0" />
-        </font>
+    <Label text="Registrar Nuevo Empleado" styleClass="label-header">
         <VBox.margin>
             <Insets bottom="10.0" />
         </VBox.margin>
     </Label>
 
     <VBox maxWidth="400.0" spacing="5.0">
-        <Label text="Nombre:" textFill="#666666">
-            <font><Font name="System Bold" size="12.0" /></font>
-        </Label>
-        <TextField fx:id="txtNombre" prefHeight="40.0" promptText="Ej. Juan" styleClass="text-field"/>
+        <Label text="Nombre:" styleClass="label-subheader"/>
+        <TextField fx:id="txtNombre" prefHeight="40.0" promptText="Ej. Juan" styleClass="text-field" />
     </VBox>
-   <VBox maxWidth="400.0" spacing="5.0">
-      <children>
-         <Label text="Apellido paterno:" textFill="#666666">
-            <font>
-               <Font name="System Bold" size="12.0" />
-            </font>
-         </Label>
-         <TextField fx:id="txtApellidoP" prefHeight="40.0" promptText="Ej. Pérez" styleClass="text-field" />
-      </children>
-   </VBox>
-   <VBox maxWidth="400.0" spacing="5.0">
-      <children>
-         <Label text="Apellido materno:" textFill="#666666">
-            <font>
-               <Font name="System Bold" size="12.0" />
-            </font>
-         </Label>
-         <TextField fx:id="txtApellidoM" prefHeight="40.0" promptText="Ej. Martínez" styleClass="text-field" />
-      </children>
-   </VBox>
 
-    <Label fx:id="lblError" text="" textFill="RED" visible="false" />
+    <VBox maxWidth="400.0" spacing="5.0">
+        <children>
+            <Label text="Apellido paterno:" styleClass="label-subheader"/>
+            <TextField fx:id="txtApellidoP" prefHeight="40.0" promptText="Ej. Pérez" styleClass="text-field" />
+        </children>
+    </VBox>
+
+    <VBox maxWidth="400.0" spacing="5.0">
+        <children>
+            <Label text="Apellido materno:" styleClass="label-subheader"/>
+            <TextField fx:id="txtApellidoM" prefHeight="40.0" promptText="Ej. Martínez" styleClass="text-field" />
+        </children>
+    </VBox>
+
+    <Label fx:id="lblError" text="" styleClass="label-error" visible="false" />
 
     <HBox alignment="CENTER" maxWidth="400.0" spacing="15.0">
         <VBox.margin>
             <Insets top="10.0" />
         </VBox.margin>
         
-        <Button onAction="#cancelar" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #E0E0E0; -fx-text-fill: #333; -fx-cursor: hand; -fx-font-weight: bold;" text="Cancelar" />
+        <Button onAction="#cancelar" prefHeight="40.0" prefWidth="120.0" 
+                text="Cancelar" styleClass="button, button-secondary" />
                 
-        <Button fx:id="btnGuardar" onAction="#guardar" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" text="Guardar Empleado" />
+        <Button fx:id="btnGuardar" onAction="#guardar" prefHeight="40.0" prefWidth="180.0" 
+                text="Guardar Empleado" styleClass="button, button-primary" />
     </HBox>
+
+    <VBox alignment="CENTER" maxWidth="400.0" spacing="10.0">
+        <children>
+            <Button fx:id="btnAlta" onAction="#darDeAlta" 
+                    prefHeight="40.0" prefWidth="315.0" 
+                    text="Dar de Alta" styleClass="button, button-primary" />
+
+            <Button fx:id="btnBaja" onAction="#darDeBaja" 
+                    prefHeight="40.0" prefWidth="315.0" 
+                    text="Dar de Baja" styleClass="button, button-danger" />
+        </children>
+    </VBox>
 
 </VBox>

@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="20.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.ListaEmpleadosController">
+<VBox alignment="TOP_CENTER" spacing="20.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.ListaEmpleadosBajaController">
 
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
-    <Label text="Empleados Registrados" styleClass="label-header" />
+    <Label text="Empleados dados de Baja" styleClass="label-header" />
 
-    <Button mnemonicParsing="false" onAction="#mostrarEmpleadosBaja" 
-            text="Cambiar a antiguos empleados" styleClass="button, button-secondary" />
+    <Button mnemonicParsing="false" onAction="#volver" 
+            text="Volver a Empleados Activos" styleClass="button, button-secondary" />
 
     <StackPane VBox.vgrow="ALWAYS">
         
-        <Label fx:id="lblSinEmpleados" text="Aún no hay empleados registrados." textFill="#888888" visible="false" styleClass="label-subheader">
-            </Label>
+        <Label fx:id="lblSinEmpleados" text="Aún no hay empleados dados de Baja." textFill="#888888" visible="false" styleClass="label-subheader">
+        </Label>
 
         <ScrollPane fx:id="scrollContainer" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
             <content>
