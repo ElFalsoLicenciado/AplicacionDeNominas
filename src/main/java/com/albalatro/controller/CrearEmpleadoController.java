@@ -58,7 +58,7 @@ public class CrearEmpleadoController {
             String apellidoP = txtApellidoP.getText();
             String apellidoM = txtApellidoM.getText();
             ArrayList<Empleado> listaActual = JSONService.readWorkers();
-            
+            Empleado target;
             
             if (nombre.isEmpty() || apellidoP.isEmpty() || apellidoM.isEmpty()) {
                 mostrarError("Por favor llena todos los campos.");
@@ -66,19 +66,38 @@ public class CrearEmpleadoController {
             }
             
             if (empleado == null) {
+                System.out.println("Empleado null");
                 Empleado nuevoEmpleado = new Empleado();
                 nuevoEmpleado.setId(UUID.randomUUID().toString());
-                setData(empleado, nombre, apellidoP, apellidoM);
+                setData(nuevoEmpleado, nombre, apellidoP, apellidoM);
                 listaActual.add(nuevoEmpleado);
+                target = nuevoEmpleado;
             } else {
                 setData(empleado, nombre, apellidoP, apellidoM);
+                boolean encontrado = false;
+
+                for (int i = 0; i < listaActual.size(); i++) { // Buscar la coincidencia en la lista del JSON
+                    if (listaActual.get(i).getId().equals(empleado.getId())) {
+                        listaActual.set(i, empleado); // Reemplaza al empleado
+                        encontrado = true;
+                        break;
+                    }
+                }
+                
+                // Manejo de NullPoinerException
+                if (!encontrado) {
+                    mostrarError("No se encontró al empleado seleccionado");
+                    return;
+                }
+
+                target = empleado;
             }
             
             boolean exito = JSONService.writeWorkers(listaActual);
             
             if (exito) {
                 System.out.println("Empleado guardado con éxito.");
-                Navigation.goBack(); // Regresamos al menú
+                Navigation.empleadoGuardadoCustomHistory(target);
             } else {
                 mostrarError("Error al escribir en el archivo JSON.");
             }

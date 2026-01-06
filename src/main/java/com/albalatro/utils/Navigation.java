@@ -1,12 +1,16 @@
 package com.albalatro.utils;
 
 import java.io.IOException;
+import java.util.EmptyStackException;
 import java.util.Stack;
+
+import com.albalatro.model.Empleado;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.Parent;
 
 public class Navigation {
 
@@ -55,7 +59,6 @@ public class Navigation {
             
             // La ponemos en el centro (sin guardarla en historial de nuevo)
             mainLayout.setCenter(vistaAnterior);
-            
             actualizarBotonAtras();
         }
     }
@@ -76,5 +79,21 @@ public class Navigation {
     public static void clearHistory() {
         history.clear();
         actualizarBotonAtras();
+    }
+
+    public static void empleadoGuardadoCustomHistory(Empleado empleado) {
+        try {
+            Session.setEmpleadoSeleccionado(empleado);
+            history.clear();
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    Navigation.class.getResource("/View/HomeView.fxml")
+            );
+            javafx.scene.Parent homeView = loader.load();
+            history.push(homeView);
+    
+            cambiarVista("/View/CalendarioView.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
