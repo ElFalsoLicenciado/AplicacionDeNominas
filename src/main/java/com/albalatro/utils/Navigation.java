@@ -1,7 +1,6 @@
 package com.albalatro.utils;
 
 import java.io.IOException;
-import java.util.EmptyStackException;
 import java.util.Stack;
 
 import com.albalatro.model.Empleado;
@@ -10,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.Parent;
 
 public class Navigation {
 
