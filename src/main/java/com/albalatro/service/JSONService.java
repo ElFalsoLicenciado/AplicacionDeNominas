@@ -26,7 +26,7 @@ public class JSONService {
     }
     
     // Configuración centralizada de Gson para no repetir código
-    private static Gson createGson() {
+    public static Gson createGson() {
         return new GsonBuilder()
         .setPrettyPrinting()
         .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())

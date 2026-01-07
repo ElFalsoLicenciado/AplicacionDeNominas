@@ -1,6 +1,10 @@
 package com.albalatro.controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
@@ -9,6 +13,7 @@ import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
 import com.albalatro.utils.Utils;
+import com.google.gson.Gson;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -126,8 +131,11 @@ public class ListaEmpleadosController {
         fileChooser.getExtensionFilters().add(new ExtensionFilter("JSON", "*.json"));
         
         File file = fileChooser.showOpenDialog(stage);
-
-        if(file == null) return;
+        
+        if(file == null) {
+            Utils.showAlert("Importación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
+            return;
+        }
         
         ArrayList<Empleado> current = JSONService.readWorkers();
         ArrayList<Empleado> additions = JSONService.readWorkers(file.getPath());
@@ -141,11 +149,11 @@ public class ListaEmpleadosController {
                     break;
                 }
             }
-
+            
             if(! found) current.add(e);
         }
         
-        if(Utils.showAlert("Confirmar", "¿Estás seguro?", "Se sobreescribará la información de empleados ya existentes.", AlertType.CONFIRMATION)) {
+        if(! Utils.showAlert("Confirmar", "¿Estás seguro?", "Se sobreescribará la información de empleados ya existentes.", AlertType.CONFIRMATION)) {
             
             if(JSONService.writeWorkers(current)) 
                 Utils.showAlert("Archivo importado.", "Se ha importado correctamente los empleados.", "", AlertType.INFORMATION);
@@ -156,11 +164,39 @@ public class ListaEmpleadosController {
             return;
         }
         Utils.showAlert("Importación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
-        
     }
     
     @FXML
+    @SuppressWarnings("CallToPrintStackTrace")
     private void exportarJSON() {
+        Stage stage = (Stage) btnExportar.getScene().getWindow();
         
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona un directorio para guardar");
+        fileChooser.setInitialFileName("respaldo_esclavos_punto_jotason.json");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Archivos JSON", "*json")
+        );
+        
+        File file  = fileChooser.showSaveDialog(stage);
+        
+        if(file == null) {
+            Utils.showAlert("Exportación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
+            return;
+        }
+               
+        ArrayList<Empleado> current = JSONService.readWorkers();
+        
+        try (BufferedWriter bw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
+            bw.write("");
+            Gson gson = JSONService.createGson();
+            gson.toJson(current, bw);
+            Utils.showAlert("Exportación exitosa", "Proceso terminado exitosamente.", "", AlertType.INFORMATION);
+        }catch(IOException e) {
+            e.printStackTrace();
+            Utils.showAlert("No se pudo exportar.", "Hubo un error al exportar.", "", AlertType.ERROR);
+        }
     }
+    
+    
 }
