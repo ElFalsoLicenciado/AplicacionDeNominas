@@ -10,25 +10,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+
 public class Utils {
     
     private static Map<String, DayOfWeek> daysOfTheWeek;
     private static final String [] nameOfTheDays = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
-
+    
     public static void innitStuff(String folderName, String jsonName){
         innitJSON(folderName, jsonName);
-
+        
         daysOfTheWeek = new HashMap<>();
-
+        
         LocalDate aux = LocalDate.of(2025, 01, 06);
-
+        
         for (int i = 0; i < 7; i++) {
             daysOfTheWeek.put(nameOfTheDays[i], aux.getDayOfWeek());
             aux = aux.plusDays(1);
         }
     }
-
-
+    
+    
     public static String stringArrayToString (ArrayList<String> array) {
         String cadena = "";
         
@@ -39,36 +43,14 @@ public class Utils {
         
         return cadena;
     }
-
-    public static int timeToMinutes(String time) {
-
-        int hour = Integer.parseInt(time.substring(0, 2));
-        int minutes = Integer.parseInt(time.substring(3, 5));
-
-        return (hour * 60) + minutes;
-    }
-
-
-    public static boolean isHourBetween(String start, String end, String hour) {
-    int startMin = timeToMinutes(start);
-    int endMin = timeToMinutes(end);
-    int hourMin = timeToMinutes(hour);
-
-    if (startMin <= endMin) {
-        return hourMin >= startMin && hourMin <= endMin;
-    } else {
-        return hourMin >= startMin || hourMin <= endMin;
-    }
-}
-
-
+    
     
     private static void innitJSON(String folderName, String jsonName){
         Path folder = createFolder(folderName);
         createJSON(folder, jsonName);
     }
-
-
+    
+    
     @SuppressWarnings("CallToPrintStackTrace")
     public static Path createFolder(String name){
         
@@ -76,25 +58,34 @@ public class Utils {
         
         try {
             if (! Files.exists(folderPath)) Files.createDirectories(folderPath);
-                // System.out.println("Folder created");
+            // System.out.println("Folder created");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return folderPath;
     }
-
+    
     @SuppressWarnings("CallToPrintStackTrace")
     public static void createJSON(Path folder, String name){
         Path jsonFile = folder.resolve(name+".json");
-
+        
         try{
             if (! Files.exists(jsonFile)) Files.writeString(jsonFile, "");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    
     public static DayOfWeek getDayOfWeek(String name) {
         return daysOfTheWeek.get(name);
+    }
+    
+    public static boolean showAlert(String title, String header, String content, AlertType alertType){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        
+        return alert.showAndWait().get() == ButtonType.OK;
     }
 }

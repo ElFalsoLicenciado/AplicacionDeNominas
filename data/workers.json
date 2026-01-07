@@ -46,5 +46,28 @@
     "apellidoM": "2qioug ",
     "observaciones": [],
     "status": "BAJA"
+  },
+  {
+    "id": "01ec803f-3155-4162-8db5-132266643d86",
+    "nombre": "skibidi",
+    "apellidoP": "toilet",
+    "apellidoM": "creeper",
+    "log": {
+      "logs": {
+        "2026-01-06": {
+          "date": "2026-01-06",
+          "periodos": [
+            {
+              "entrada": "12:00",
+              "salida": "18:30"
+            }
+          ],
+          "totalMinutosTrabajados": 390,
+          "totalPagoDia": 260.0
+        }
+      }
+    },
+    "observaciones": [],
+    "status": "ALTA"
   }
 ]

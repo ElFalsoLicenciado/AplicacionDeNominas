@@ -1,5 +1,6 @@
 package com.albalatro.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
@@ -7,13 +8,18 @@ import com.albalatro.model.Status;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
+import com.albalatro.utils.Utils;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class ListaEmpleadosController {
     
@@ -21,6 +27,8 @@ public class ListaEmpleadosController {
     @FXML private Label lblSinEmpleados;
     @FXML private ScrollPane scrollContainer;
     @FXML private Button btnCambiarStatus;
+    @FXML private Button btnExportar;
+    @FXML private Button btnImportar;
     private ArrayList<Empleado> empleados;
     private Status status;
     
@@ -37,11 +45,12 @@ public class ListaEmpleadosController {
             scrollContainer.setVisible(true);
             
             //Generar botones dinámicamente
-            mostrarEmpleados(empleados);
+            mostrarEmpleados();
         }
     }
     
-    private void mostrarEmpleados(ArrayList<Empleado> empleados) {
+    private void mostrarEmpleados() {
+        empleados = JSONService.readWorkers();
         vboxLista.getChildren().clear();
         for (Empleado emp : empleados) {
             if (emp.getStatus() == status) {
@@ -56,8 +65,8 @@ public class ListaEmpleadosController {
         System.out.print("Status cambiado de " + status);
         status = (status == Status.ALTA) ? Status.BAJA : Status.ALTA;
         System.out.println(" a " + status);
-
-        mostrarEmpleados(empleados);
+        
+        mostrarEmpleados();
     }
     
     private Button crearBotonEmpleado(Empleado emp) {
@@ -107,13 +116,51 @@ public class ListaEmpleadosController {
         
         return btn;
     }
+    
+    @FXML
+    private void importarJSON() {
+        Stage stage = (Stage) btnImportar.getScene().getWindow(); 
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona un archivo JSON");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("JSON", "*.json"));
+        
+        File file = fileChooser.showOpenDialog(stage);
 
-    // private void importar() {
+        if(file == null) return;
+        
+        ArrayList<Empleado> current = JSONService.readWorkers();
+        ArrayList<Empleado> additions = JSONService.readWorkers(file.getPath());
+        
+        for(Empleado e : additions) {
+            boolean found = false;
+            for(int i = 0; i < current.size(); i++) {
+                if(current.get(i).getId().equals(e.getId())) {
+                    current.set(i, e);
+                    found = true;
+                    break;
+                }
+            }
 
-    //     JSONService.importJSON();
-    // }
-
-    // private void exportar() {
-    //     JSONService.exportJSON(folder);
-    // }
+            if(! found) current.add(e);
+        }
+        
+        if(Utils.showAlert("Confirmar", "¿Estás seguro?", "Se sobreescribará la información de empleados ya existentes.", AlertType.CONFIRMATION)) {
+            
+            if(JSONService.writeWorkers(current)) 
+                Utils.showAlert("Archivo importado.", "Se ha importado correctamente los empleados.", "", AlertType.INFORMATION);
+            
+            else Utils.showAlert("No se pudo importar.", "Hubo un error al importar.", "", AlertType.ERROR);
+            
+            mostrarEmpleados();
+            return;
+        }
+        Utils.showAlert("Importación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
+        
+    }
+    
+    @FXML
+    private void exportarJSON() {
+        
+    }
 }
