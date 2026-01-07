@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javax.swing.filechooser.FileSystemView;
+
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Status;
 import com.albalatro.service.JSONService;
@@ -57,6 +59,7 @@ public class ListaEmpleadosController {
     private void mostrarEmpleados() {
         empleados = JSONService.readWorkers();
         vboxLista.getChildren().clear();
+
         for (Empleado emp : empleados) {
             if (emp.getStatus() == status) {
                 Button btn = crearBotonEmpleado(emp);
@@ -64,13 +67,14 @@ public class ListaEmpleadosController {
             }
         }
     }
-    
+
     @FXML
     public void cambiarStatus() {
         System.out.print("Status cambiado de " + status);
         status = (status == Status.ALTA) ? Status.BAJA : Status.ALTA;
+        btnCambiarStatus.setText((status == Status.ALTA) ? "Mostrar antiguos Empleados" : "Mostrar Empleados activos");
         System.out.println(" a " + status);
-        
+
         mostrarEmpleados();
     }
     
@@ -128,7 +132,7 @@ public class ListaEmpleadosController {
         
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona un archivo JSON");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("JSON", "*.json"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Archivo JSON (*.json)", "*.json"));
         
         File file = fileChooser.showOpenDialog(stage);
         
@@ -170,13 +174,24 @@ public class ListaEmpleadosController {
     @SuppressWarnings("CallToPrintStackTrace")
     private void exportarJSON() {
         Stage stage = (Stage) btnExportar.getScene().getWindow();
+        //Ruta para el escritorio
+        String userHome = System.getProperty("user.home");
+        File rutaEscritorio = FileSystemView.getFileSystemView().getHomeDirectory();
         
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona un directorio para guardar");
-        fileChooser.setInitialFileName("respaldo_esclavos_punto_jotason.json");
+        fileChooser.setInitialFileName("respaldo_empleados.json");
         fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Archivos JSON", "*json")
+            new FileChooser.ExtensionFilter("Archivos JSON (*.json)", "*.json")
         );
+
+        // En caso de que no tenga escritorio
+        if (rutaEscritorio.exists() && rutaEscritorio.isDirectory()) {
+            fileChooser.setInitialDirectory(rutaEscritorio);
+        } else {
+            // Plan B: Usar la carpeta de Documentos o el Home
+            fileChooser.setInitialDirectory(new File(userHome));
+        }
         
         File file  = fileChooser.showSaveDialog(stage);
         
@@ -197,6 +212,4 @@ public class ListaEmpleadosController {
             Utils.showAlert("No se pudo exportar.", "Hubo un error al exportar.", "", AlertType.ERROR);
         }
     }
-    
-    
 }
