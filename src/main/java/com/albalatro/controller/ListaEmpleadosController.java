@@ -48,9 +48,6 @@ public class ListaEmpleadosController {
             lblSinEmpleados.setVisible(true);
             scrollContainer.setVisible(false);
         } else {
-            lblSinEmpleados.setVisible(false);
-            scrollContainer.setVisible(true);
-            
             //Generar botones dinámicamente
             mostrarEmpleados();
         }
@@ -59,7 +56,10 @@ public class ListaEmpleadosController {
     private void mostrarEmpleados() {
         empleados = JSONService.readWorkers();
         vboxLista.getChildren().clear();
-
+        
+        lblSinEmpleados.setVisible(false);
+        scrollContainer.setVisible(true);
+        
         for (Empleado emp : empleados) {
             if (emp.getStatus() == status) {
                 Button btn = crearBotonEmpleado(emp);
@@ -67,14 +67,14 @@ public class ListaEmpleadosController {
             }
         }
     }
-
+    
     @FXML
     public void cambiarStatus() {
         System.out.print("Status cambiado de " + status);
         status = (status == Status.ALTA) ? Status.BAJA : Status.ALTA;
         btnCambiarStatus.setText((status == Status.ALTA) ? "Mostrar antiguos Empleados" : "Mostrar Empleados activos");
         System.out.println(" a " + status);
-
+        
         mostrarEmpleados();
     }
     
@@ -147,7 +147,7 @@ public class ListaEmpleadosController {
         // 2. Hacemos el Merge (Tu lógica aquí estaba perfecta)
         int nuevos = 0;
         int actualizados = 0;
-
+        
         for(Empleado e : additions) {
             boolean found = false;
             for(int i = 0; i < current.size(); i++) {
@@ -163,12 +163,17 @@ public class ListaEmpleadosController {
                 nuevos++;
             }
         }
+
+        if(nuevos == 0 && actualizados == 0) {
+            Utils.showAlert("Error", "El JSON esta vacío.", "", AlertType.ERROR);
+            return;
+        }
         
         // "Si el usuario dice SÍ, entonces guardamos"
         if(Utils.showAlert("Confirmar Importación", 
-                           "Se van a procesar " + additions.size() + " registros.", 
-                           "Nuevos: " + nuevos + " | Actualizados: " + actualizados + "\n¿Deseas continuar?", 
-                           AlertType.CONFIRMATION)) {
+        "Se van a procesar " + additions.size() + " registros.", 
+        "Nuevos: " + nuevos + " | Actualizados: " + actualizados + "\n¿Deseas continuar?", 
+        AlertType.CONFIRMATION)) {
             
             if(JSONService.writeWorkers(current)) {
                 Utils.showAlert("Éxito", "Importación completada correctamente.", "", AlertType.INFORMATION);
@@ -176,7 +181,7 @@ public class ListaEmpleadosController {
             } else {
                 Utils.showAlert("Error", "No se pudo escribir en el archivo de base de datos.", "", AlertType.ERROR);
             }
-
+            
         } else {
             // Si el usuario dice que NO en la alerta
             Utils.showAlert("Cancelado", "No se realizaron cambios.", "", AlertType.WARNING);
@@ -196,7 +201,7 @@ public class ListaEmpleadosController {
         fileChooser.getExtensionFilters().add(
             new FileChooser.ExtensionFilter("Archivos JSON (*.json)", "*.json")
         );
-
+        
         // En caso de que no tenga escritorio
         if (rutaEscritorio.exists() && rutaEscritorio.isDirectory()) {
             fileChooser.setInitialDirectory(rutaEscritorio);
@@ -211,7 +216,7 @@ public class ListaEmpleadosController {
             Utils.showAlert("Exportación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
             return;
         }
-               
+        
         ArrayList<Empleado> current = JSONService.readWorkers();
         
         try (BufferedWriter bw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
