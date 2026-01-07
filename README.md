@@ -23,23 +23,15 @@ La ultima vez que lo hice fue de 3 semanas 1-21 Dic y lo que sacaba de lo que se
 - Cada recuadro aparte de mostrar las horas trabajadas, día y mes que
 también muestre las horas de entrada y de salida (de ese día claro)
 
-# Cosas por hacer:
+# Cosas por hacer / TO DO:
 
 1. Entregar un PDF con el siguiente formato:    
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo
 
-2. Dependiendo del número de semenas del periodo, hacer un tipo tabla semejante a el widget del calendario.
+2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado o un PDF para todos los empleados?)
 
-        
-    ![1766980567245](image/README/1766980567245.png)
-
-3. Guardar de alguna forma cada usuario y sus registros de chamba en JSON.
-4. Poder crear, editar, leer y borrar usuarios (SOFT DELETE).
-5. Agregar manera de cambiar el salario para todos.
-6. TODO: Añadir capacidad del programa para poder exportar un archivo JSON al directorio deseado por el usuario, para que sirva como respaldo.
-7. TODO: Añadir boton en la view principal para poder importar informacion de un archivo JSON (***AÑADIR MAS NO REESCRIBIR AL JSON ACTUAL CON EL QUE SE TRABAJA***) para trabajar con más empleados. Para seleccionar tambien se debe utilizar Windows File Explorer (o el explorador de archivos nativo del OS).
 
 ```text
 src/
