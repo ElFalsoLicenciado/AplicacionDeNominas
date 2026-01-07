@@ -76,10 +76,7 @@ public class Utils {
         }
     }
     
-    public static DayOfWeek getDayOfWeek(String name) {
-        return daysOfTheWeek.get(name);
-    }
-    
+
     public static boolean showAlert(String title, String header, String content, AlertType alertType){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

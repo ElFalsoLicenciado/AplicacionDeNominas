@@ -18,7 +18,6 @@ La ultima vez que lo hice fue de 3 semanas 1-21 Dic y lo que sacaba de lo que se
 - Poder modificar cuantas semanas se van a pagar, es decir, el periodo de paga (se me ocurrió después de ver tu propuesta).
 - Permitir imprimir las horas, días trabajados (como la propuesta que me mandaste pero que se pueda imprimir).
 - En el formato de paga aparte de venir el nombre del trabajador, sus horas trabajadas y su salario, también que venga un apartado donde diga cuanto gano en esa semana (algo así como una columna extra después del Domingo donde diga cuanto gano el trabajador esa semana de lunes a sábado y si trabajo el domingo, que le sume lo que gano el domingo y lo agregue al total de esa semana).
-- La foto y edad están de más, con el puro nombre es suficiente.
 - Permitir agregar un apartado de notas ahí donde pusiste Etc…. para anexar ahí mismo observaciones o reclamaciones del jefe a los trabajadores, si puedes poner el nombre en el lado derecho y dejar todo el lado izquierdo en blanco (ese apartado se utilizará para engraparle los tickets y comprobantes de préstamo una vez ya este impreso).
 - Cada recuadro aparte de mostrar las horas trabajadas, día y mes que
 también muestre las horas de entrada y de salida (de ese día claro)
@@ -30,9 +29,21 @@ también muestre las horas de entrada y de salida (de ese día claro)
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo
 
-2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado o un PDF para todos los empleados?)
+2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado)
 
+3. Botón para guardar los cambios del empleado en el JSON.
 
+4. Poder gestionar el salario de los empleados: (EN JSON)
+   1. Individual.
+      1. Aumento de salario por hora.
+      2. Salario fijo por día.
+   2. Grupal.
+
+5. Justificacion de faltas por día.
+
+6. Agregar botón de observaciones a la hora de gestionar un empleado (Editar sus datos).
+
+7. Seleccionar un rango de días a pagar. 
 ```text
 src/
 └── main/
