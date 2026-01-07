@@ -69,5 +69,21 @@
     },
     "observaciones": [],
     "status": "ALTA"
+  },
+  {
+    "id": "4f7f90f0-9d36-492f-92c5-388f2c45f3e2",
+    "nombre": "tung",
+    "apellidoP": "tung",
+    "apellidoM": "sahur",
+    "observaciones": [],
+    "status": "BAJA"
+  },
+  {
+    "id": "3f95ae5e-4fed-4d1b-91b2-c5f4d74b7133",
+    "nombre": "cande",
+    "apellidoP": "asdjkl",
+    "apellidoM": "asfjkl",
+    "observaciones": [],
+    "status": "BAJA"
   }
 ]

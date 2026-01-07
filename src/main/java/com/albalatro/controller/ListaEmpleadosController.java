@@ -137,41 +137,53 @@ public class ListaEmpleadosController {
         File file = fileChooser.showOpenDialog(stage);
         
         if(file == null) {
-            Utils.showAlert("Importación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
-            return;
+            return; // El usuario cerró la ventana de archivos
         }
         
+        // 1. Leemos los datos
         ArrayList<Empleado> current = JSONService.readWorkers();
         ArrayList<Empleado> additions = JSONService.readWorkers(file.getPath());
         
+        // 2. Hacemos el Merge (Tu lógica aquí estaba perfecta)
+        int nuevos = 0;
+        int actualizados = 0;
+
         for(Empleado e : additions) {
             boolean found = false;
             for(int i = 0; i < current.size(); i++) {
                 if(current.get(i).getId().equals(e.getId())) {
                     current.set(i, e);
                     found = true;
+                    actualizados++;
                     break;
                 }
             }
-            
-            if(! found) current.add(e);
+            if(! found) {
+                current.add(e);
+                nuevos++;
+            }
         }
         
-        if(! Utils.showAlert("Confirmar", "¿Estás seguro?", "Se sobreescribará la información de empleados ya existentes.", AlertType.CONFIRMATION)) {
+        // "Si el usuario dice SÍ, entonces guardamos"
+        if(Utils.showAlert("Confirmar Importación", 
+                           "Se van a procesar " + additions.size() + " registros.", 
+                           "Nuevos: " + nuevos + " | Actualizados: " + actualizados + "\n¿Deseas continuar?", 
+                           AlertType.CONFIRMATION)) {
             
-            if(JSONService.writeWorkers(current)) 
-                Utils.showAlert("Archivo importado.", "Se ha importado correctamente los empleados.", "", AlertType.INFORMATION);
-            
-            else Utils.showAlert("No se pudo importar.", "Hubo un error al importar.", "", AlertType.ERROR);
-            
-            mostrarEmpleados();
-            return;
+            if(JSONService.writeWorkers(current)) {
+                Utils.showAlert("Éxito", "Importación completada correctamente.", "", AlertType.INFORMATION);
+                mostrarEmpleados(); // Actualizamos la vista
+            } else {
+                Utils.showAlert("Error", "No se pudo escribir en el archivo de base de datos.", "", AlertType.ERROR);
+            }
+
+        } else {
+            // Si el usuario dice que NO en la alerta
+            Utils.showAlert("Cancelado", "No se realizaron cambios.", "", AlertType.WARNING);
         }
-        Utils.showAlert("Importación cancelada", "Se ha cancelado el proceso.", "", AlertType.WARNING);
     }
     
     @FXML
-    @SuppressWarnings("CallToPrintStackTrace")
     private void exportarJSON() {
         Stage stage = (Stage) btnExportar.getScene().getWindow();
         //Ruta para el escritorio
