@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -23,17 +24,19 @@
    <center>
       <AnchorPane prefHeight="378.0" prefWidth="402.0" BorderPane.alignment="CENTER">
          <children>
-            <RadioButton fx:id="choiceHora" layoutX="90.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por hora">
+            <RadioButton fx:id="choiceHora" layoutX="76.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por hora">
                <toggleGroup>
                   <ToggleGroup fx:id="groupPago" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="choiceFijo" layoutX="208.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por día" toggleGroup="$groupPago" />
-            <Spinner fx:id="spinnerNormal" editable="true" layoutX="127.0" layoutY="144.0" />
-            <Spinner fx:id="spinnerDomingo" editable="true" layoutX="126.0" layoutY="237.0" />
-            <Label fx:id="labelNormal" alignment="CENTER" layoutY="112.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Entre semana" textAlignment="CENTER" />
-            <Label fx:id="labelDomingo" alignment="CENTER" layoutX="2.0" layoutY="202.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Domingos" textAlignment="CENTER" />
-            <CheckBox fx:id="choiceTodos" layoutX="153.0" layoutY="63.0" mnemonicParsing="false" onAction="#setDias" text="Todos los dias" />
+            <RadioButton fx:id="choiceFijo" layoutX="240.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por día" toggleGroup="$groupPago" />
+            <Spinner fx:id="spinnerNormal" editable="true" layoutX="125.0" layoutY="190.0" />
+            <Spinner fx:id="spinnerDomingo" editable="true" layoutX="125.0" layoutY="267.0" />
+            <Label fx:id="labelNormal" alignment="CENTER" layoutX="-1.0" layoutY="158.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Entre semana" textAlignment="CENTER" />
+            <Label fx:id="labelDomingo" alignment="CENTER" layoutX="1.0" layoutY="233.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Domingos" textAlignment="CENTER" />
+            <CheckBox fx:id="choiceTodos" layoutX="153.0" layoutY="125.0" mnemonicParsing="false" onAction="#setDias" text="Todos los dias" />
+            <Label fx:id="labelNormal1" alignment="CENTER" layoutX="1.0" layoutY="49.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Nombre" textAlignment="CENTER" />
+            <TextField fx:id="fieldNombre" layoutX="127.0" layoutY="83.0" />
          </children>
       </AnchorPane>
    </center>
