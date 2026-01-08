@@ -1,7 +1,7 @@
 package com.albalatro.model;
 
-import java.util.Map;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * <h1> Clase {@code Log}</h1>

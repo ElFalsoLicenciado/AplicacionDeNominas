@@ -12,6 +12,7 @@ import com.albalatro.model.DailyLog;
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Log;
 import com.albalatro.model.Periodo;
+import com.albalatro.model.Salario;
 import com.albalatro.service.JSONService;
 
 import javafx.fxml.FXML;
@@ -31,12 +32,12 @@ public class DetalleController {
 
     private LocalDate fechaActual;
     private Empleado empleadoActual;
+    private Salario salario;
     private Runnable onDatosGuardados; // El "Callback" para avisar al calendario
 
     // Formateadores de hora
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEEE dd MMM", new Locale("es", "ES"));
-
     // --- MÉTODOS DE INICIALIZACIÓN ---
 
     public void setOnDatosGuardados(Runnable onDatosGuardados) {
@@ -49,7 +50,7 @@ public class DetalleController {
     public void cargarDatosDia(LocalDate fecha, Empleado emp) {
         this.fechaActual = fecha;
         this.empleadoActual = emp;
-
+        
         // 1. Actualizar Título
         lblFechaActual.setText(fecha.format(dateFormatter).toUpperCase());
 
@@ -61,6 +62,8 @@ public class DetalleController {
             DailyLog logDia = emp.getLog().getLogs().get(fecha);
             
             if (logDia != null && logDia.getPeriodos() != null) {
+                salario = logDia.getSalario();
+
                 // Actualizar total visual
                 lblTotalDinero.setText(String.format("$%.2f", logDia.getTotalPagoDia()));
 
@@ -70,8 +73,10 @@ public class DetalleController {
                 }
             } else {
                 lblTotalDinero.setText("$0.00");
+                
             }
         }
+        salario = JSONService.getSalario(empleadoActual.getSalario());
     }
 
     // --- MÉTODOS DE INTERACCIÓN ---
@@ -137,7 +142,7 @@ public class DetalleController {
         // Creamos o actualizamos el DailyLog
         DailyLog logDia = empleadoActual.getLog().getLogs().get(fechaActual);
         if (logDia == null) {
-            logDia = new DailyLog(fechaActual, nuevosPeriodos);
+            logDia = new DailyLog(salario,  fechaActual, nuevosPeriodos);
             empleadoActual.getLog().getLogs().put(fechaActual, logDia);
         } else {
             logDia.setPeriodos(nuevosPeriodos);

@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
+import com.albalatro.model.Pago;
 import com.albalatro.model.Salario;
 import com.albalatro.utils.LocalDateTypeAdapter;
 import com.albalatro.utils.LocalTimeTypeAdapter;
@@ -67,27 +68,15 @@ public class JSONService {
     
     private static void setFILE(int choice, String FILE) {
         switch (choice) {
-            case 0 -> {
-                JSONService.workers_file = FILE;
-            }
-            case 1 -> {
-                JSONService.wages_file = FILE;
-            }
-            default -> {
-                throw new AssertionError();
-            }
+            case 0 -> JSONService.workers_file = FILE;
+            case 1 -> JSONService.wages_file = FILE; 
         }
     }
 
     private static void innitWages(){
         ArrayList<Salario> wages = readWages();
 
-        Salario base = new Salario();
-        base.setId("BASE");
-        base.setNombre("Salario base");
-        base.setNormal(10.0);
-        base.setDomingo(15.0);
-
+        Salario base =  createBaseWage();
         boolean found = false;
 
         for(Salario w : wages) {
@@ -102,6 +91,17 @@ public class JSONService {
         }
 
         writeWages(wages);
+    }
+
+    private static Salario createBaseWage() {
+        Salario base = new Salario();
+        base.setId("BASE");
+        base.setNombre("Salario base");
+        base.setPago(Pago.HORA);
+        base.setNormal(40.0);
+        base.setDomingo(50.0);
+
+        return base;
     }
     
     public static Gson createGson() {
@@ -184,5 +184,14 @@ public class JSONService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static Salario getSalario(String id) {
+        for (Salario w: readWages()) {
+            if(w.getId().equals(id)) {
+                return w;
+            }
+        }
+        return null;
     }
 }
