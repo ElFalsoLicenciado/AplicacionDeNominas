@@ -44,6 +44,8 @@ también muestre las horas de entrada y de salida (de ese día claro)
 6. Agregar botón de observaciones a la hora de gestionar un empleado (Editar sus datos).
 
 7. Seleccionar un rango de días a pagar. 
+
+8. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
 ```text
 src/
 └── main/

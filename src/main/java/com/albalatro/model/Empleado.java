@@ -22,10 +22,12 @@ public class Empleado implements java.io.Serializable{
     private String apellidoP;
     private String apellidoM;
     private Log log;
+    private String salario;
     private ArrayList<String> observaciones;
     private Status status;
     
     public Empleado() {
+        salario = "BASE";
         observaciones = new ArrayList<>();
         status = Status.ALTA;
     }
@@ -35,18 +37,20 @@ public class Empleado implements java.io.Serializable{
         this.nombre = nombre;
         this.apellidoM = apellidoM;
         this.apellidoP = apellidoP;
+        salario = "BASE";
         observaciones = new ArrayList<>();
         status = Status.ALTA;
     }
-
-    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log,
-            ArrayList<String> observaciones) {
+    
+    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario, ArrayList<String> observaciones, Status status) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
         this.apellidoM = apellidoM;
         this.log = log;
+        this.salario = salario;
         this.observaciones = observaciones;
+        this.status = status;
     }
     
     public String getId() {
@@ -56,7 +60,6 @@ public class Empleado implements java.io.Serializable{
     public void setId(String id) {
         this.id = id;
     }
-    
     
     /** 
     * @return String
@@ -99,7 +102,23 @@ public class Empleado implements java.io.Serializable{
     public void setApellidoM(String apellidoM) {
         this.apellidoM = apellidoM;
     }
-
+    
+    public Log getLog() {
+        return log;
+    }
+    
+    public void setLog(Log log) {
+        this.log = log;
+    }
+    
+    public String getSalario() {
+        return salario;
+    }
+    
+    public void setSalario(String salario) {
+        this.salario = salario;
+    }
+    
     public ArrayList<String> getObservaciones() {
         return observaciones;
     }
@@ -107,23 +126,15 @@ public class Empleado implements java.io.Serializable{
     public void setObservaciones(ArrayList<String> observaciones) {
         this.observaciones = observaciones;
     }
-
-    public Log getLog() {
-        return log;
-    }
-
-    public void setLog(Log log) {
-        this.log = log;
-    }
-
+    
     public Status getStatus() {
         return status;
     }
-
+    
     public void setStatus(Status status) {
         this.status = status;
     }
-
+    
     public String getNombreCompleto() {
         return nombre + " " + apellidoP + " " + apellidoM;
     }
@@ -140,4 +151,5 @@ public class Empleado implements java.io.Serializable{
         ", observaciones= '" + Utils.stringArrayToString(observaciones) + '\'' +
         '}';
     }
+    
 }

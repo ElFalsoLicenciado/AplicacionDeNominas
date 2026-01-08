@@ -1,37 +1,12 @@
 package com.albalatro.utils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
 public class Utils {
-    
-    private static Map<String, DayOfWeek> daysOfTheWeek;
-    private static final String [] nameOfTheDays = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
-    
-    public static void innitStuff(String folderName, String jsonName){
-        innitJSON(folderName, jsonName);
-        
-        daysOfTheWeek = new HashMap<>();
-        
-        LocalDate aux = LocalDate.of(2025, 01, 06);
-        
-        for (int i = 0; i < 7; i++) {
-            daysOfTheWeek.put(nameOfTheDays[i], aux.getDayOfWeek());
-            aux = aux.plusDays(1);
-        }
-    }
-    
     
     public static String stringArrayToString (ArrayList<String> array) {
         String cadena = "";
@@ -44,39 +19,6 @@ public class Utils {
         return cadena;
     }
     
-    
-    private static void innitJSON(String folderName, String jsonName){
-        Path folder = createFolder(folderName);
-        createJSON(folder, jsonName);
-    }
-    
-    
-    @SuppressWarnings("CallToPrintStackTrace")
-    public static Path createFolder(String name){
-        
-        Path folderPath = Paths.get(name); // relative path
-        
-        try {
-            if (! Files.exists(folderPath)) Files.createDirectories(folderPath);
-            // System.out.println("Folder created");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return folderPath;
-    }
-    
-    @SuppressWarnings("CallToPrintStackTrace")
-    public static void createJSON(Path folder, String name){
-        Path jsonFile = folder.resolve(name+".json");
-        
-        try{
-            if (! Files.exists(jsonFile)) Files.writeString(jsonFile, "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-
     public static boolean showAlert(String title, String header, String content, AlertType alertType){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

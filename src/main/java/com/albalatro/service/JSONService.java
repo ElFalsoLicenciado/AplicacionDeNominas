@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
+import com.albalatro.model.Salario;
 import com.albalatro.utils.LocalDateTypeAdapter;
 import com.albalatro.utils.LocalTimeTypeAdapter;
 import com.google.gson.Gson;
@@ -22,12 +23,13 @@ import com.google.gson.reflect.TypeToken;
 public class JSONService {
     
     // Ruta final que usará la aplicación
-    public static String FILE = "empleados.json"; 
-
+    public static String workers_file = "empleados.json"; 
+    public static String wages_file = "salarios.json";
+    
     // Configuración de rutas
     public static final String APP_FOLDER = "AlbalatroApp";
     public static final String DATA_FOLDER = "data";
-    public static final String FILE_NAME = "empleados.json"; 
+    public static final String FILE_NAME[] = {"empleados.json", "salarios.json"}; 
     
     static {
         System.out.println("--- INICIANDO SERVICIO DE DATOS ---");
@@ -36,44 +38,70 @@ public class JSONService {
             
             // Ruta destino (C:/Users/Usuario/AlbalatroApp/data/empleados.json)
             File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER);
-            File destinationFile = new File(folderPath, FILE_NAME);
-
-            // Ruta Origen para migración
-            File localFolder = new File(System.getProperty("user.dir"), "data");
-            File localFile = new File(localFolder, FILE_NAME); 
-
-            System.out.println("1. Buscando archivo origen en: " + localFile.getAbsolutePath());
-            System.out.println("2. Ruta destino deseada: " + destinationFile.getAbsolutePath());
-
-            if (!folderPath.exists()) {
-                folderPath.mkdirs();
-            }
-
-            // Lógica de Migración
-            if (!destinationFile.exists()) {
-                System.out.println("   -> Destino vacío. Buscando respaldo local...");
+            
+            for (int i = 0; i < FILE_NAME.length; i++) {
+                File destinationFile = new File(folderPath, FILE_NAME[i]);
                 
-                if (localFile.exists()) {
-                    System.out.println("   -> ¡Respaldo encontrado! Copiando...");
-                    Files.copy(localFile.toPath(), destinationFile.toPath());
-                } else {
-                    System.out.println("   -> No se encontró respaldo local. Creando DB nueva.");
+                IO.println("Ruta destino deseada: " + destinationFile.getAbsolutePath());
+                if (!folderPath.exists()) {
+                    folderPath.mkdirs();
+                }
+                
+                // Lógica de Migración
+                if (! destinationFile.exists()) {
+                    IO.println("   -> Destino vacío. Buscando respaldo local...");
+
                     destinationFile.createNewFile();
                     Files.writeString(destinationFile.toPath(), "[]", StandardCharsets.UTF_8);
+                } else {
+                    IO.println("   -> Archivo de datos cargado correctamente.");
                 }
-            } else {
-                System.out.println("   -> Archivo de datos cargado correctamente.");
-            }
-
-            setFILE(destinationFile.getAbsolutePath());
-
-        } catch (Exception e) {
+                
+                setFILE(i,destinationFile.getAbsolutePath());
+            }            
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        innitWages();
     }
     
-    public static void setFILE(String FILE) {
-        JSONService.FILE = FILE;
+    private static void setFILE(int choice, String FILE) {
+        switch (choice) {
+            case 0 -> {
+                JSONService.workers_file = FILE;
+            }
+            case 1 -> {
+                JSONService.wages_file = FILE;
+            }
+            default -> {
+                throw new AssertionError();
+            }
+        }
+    }
+
+    private static void innitWages(){
+        ArrayList<Salario> wages = readWages();
+
+        Salario base = new Salario();
+        base.setId("BASE");
+        base.setNombre("Salario base");
+        base.setNormal(10.0);
+        base.setDomingo(15.0);
+
+        boolean found = false;
+
+        for(Salario w : wages) {
+            if(w.getId().equals(base.getId())) {
+                found = true;
+                break;
+            }
+        }
+
+        if (! found) {
+            wages.add(base);
+        }
+
+        writeWages(wages);
     }
     
     public static Gson createGson() {
@@ -82,13 +110,14 @@ public class JSONService {
         .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
         .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter()) 
         .create();
+        
     }
     
     // ==========================================
     // LECTURA
     // ==========================================
     public static ArrayList<Empleado> readWorkers() {
-        return readWorkers(FILE);
+        return readWorkers(workers_file);
     }
     
     public static ArrayList<Empleado> readWorkers(String path) {
@@ -109,13 +138,47 @@ public class JSONService {
         }
     }
     
+    public static ArrayList<Salario> readWages() {
+        return readWages(wages_file);
+    }
+    
+    public static ArrayList<Salario> readWages(String path) {
+        File archivo = new File(path);
+        
+        if (! archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
+        
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(path), StandardCharsets.UTF_8)) {
+            Gson gson = createGson();
+            Type listType = new TypeToken<ArrayList<Salario>>(){}.getType();
+            ArrayList<Salario> wages = gson.fromJson(reader, listType);
+            return wages != null ? wages : new ArrayList<>();
+        } catch (Exception e) { 
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        
+    }
+    
     // ==========================================
     // ESCRITURA
     // ==========================================
     public static boolean writeWorkers(ArrayList<Empleado> workers) {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(FILE), StandardCharsets.UTF_8)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(workers_file), StandardCharsets.UTF_8)) {
             Gson gson = createGson();
             gson.toJson(workers, writer);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public static boolean writeWages(ArrayList<Salario> wages) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(wages_file), StandardCharsets.UTF_8)) {
+            Gson gson = createGson();
+            gson.toJson(wages, writer);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
