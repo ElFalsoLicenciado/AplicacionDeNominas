@@ -1,6 +1,7 @@
 package com.albalatro.model;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalTime;
 
 public class Periodo {
     private LocalTime entrada;
@@ -32,4 +33,11 @@ public class Periodo {
     public Long getMinutosTrabajados() {
         return Duration.between(entrada, salida).toMinutes();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s-%s", entrada, salida);
+    }
+
+    
 }

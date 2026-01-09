@@ -148,7 +148,7 @@ public class Empleado implements java.io.Serializable{
         "nombre= '" + nombre + '\'' +
         ", apellidoP= '" + apellidoP + '\'' +
         ", apellidoM= '" + apellidoM + '\'' +
-        ", observaciones= '" + Utils.stringArrayToString(observaciones) + '\'' +
+        ", observaciones= '" + Utils.stringArrayToStringBreak(observaciones) + '\'' +
         '}';
     }
     

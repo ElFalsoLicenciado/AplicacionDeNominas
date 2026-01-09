@@ -3,12 +3,15 @@ package com.albalatro.controller;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import com.albalatro.model.DailyLog;
 import com.albalatro.model.Empleado;
+import com.albalatro.model.Periodo;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
+import com.albalatro.utils.Utils;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -198,11 +201,21 @@ public class CalendarioController {
 
         // Si tiene logs, verificar que un log de un día exacto exista
         if (logDelDia != null) {
+            ArrayList<String> array = new ArrayList<>(); 
+            for(Periodo p : logDelDia.getPeriodos()) {
+                array.add(p.toString());
+            }
+            
+            Label lblPeriodos = new Label (Utils.stringArrayToStringSpace(array));
+            lblPeriodos.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            lblPeriodos.wrapTextProperty();
+            
             montoPago = logDelDia.getTotalPagoDia();
             Label lblPago = new Label(String.format("$%.2f", montoPago));
 
             lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 15px; -fx-font-weight: bold;");
-            celda.getChildren().addAll(lblDia, lblHoras, lblPago);
+            celda.getChildren().addAll(lblDia,lblPeriodos, lblHoras, lblPago);
+            
         } else { // Si no tiene log de un dia específico, no se muestra información de pago ese dia.
             celda.getChildren().addAll(lblDia, lblHoras);
         }

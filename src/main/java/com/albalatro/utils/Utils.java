@@ -8,12 +8,23 @@ import javafx.scene.control.ButtonType;
 
 public class Utils {
     
-    public static String stringArrayToString (ArrayList<String> array) {
+    public static String stringArrayToStringBreak (ArrayList<String> array) {
         String cadena = "";
         
         for (int i = 0; i < array.size(); i++) {
             cadena += array.get(i);
             if(i < array.size()-1) cadena += "\n";
+        }
+        
+        return cadena;
+    }
+
+    public static String stringArrayToStringSpace (ArrayList<String> array) {
+        String cadena = "";
+        
+        for (int i = 0; i < array.size(); i++) {
+            cadena += array.get(i);
+            if(i < array.size()-1) cadena += ", ";
         }
         
         return cadena;
