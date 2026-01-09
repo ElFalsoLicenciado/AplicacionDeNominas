@@ -24,13 +24,15 @@ import com.google.gson.reflect.TypeToken;
 public class JSONService {
     
     // Ruta final que usará la aplicación
-    public static String workers_file = "empleados.json"; 
+    public static String workers_file = "empleados.json";
+    public static String workers_edit = "empleadosEdit.json"; 
     public static String wages_file = "salarios.json";
+    public static String wages_edit = "salariosEdit.json";
     
     // Configuración de rutas
     public static final String APP_FOLDER = "AlbalatroApp";
     public static final String DATA_FOLDER = "data";
-    public static final String FILE_NAME[] = {"empleados.json", "salarios.json"}; 
+    public static final String FILE_NAME[] = {"empleados.json", "empleadosEdit.json", "salarios.json", "salariosEdit.json"}; 
     
     static {
         System.out.println("--- INICIANDO SERVICIO DE DATOS ---");
@@ -63,14 +65,22 @@ public class JSONService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        innitEdits();
         innitWages();
     }
     
     private static void setFILE(int choice, String FILE) {
         switch (choice) {
             case 0 -> JSONService.workers_file = FILE;
-            case 1 -> JSONService.wages_file = FILE; 
+            case 1 -> JSONService.workers_edit = FILE;
+            case 2 -> JSONService.wages_file = FILE; 
+            case 3 -> JSONService.wages_edit = FILE;
         }
+    }
+
+    public static void innitEdits(){
+        writeWorkersEdit(readWorkers());
+        writeWagesEdit(readWages());
     }
 
     private static void innitWages(){
@@ -119,6 +129,10 @@ public class JSONService {
     public static ArrayList<Empleado> readWorkers() {
         return readWorkers(workers_file);
     }
+
+    public static ArrayList<Empleado> readWorkersEdit() {
+        return readWorkers(workers_edit);
+    }
     
     public static ArrayList<Empleado> readWorkers(String path) {
         File archivo = new File(path);
@@ -142,6 +156,10 @@ public class JSONService {
         return readWages(wages_file);
     }
     
+    public static ArrayList<Salario> readWagesEdit() {
+        return readWages(wages_edit);
+    }
+
     public static ArrayList<Salario> readWages(String path) {
         File archivo = new File(path);
         
@@ -160,12 +178,20 @@ public class JSONService {
         }
         
     }
+
+    public static boolean writeWorkers(ArrayList<Empleado> workers) {
+        return writeWorkers(workers, workers_file);
+    }
+    
+    public static boolean writeWorkersEdit(ArrayList<Empleado> wages) {
+        return writeWorkers(wages, workers_edit);
+    }
     
     // ==========================================
     // ESCRITURA
     // ==========================================
-    public static boolean writeWorkers(ArrayList<Empleado> workers) {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(workers_file), StandardCharsets.UTF_8)) {
+    public static boolean writeWorkers(ArrayList<Empleado> workers, String path) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
             Gson gson = createGson();
             gson.toJson(workers, writer);
             return true;
@@ -176,7 +202,15 @@ public class JSONService {
     }
     
     public static boolean writeWages(ArrayList<Salario> wages) {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(wages_file), StandardCharsets.UTF_8)) {
+        return writeWages(wages, wages_file);
+    }
+    
+    public static boolean writeWagesEdit(ArrayList<Salario> wages) {
+        return writeWages(wages, wages_edit);
+    }
+    
+    public static boolean writeWages(ArrayList<Salario> wages, String path) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
             Gson gson = createGson();
             gson.toJson(wages, writer);
             return true;
@@ -193,5 +227,23 @@ public class JSONService {
             }
         }
         return null;
+    }
+
+    public static void removeEdits(){
+        try {
+            File workers_json = new File(workers_edit);
+            workers_json.delete();
+
+            File wages_json = new File(wages_edit);
+            wages_json.delete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveChanges(){
+        writeWorkers(readWorkersEdit());
+        writeWages(readWagesEdit());
     }
 }

@@ -152,7 +152,7 @@ public class DetalleController {
         // Necesitas actualizar la lista general de empleados y guardar
         // Como aquí solo tenemos 1 empleado, lo ideal es recargar la lista, buscar este empleado y actualizarlo,
         // o pasar la lista completa. Por simplicidad, asumimos que manejas la persistencia:
-        ArrayList<Empleado> listaActualizada = JSONService.readWorkers();
+        ArrayList<Empleado> listaActualizada = JSONService.readWorkersEdit();
         // Lógica para reemplazar el empleado actual en la lista y guardar...
         for(int i=0; i<listaActualizada.size(); i++) {
             if(listaActualizada.get(i).getId().equals(empleadoActual.getId())) {
@@ -160,7 +160,7 @@ public class DetalleController {
                 break;
             }
         }
-        JSONService.writeWorkers(listaActualizada);
+        JSONService.writeWorkersEdit(listaActualizada);
 
         // 4. Refrescar vista actual (Totales)
         cargarDatosDia(fechaActual, empleadoActual);

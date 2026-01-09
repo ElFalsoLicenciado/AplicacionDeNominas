@@ -2,11 +2,13 @@ package com.albalatro.controller;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Status;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,7 +49,7 @@ public class CrearEmpleadoController {
             return;
         }
 
-        ArrayList<Empleado> lista = JSONService.readWorkers();
+        ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         Empleado target = (empleado == null) ? new Empleado() : empleado;
         
         setData(target, n, ap, am);
@@ -59,7 +61,7 @@ public class CrearEmpleadoController {
             actualizarEnLista(lista, target);
         }
         
-        if (JSONService.writeWorkers(lista)) Navigation.empleadoGuardadoCustomHistory(target);
+        if (JSONService.writeWorkersEdit(lista)) Navigation.empleadoGuardadoCustomHistory(target);
         else mostrarError("Error al escribir en el archivo JSON.");
     }
 
@@ -79,10 +81,10 @@ public class CrearEmpleadoController {
 
     private boolean cambiarStatus(Status s) {
         empleado.setStatus(s);
-        ArrayList<Empleado> lista = JSONService.readWorkers();
+        ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         actualizarEnLista(lista, empleado);
         
-        boolean exito = JSONService.writeWorkers(lista);
+        boolean exito = JSONService.writeWorkersEdit(lista);
         if (exito) System.out.println("Status actualizado a " + s);
         return exito;
     }

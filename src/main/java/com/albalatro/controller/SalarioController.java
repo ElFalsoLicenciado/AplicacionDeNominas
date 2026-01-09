@@ -26,6 +26,7 @@ public class SalarioController implements Initializable{
     @FXML private Spinner<Double> spinnerNormal, spinnerDomingo;
     @FXML private Button btnGuardar, btnCancelar;
     private Salario salario;
+    private String motivo;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -41,7 +42,7 @@ public class SalarioController implements Initializable{
         
     }
     
-    public void cargarDatos(Salario salario) {
+    public void cargarDatos(Salario salario, String motivo) {
         this.salario = salario;
         
         if (salario != null) {
@@ -118,7 +119,7 @@ public class SalarioController implements Initializable{
             salario.setDomingo(spinnerDomingo.getValue()); 
         
     }
-    
+
     public void cancelar() {
         
     }

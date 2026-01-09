@@ -2,6 +2,8 @@ package com.albalatro;
 
 import java.util.Objects;
 
+import com.albalatro.service.JSONService;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,6 +58,7 @@ public class Main extends Application {
         
         if (alert.showAndWait().get() == ButtonType.OK){
             stage.close();
+            JSONService.removeEdits();
         } 
     }
 }

@@ -41,7 +41,7 @@ public class ListaEmpleadosController {
     
     @FXML
     public void initialize() {
-        empleados = JSONService.readWorkers();
+        empleados = JSONService.readWorkersEdit();
         status = Status.ALTA;
         
         if (empleados.isEmpty()) {
@@ -54,7 +54,7 @@ public class ListaEmpleadosController {
     }
     
     private void mostrarEmpleados() {
-        empleados = JSONService.readWorkers();
+        empleados = JSONService.readWorkersEdit();
         vboxLista.getChildren().clear();
         
         lblSinEmpleados.setVisible(false);
@@ -141,7 +141,7 @@ public class ListaEmpleadosController {
         }
         
         // 1. Leemos los datos
-        ArrayList<Empleado> current = JSONService.readWorkers();
+        ArrayList<Empleado> current = JSONService.readWorkersEdit();
         ArrayList<Empleado> additions = JSONService.readWorkers(file.getPath());
         
         // 2. Hacemos el Merge (Tu lógica aquí estaba perfecta)
@@ -175,7 +175,7 @@ public class ListaEmpleadosController {
         "Nuevos: " + nuevos + " | Actualizados: " + actualizados + "\n¿Deseas continuar?", 
         AlertType.CONFIRMATION)) {
             
-            if(JSONService.writeWorkers(current)) {
+            if(JSONService.writeWorkersEdit(current)) {
                 Utils.showAlert("Éxito", "Importación completada correctamente.", "", AlertType.INFORMATION);
                 mostrarEmpleados(); // Actualizamos la vista
             } else {
@@ -217,7 +217,7 @@ public class ListaEmpleadosController {
             return;
         }
         
-        ArrayList<Empleado> current = JSONService.readWorkers();
+        ArrayList<Empleado> current = JSONService.readWorkersEdit();
         
         try (BufferedWriter bw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
             bw.write("");
