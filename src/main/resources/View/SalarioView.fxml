@@ -1,58 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.SalarioController">
-   <top>
-      <HBox prefHeight="54.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+
+<VBox alignment="CENTER" prefHeight="720.0" prefWidth="454.0" spacing="20.0" style="-fx-padding: 50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.SalarioController">
+   <children>
+      <Label alignment="CENTER" prefHeight="64.0" prefWidth="433.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="EDITOR DE SALARIOS" textAlignment="CENTER" wrapText="true" />
+      <HBox alignment="CENTER" prefHeight="18.0" prefWidth="435.0">
          <children>
-            <Label alignment="CENTER" prefHeight="61.0" prefWidth="400.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="ASIGNAR SALARIO" textAlignment="CENTER" wrapText="true" />
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <AnchorPane prefHeight="378.0" prefWidth="402.0" BorderPane.alignment="CENTER">
-         <children>
-            <RadioButton fx:id="choiceHora" layoutX="76.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por hora">
+            <Region prefHeight="19.0" prefWidth="44.0" />
+            <RadioButton fx:id="choiceHora" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por hora">
                <toggleGroup>
                   <ToggleGroup fx:id="groupPago" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="choiceFijo" layoutX="240.0" layoutY="20.0" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por día" toggleGroup="$groupPago" />
-            <Spinner fx:id="spinnerNormal" editable="true" layoutX="125.0" layoutY="190.0" />
-            <Spinner fx:id="spinnerDomingo" editable="true" layoutX="125.0" layoutY="267.0" />
-            <Label fx:id="labelNormal" alignment="CENTER" layoutX="-1.0" layoutY="158.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Entre semana" textAlignment="CENTER" />
-            <Label fx:id="labelDomingo" alignment="CENTER" layoutX="1.0" layoutY="233.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Domingos" textAlignment="CENTER" />
-            <CheckBox fx:id="choiceTodos" layoutX="153.0" layoutY="125.0" mnemonicParsing="false" onAction="#setDias" text="Todos los dias" />
-            <Label fx:id="labelNormal1" alignment="CENTER" layoutX="1.0" layoutY="49.0" prefHeight="19.0" prefWidth="400.0" style="-fx-font-size: 13px;" text="Nombre" textAlignment="CENTER" />
-            <TextField fx:id="fieldNombre" layoutX="127.0" layoutY="83.0" />
-         </children>
-      </AnchorPane>
-   </center>
-   <bottom>
-      <HBox prefHeight="70.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-         <children>
-            <Region prefHeight="70.0" prefWidth="47.0" />
-            <Button fx:id="btnGuardar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" translateY="20.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Region prefHeight="70.0" prefWidth="165.0" />
-            <Button fx:id="btnCancelar" alignment="CENTER" mnemonicParsing="false" onAction="#cancelar" text="CANCELAR" translateY="20.0" />
-            <Region prefHeight="70.0" prefWidth="36.0" />
+            <Region prefHeight="19.0" prefWidth="97.0" />
+            <RadioButton fx:id="choiceFijo" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por día" toggleGroup="$groupPago" />
+            <Region prefHeight="19.0" prefWidth="62.0" />
          </children>
       </HBox>
-   </bottom>
-</BorderPane>
+      <Separator orientation="VERTICAL" prefHeight="18.0" prefWidth="6.0" visible="false" />
+      <Label fx:id="labelNormal1" alignment="CENTER" prefHeight="19.0" prefWidth="435.0" style="-fx-font-size: 13px;" text="Nombre del salario" textAlignment="CENTER" />
+      <TextField fx:id="fieldNombre" maxWidth="250.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
+      <Separator orientation="VERTICAL" prefHeight="25.0" visible="false" />
+      <CheckBox fx:id="choiceTodos" mnemonicParsing="false" onAction="#setDias" text="Todos los dias" />
+      <Separator orientation="VERTICAL" prefHeight="10.0" visible="false" />
+      <Label fx:id="labelNormal" alignment="CENTER" prefHeight="19.0" prefWidth="433.0" style="-fx-font-size: 13px;" text="Entre semana" textAlignment="CENTER" />
+      <Spinner fx:id="spinnerNormal" editable="true" />
+      <Label fx:id="labelDomingo" alignment="CENTER" prefHeight="19.0" prefWidth="433.0" style="-fx-font-size: 13px;" text="Domingos" textAlignment="CENTER" />
+      <Spinner fx:id="spinnerDomingo" editable="true" />
+      <Separator orientation="VERTICAL" prefHeight="50.0" visible="false" />
+      <Button fx:id="btnGuardar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" />
+   </children>
+</VBox>

@@ -1,6 +1,6 @@
 package com.albalatro.model;
 
-public enum Pago {
+public enum TipoPago {
     HORA,
     FIJO
 }

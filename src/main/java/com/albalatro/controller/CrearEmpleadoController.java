@@ -19,7 +19,7 @@ public class CrearEmpleadoController {
     
     @FXML private TextField txtNombre, txtApellidoP, txtApellidoM;
     @FXML private Label lblError;
-    @FXML private Button btnGuardar, btnAlta, btnBaja;
+    @FXML private Button btnGuardar, btnAlta, btnBaja, btnSalario;
     private Empleado empleado;
     
     @FXML
@@ -35,6 +35,8 @@ public class CrearEmpleadoController {
 
         btnAlta.setVisible(isEdit && empleado.getStatus() == Status.BAJA);
         btnBaja.setVisible(isEdit && empleado.getStatus() == Status.ALTA);
+        btnSalario.setVisible(isEdit);
+        
         
         txtNombre.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ENTER) txtApellidoP.requestFocus(); });
         txtApellidoP.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ENTER) txtApellidoM.requestFocus(); });
@@ -77,6 +79,10 @@ public class CrearEmpleadoController {
         if (cambiarStatus(Status.ALTA)) {
             Navigation.irAListaEmpleados();
         }
+     }
+
+     @FXML public void gestionarSalario() {
+        Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getId()));
      }
 
     private boolean cambiarStatus(Status s) {

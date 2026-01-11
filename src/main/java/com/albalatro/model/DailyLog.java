@@ -14,6 +14,7 @@ public class DailyLog {
     // Inicializamos en 0 para evitar nulls en el JSON
     private Long totalMinutosTrabajados = 0L;
     private Double totalPagoDia = 0.0;
+    private String falta;
     
     public DailyLog() { }
     
@@ -73,6 +74,14 @@ public class DailyLog {
             actualizarCalculos();
         }
     }
+
+    public String getFalta() {
+        return falta;
+    }
+
+    public void setFalta(String falta) {
+        this.falta = falta;
+    }
     
     /**
     * Este método privado es el único responsable de hacer las matemáticas.
@@ -99,8 +108,8 @@ public class DailyLog {
         
         // double tarifa = (date.getDayOfWeek() == DayOfWeek.SUNDAY) ? tarifa : tarifa_normal;
         switch (salario.getPago()) {
-            case Pago.FIJO -> this.totalPagoDia = salario.getNormal();
-            case Pago.HORA -> {
+            case TipoPago.FIJO -> this.totalPagoDia = salario.getNormal();
+            case TipoPago.HORA -> {
                 double tarifa = (date.getDayOfWeek() == DayOfWeek.SUNDAY) ? salario.getDomingo() : salario.getNormal();
                 this.totalPagoDia = (this.totalMinutosTrabajados / 60.0) * tarifa;
                 this.totalPagoDia = Math.round(this.totalPagoDia * 100.0) / 100.0;

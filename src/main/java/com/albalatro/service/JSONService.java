@@ -13,8 +13,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
-import com.albalatro.model.Pago;
 import com.albalatro.model.Salario;
+import com.albalatro.model.TipoPago;
 import com.albalatro.utils.LocalDateTypeAdapter;
 import com.albalatro.utils.LocalTimeTypeAdapter;
 import com.google.gson.Gson;
@@ -107,7 +107,7 @@ public class JSONService {
         Salario base = new Salario();
         base.setId("BASE");
         base.setNombre("Salario base");
-        base.setPago(Pago.HORA);
+        base.setPago(TipoPago.HORA);
         base.setNormal(40.0);
         base.setDomingo(50.0);
 
@@ -126,7 +126,7 @@ public class JSONService {
     // ==========================================
     // LECTURA
     // ==========================================
-    public static ArrayList<Empleado> readWorkers() {
+    private static ArrayList<Empleado> readWorkers() {
         return readWorkers(workers_file);
     }
 
@@ -152,7 +152,7 @@ public class JSONService {
         }
     }
     
-    public static ArrayList<Salario> readWages() {
+    private static ArrayList<Salario> readWages() {
         return readWages(wages_file);
     }
     
@@ -179,7 +179,7 @@ public class JSONService {
         
     }
 
-    public static boolean writeWorkers(ArrayList<Empleado> workers) {
+    private static boolean writeWorkers(ArrayList<Empleado> workers) {
         return writeWorkers(workers, workers_file);
     }
     
@@ -201,7 +201,7 @@ public class JSONService {
         }
     }
     
-    public static boolean writeWages(ArrayList<Salario> wages) {
+    private static boolean writeWages(ArrayList<Salario> wages) {
         return writeWages(wages, wages_file);
     }
     
@@ -221,7 +221,7 @@ public class JSONService {
     }
 
     public static Salario getSalario(String id) {
-        for (Salario w: readWages()) {
+        for (Salario w: readWagesEdit()) {
             if(w.getId().equals(id)) {
                 return w;
             }

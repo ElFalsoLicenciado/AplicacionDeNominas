@@ -3,7 +3,7 @@ package com.albalatro.model;
 public class Salario {
     private String id;
     private String nombre;
-    private Pago pago;
+    private TipoPago pago;
     private Double normal;
     private Double domingo;
     
@@ -11,7 +11,7 @@ public class Salario {
         
     }
     
-    public Salario(Double domingo, Pago pago, String id, String nombre, Double normal) {
+    public Salario(Double domingo, TipoPago pago, String id, String nombre, Double normal) {
         this.id = id;
         this.nombre = nombre;
         this.pago = pago;
@@ -35,11 +35,11 @@ public class Salario {
         this.normal = normal;
     }
 
-    public Pago getPago() {
+    public TipoPago getPago() {
         return pago;
     }
 
-    public void setPago(Pago pago) {
+    public void setPago(TipoPago pago) {
         this.pago = pago;
     }
     

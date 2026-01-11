@@ -1,15 +1,15 @@
 package com.albalatro.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.ArrayList;
 import java.util.UUID;
 
-import com.albalatro.model.Pago;
 import com.albalatro.model.Salario;
+import com.albalatro.model.TipoPago;
+import com.albalatro.service.JSONService;
+import com.albalatro.utils.Session;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -18,37 +18,40 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 
-public class SalarioController implements Initializable{
+public class SalarioController{
     @FXML private Label labelNormal, labelDomingo;
     @FXML private TextField fieldNombre;
     @FXML private RadioButton choiceHora, choiceFijo;
     @FXML private CheckBox choiceTodos;
     @FXML private Spinner<Double> spinnerNormal, spinnerDomingo;
-    @FXML private Button btnGuardar, btnCancelar;
+    @FXML private Button btnGuardar;
     private Salario salario;
-    private String motivo;
     
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
+    @FXML
+    public void initialize() {
         
-        SpinnerValueFactory<Double> valueFactory = 
+        SpinnerValueFactory<Double> valueFactory1 = 
         new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 999.99);
         
-        valueFactory.setValue(40.0);
-        spinnerNormal.setValueFactory(valueFactory);
+        valueFactory1.setValue(40.0);
+        spinnerNormal.setValueFactory(valueFactory1);
 
-        valueFactory.setValue(50.0);
-        spinnerDomingo.setValueFactory(valueFactory);
+        SpinnerValueFactory<Double> valueFactory2 = 
+        new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 999.99);
+
+        valueFactory2.setValue(50.0);
+        spinnerDomingo.setValueFactory(valueFactory2);
         
+        cargarDatos();
     }
     
-    public void cargarDatos(Salario salario, String motivo) {
-        this.salario = salario;
+    public void cargarDatos() {
+        this.salario = Session.getSalarioSeleccionado();
         
         if (salario != null) {
             switch (salario.getPago()) {
-                case Pago.HORA -> choiceHora.setSelected(true);
-                case Pago.FIJO -> choiceFijo.setSelected(true);
+                case TipoPago.HORA -> choiceHora.setSelected(true);
+                case TipoPago.FIJO -> choiceFijo.setSelected(true);
             }
             fieldNombre.setText(salario.getNombre());
             
@@ -56,18 +59,20 @@ public class SalarioController implements Initializable{
                 choiceTodos.setSelected(true);
             }
             
-            SpinnerValueFactory<Double> valueFactory = 
+            SpinnerValueFactory<Double> valueFactory1 = 
             new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 999.99);
-            valueFactory.setValue(salario.getNormal());
-            spinnerNormal.setValueFactory(valueFactory);
+            valueFactory1.setValue(salario.getNormal());
+            spinnerNormal.setValueFactory(valueFactory1);
             
-            valueFactory.setValue(salario.getDomingo());
-            spinnerDomingo.setValueFactory(valueFactory);
+            SpinnerValueFactory<Double> valueFactory2 = 
+            new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 999.99);
+            valueFactory2.setValue(salario.getDomingo());
+            spinnerDomingo.setValueFactory(valueFactory2);
         } else {
             salario = new Salario();
             salario.setId(UUID.randomUUID().toString());
             
-            salario.setPago(Pago.HORA);
+            salario.setPago(TipoPago.HORA);
             choiceHora.setSelected(true);
 
             salario.setNombre("Nuevo salario");
@@ -83,10 +88,10 @@ public class SalarioController implements Initializable{
     
     public void setPago(ActionEvent event) {
         if(choiceHora.isSelected()) {
-            salario.setPago(Pago.HORA);
+            salario.setPago(TipoPago.HORA);
         } 
         else if(choiceFijo.isSelected()) {
-            salario.setPago(Pago.FIJO);
+            salario.setPago(TipoPago.FIJO);
         }
     }
     
@@ -118,9 +123,24 @@ public class SalarioController implements Initializable{
         else
             salario.setDomingo(spinnerDomingo.getValue()); 
         
-    }
+        Session.setSalarioSeleccionado(salario);
 
-    public void cancelar() {
-        
+        if(! salario.getId().equals("custom")) {
+            ArrayList<Salario> salarios = JSONService.readWagesEdit();
+            
+            boolean found = false;
+
+            for(Salario w : salarios) {
+                if(w.getId().equals(salario.getId())){
+                    salarios.set(salarios.indexOf(w), salario);
+                    found = true;
+                    break;    
+                }
+            }
+
+            if (! found) salarios.add(salario);
+
+            JSONService.writeWagesEdit(salarios);
+        }
     }
 }
