@@ -9,6 +9,7 @@ import java.util.Locale;
 import com.albalatro.model.DailyLog;
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Periodo;
+import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
 import com.albalatro.utils.Utils;
@@ -87,6 +88,7 @@ public class CalendarioController {
     @FXML
     public void gestionarPressed() {
         System.out.println("Gestionando empleado " + empleado.getNombre());
+        Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
         Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
     }
 

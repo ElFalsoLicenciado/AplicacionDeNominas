@@ -58,6 +58,12 @@ public class Salario {
     public String getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
     
 }
 
