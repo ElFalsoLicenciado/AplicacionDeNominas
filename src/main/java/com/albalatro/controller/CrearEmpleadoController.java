@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.albalatro.model.Empleado;
-import com.albalatro.model.Salario;
 import com.albalatro.model.Status;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
@@ -84,14 +83,8 @@ public class CrearEmpleadoController {
      }
 
      @FXML public void gestionarSalario() {
-        Salario salarioIndividual = JSONService.getSalario(empleado.getSalario());
-
-        if(salarioIndividual.getId().equals("BASE")) {
-            salarioIndividual.setId(UUID.randomUUID().toString());
-            salarioIndividual.setNombre("Salario de " + empleado.getNombreCompleto());
-        }
-
-        Session.setSalarioSeleccionado(salarioIndividual);
+        Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
+        Session.setEditandoSalarioIndividual();
         Navigation.cambiarVista("/View/SelectorSalarioView.fxml");
      }
 

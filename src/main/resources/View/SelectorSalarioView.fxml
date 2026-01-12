@@ -14,12 +14,14 @@
       <Label style="-fx-background-size: 14px;" text="Salarios disponibles:" VBox.vgrow="ALWAYS" />
       <HBox prefHeight="31.0" prefWidth="443.0">
          <children>
-            <Separator disable="true" prefHeight="0.0" prefWidth="134.0" visible="false" />
+            <Separator disable="true" prefHeight="5.0" prefWidth="98.0" visible="false" />
             <ChoiceBox fx:id="choiceBoxSalario" prefHeight="46.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
             <Separator disable="true" prefHeight="0.0" prefWidth="15.0" visible="false" />
             <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#nuevoSalario" prefHeight="35.0" prefWidth="32.0" text="+" HBox.hgrow="ALWAYS" />
             <Separator disable="true" prefHeight="0.0" prefWidth="10.0" visible="false" />
             <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrarSalario" prefHeight="35.0" prefWidth="32.0" text="-" HBox.hgrow="ALWAYS" />
+            <Separator disable="true" prefHeight="0.0" prefWidth="10.0" visible="false" />
+            <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#editarSalario" prefHeight="35.0" prefWidth="32.0" text="✏" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
       <Separator orientation="VERTICAL" prefHeight="40.0" visible="false" />

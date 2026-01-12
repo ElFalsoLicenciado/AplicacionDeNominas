@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Salario;
+import com.albalatro.model.TipoPago;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
@@ -18,53 +19,89 @@ import javafx.scene.control.ChoiceBox;
 public class SelectorSalarioController {
     
     @FXML private ChoiceBox<Salario> choiceBoxSalario;
-    @FXML private Button btnNuevo, btnBorrar, btnAceptar, btnCancelar;
-    private ArrayList<Salario> salariosDisponibles = new ArrayList<>();
+    @FXML private Button btnNuevo, btnBorrar, btnEditar, btnAceptar, btnCancelar;
+    private ArrayList<Salario> listaSalarios = new ArrayList<>();
     private Salario salarioSeleccionado; 
     private Empleado emp;
+    private boolean salarioIndividual, salarioCustom = false;
+    private String casoSalario;
     
     @FXML public void initialize() {
         emp =  Session.getEmpleadoSeleccionado();
+        casoSalario = Session.getSalarioString();
         
         //Obtener salario base
-        salariosDisponibles.add(JSONService.getSalario("BASE"));
-        
+        listaSalarios.add(JSONService.getSalario("BASE"));
         
         //Obtener salario individual
-        if (! emp.getSalario().equals("BASE"))
-            salariosDisponibles.add(JSONService.getSalario(emp.getSalario()));
-        
-        //Obtener salario custom
-        if( (!Session.getSalarioSeleccionado().getId().equals("BASE") 
-            && !Session.getSalarioSeleccionado().getId().equals(emp.getSalario()))) {
-            salariosDisponibles.add(Session.getSalarioSeleccionado());
+        if (JSONService.getSalario(emp.getSalario()) != null) {
+            listaSalarios.add(JSONService.getSalario(emp.getSalario()));
+            salarioIndividual = true;
         }
         
-        choiceBoxSalario.getItems().addAll(salariosDisponibles);
+        //Obtener salario custom
+        if( (! Session.getSalarioSeleccionado().getId().equals("BASE") 
+            && !Session.getSalarioSeleccionado().getId().equals(emp.getSalario()))) {
+            listaSalarios.add(Session.getSalarioSeleccionado());
+            salarioCustom = true;
+        }
+        
+        choiceBoxSalario.getItems().addAll(listaSalarios);
         choiceBoxSalario.setOnAction(this::seleccionarSalario);
         choiceBoxSalario.setValue(Session.getSalarioSeleccionado());
     }
     
     @FXML public void nuevoSalario() {
         Salario nuevo = new Salario();
-
-        salariosDisponibles.add(nuevo);
-
+        
+        switch (Session.getSalarioString()) {
+            case "EMPLEADO" -> {
+                nuevo.setId(emp.getId());
+                nuevo.setNombre("Salario de " + emp.getNombreCompleto());
+                salarioIndividual = true;
+            }
+            
+            case "CUSTOM" -> {
+                nuevo.setId("custom");
+                nuevo.setNombre("Nuevo salario");
+                salarioCustom = true;
+            }
+        }
+        
+        nuevo.setPago(TipoPago.HORA);
+        nuevo.setNormal(40.0);
+        nuevo.setDomingo(50.0);
+        
+        listaSalarios.add(nuevo);
+        
         choiceBoxSalario.getItems().clear();
-        choiceBoxSalario.getItems().addAll(salariosDisponibles);
+        choiceBoxSalario.getItems().addAll(listaSalarios);
     }
     
     @FXML public void borrarSalario() {
         if(salarioSeleccionado.getId().equals("BASE")) {
             Utils.showAlert("Alerta", "No se puede borrar el salario base.", "", AlertType.WARNING);
         }
-
-        salariosDisponibles.remove(salarioSeleccionado);
-
+        
+        Salario nuevoSalarioSeleccionado = listaSalarios.get(listaSalarios.indexOf(salarioSeleccionado)-1);
+        listaSalarios.remove(salarioSeleccionado);
+                
+        switch (salarioSeleccionado.getId()) {
+            case "custom" -> salarioCustom = false;
+            
+            default -> salarioIndividual = false;
+        }
+        
         choiceBoxSalario.getItems().clear();
-        choiceBoxSalario.getItems().addAll(salariosDisponibles);
-
-        salarioSeleccionado = null;
+        choiceBoxSalario.getItems().addAll(listaSalarios);
+        choiceBoxSalario.setValue(nuevoSalarioSeleccionado);
+        
+        salarioSeleccionado = nuevoSalarioSeleccionado;
+    }
+    
+    @FXML public void editarSalario() {
+        Session.setSalarioSeleccionado(salarioSeleccionado);
+        Navigation.cambiarVista("/View/SalarioView.fxml");
     }
     
     @FXML public void seleccionarSalario(ActionEvent event) {
@@ -72,13 +109,16 @@ public class SelectorSalarioController {
         
         if(salarioSeleccionado.getId().equals("BASE")) {
             btnBorrar.setVisible(false);
-            btnNuevo.setVisible(true);
+            btnNuevo.setVisible(! salarioIndividual || ! salarioCustom);
+            btnEditar.setVisible(false);
         } else if (salarioSeleccionado.getId().equals(emp.getSalario())) {
             btnBorrar.setVisible(true);
-            btnNuevo.setVisible(true);
+            btnNuevo.setVisible(! salarioCustom && casoSalario.equals("CUSTOM"));
+            btnEditar.setVisible(true);
         } else if (salarioSeleccionado.getId().equals("custom")) {
             btnBorrar.setVisible(true);
-            btnNuevo.setVisible(false);
+            btnNuevo.setVisible(! salarioIndividual && casoSalario.equals("EMPLEADO"));
+            btnEditar.setVisible(true);
         }
     }
     
