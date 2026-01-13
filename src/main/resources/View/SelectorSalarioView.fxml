@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="443.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.SelectorSalarioController">
@@ -27,10 +28,11 @@
       <Separator orientation="VERTICAL" prefHeight="40.0" visible="false" />
       <HBox prefHeight="32.0" prefWidth="394.0">
          <children>
-            <Separator disable="true" prefHeight="0.0" prefWidth="113.0" visible="false" />
-            <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#aceptar" prefHeight="32.0" prefWidth="89.0" styleClass="button-primary" text="Seleccionar" HBox.hgrow="ALWAYS" />
-            <Separator disable="true" prefHeight="0.0" prefWidth="60.0" visible="false" />
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" prefHeight="32.0" prefWidth="76.0" text="Cancelar" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="btnAceptar" minWidth="150.0" mnemonicParsing="false" onAction="#aceptar" prefHeight="32.0" prefWidth="89.0" styleClass="button-primary" text="Seleccionar" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="btnCancelar" minWidth="150.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="32.0" prefWidth="76.0" text="Cancelar" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
          </children>
       </HBox>
    </children>

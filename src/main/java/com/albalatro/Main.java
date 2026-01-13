@@ -36,6 +36,7 @@ public class Main extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
+            // Eliminar JSON edit
             event.consume();
             logout(primaryStage);
         });
@@ -56,7 +57,7 @@ public class Main extends Application {
         alert.setHeaderText("¿Estás seguro de que quieres salir?");
         alert.setContentText("¿Has guardado todos los cambios?");
         
-        if (alert.showAndWait().get() == ButtonType.OK){
+        if (alert.showAndWait().get() == ButtonType.OK) {
             stage.close();
             JSONService.removeEdits();
         } 

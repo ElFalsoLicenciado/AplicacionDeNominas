@@ -33,12 +33,13 @@ public class JSONService {
     public static final String APP_FOLDER = "AlbalatroApp";
     public static final String DATA_FOLDER = "data";
     public static final String FILE_NAME[] = {"empleados.json", "empleadosEdit.json", "salarios.json", "salariosEdit.json"}; 
+
+    //User Home
+    private static String userHome = System.getProperty("user.home");
     
     static {
         System.out.println("--- INICIANDO SERVICIO DE DATOS ---");
         try {
-            String userHome = System.getProperty("user.home");
-            
             // Ruta destino (C:/Users/Usuario/AlbalatroApp/data/empleados.json)
             File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER);
             
@@ -178,18 +179,22 @@ public class JSONService {
         }
         
     }
-
-    private static boolean writeWorkers(ArrayList<Empleado> workers) {
-        return writeWorkers(workers, workers_file);
-    }
-    
-    public static boolean writeWorkersEdit(ArrayList<Empleado> wages) {
-        return writeWorkers(wages, workers_edit);
-    }
     
     // ==========================================
     // ESCRITURA
     // ==========================================
+    private static boolean writeWorkers(ArrayList<Empleado> workers) {
+        File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER); 
+        File filePath = new File(folderPath, "empleados.json");
+        return writeWorkers(workers, filePath.getAbsolutePath());
+    }
+    
+    public static boolean writeWorkersEdit(ArrayList<Empleado> wages) {
+        File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER); 
+        File filePath = new File(folderPath, "salarios.json");
+        return writeWorkers(wages, filePath.getAbsolutePath());
+    }
+    
     public static boolean writeWorkers(ArrayList<Empleado> workers, String path) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
             Gson gson = createGson();

@@ -16,12 +16,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
 public class CrearEmpleadoController {
-    
+
     @FXML private TextField txtNombre, txtApellidoP, txtApellidoM;
     @FXML private Label lblError;
     @FXML private Button btnGuardar, btnAlta, btnBaja, btnSalario;
     private Empleado empleado;
-    
+
     @FXML
     public void initialize() {
         empleado = Session.getEmpleadoSeleccionado();
@@ -36,13 +36,21 @@ public class CrearEmpleadoController {
         btnAlta.setVisible(isEdit && empleado.getStatus() == Status.BAJA);
         btnBaja.setVisible(isEdit && empleado.getStatus() == Status.ALTA);
         btnSalario.setVisible(isEdit);
-        
-        
-        txtNombre.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ENTER) txtApellidoP.requestFocus(); });
-        txtApellidoP.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ENTER) txtApellidoM.requestFocus(); });
-        txtApellidoM.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ENTER) btnGuardar.fire(); });
+
+        txtNombre.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER)
+                txtApellidoP.requestFocus();
+        });
+        txtApellidoP.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER)
+                txtApellidoM.requestFocus();
+        });
+        txtApellidoM.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER)
+                btnGuardar.fire();
+        });
     }
-    
+
     @FXML
     public void guardar() {
         String n = txtNombre.getText(), ap = txtApellidoP.getText(), am = txtApellidoM.getText();
@@ -53,7 +61,7 @@ public class CrearEmpleadoController {
 
         ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         Empleado target = (empleado == null) ? new Empleado() : empleado;
-        
+
         setData(target, n, ap, am);
 
         if (empleado == null) {
@@ -63,38 +71,47 @@ public class CrearEmpleadoController {
             target.setSalario(Session.getSalarioSeleccionado().getId());
             actualizarEnLista(lista, target);
         }
-        
-        if (JSONService.writeWorkersEdit(lista)) Navigation.empleadoGuardadoCustomHistory(target);
-        else mostrarError("Error al escribir en el archivo JSON.");
+
+        if (JSONService.writeWorkersEdit(lista))
+            Navigation.empleadoGuardadoCustomHistory(target);
+        else
+            mostrarError("Error al escribir en el archivo JSON.");
     }
 
-    @FXML public void cancelar() { Navigation.goBack(); }
+    @FXML
+    public void cancelar() {
+        Navigation.goBack();
+    }
 
-    @FXML public void darDeBaja() { 
+    @FXML
+    public void darDeBaja() {
         if (cambiarStatus(Status.BAJA)) {
             Navigation.irAListaEmpleados();
-        } 
+        }
     }
 
-    @FXML public void darDeAlta() { 
+    @FXML
+    public void darDeAlta() {
         if (cambiarStatus(Status.ALTA)) {
             Navigation.irAListaEmpleados();
         }
-     }
+    }
 
-     @FXML public void gestionarSalario() {
+    @FXML
+    public void gestionarSalario() {
         Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
         Session.setEditandoSalarioIndividual();
         Navigation.cambiarVista("/View/SelectorSalarioView.fxml");
-     }
+    }
 
     private boolean cambiarStatus(Status s) {
         empleado.setStatus(s);
         ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         actualizarEnLista(lista, empleado);
-        
+
         boolean exito = JSONService.writeWorkersEdit(lista);
-        if (exito) System.out.println("Status actualizado a " + s);
+        if (exito)
+            System.out.println("Status actualizado a " + s);
         return exito;
     }
 
@@ -106,13 +123,13 @@ public class CrearEmpleadoController {
             }
         }
     }
-    
+
     private void setData(Empleado emp, String n, String ap, String am) {
         emp.setNombre(n);
         emp.setApellidoP(ap);
         emp.setApellidoM(am);
     }
-    
+
     private void mostrarError(String mensaje) {
         lblError.setText(mensaje);
         lblError.setVisible(true);

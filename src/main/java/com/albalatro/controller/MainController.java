@@ -1,5 +1,6 @@
 package com.albalatro.controller;
 
+import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ public class MainController {
 
     @FXML private BorderPane mainContainer;
     @FXML private Button btnAtras;
+    @FXML private Button btnGuardarCambios;
 
     @FXML
     public void initialize() {
@@ -24,5 +26,10 @@ public class MainController {
     @FXML
     public void regresar() {
         Navigation.goBack();
+    }
+
+    @FXML
+    public void saveToOriginalJSON() {
+        JSONService.saveChanges();
     }
 }
