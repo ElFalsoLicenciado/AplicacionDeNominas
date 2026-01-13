@@ -49,6 +49,4 @@ public class Session {
         return salarioString;
     }
     // 01/05/25 : Skill issue (ALBERTO), no sabe pensar.
-
-
 }

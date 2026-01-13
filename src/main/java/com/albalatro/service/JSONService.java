@@ -127,7 +127,7 @@ public class JSONService {
     // ==========================================
     // LECTURA
     // ==========================================
-    private static ArrayList<Empleado> readWorkers() {
+    public static ArrayList<Empleado> readWorkers() {
         return readWorkers(workers_file);
     }
 
@@ -184,15 +184,11 @@ public class JSONService {
     // ESCRITURA
     // ==========================================
     private static boolean writeWorkers(ArrayList<Empleado> workers) {
-        File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER); 
-        File filePath = new File(folderPath, "empleados.json");
-        return writeWorkers(workers, filePath.getAbsolutePath());
+        return writeWorkers(workers, workers_file);
     }
     
     public static boolean writeWorkersEdit(ArrayList<Empleado> wages) {
-        File folderPath = new File(userHome, APP_FOLDER + File.separator + DATA_FOLDER); 
-        File filePath = new File(folderPath, "salarios.json");
-        return writeWorkers(wages, filePath.getAbsolutePath());
+        return writeWorkers(wages, workers_edit);
     }
     
     public static boolean writeWorkers(ArrayList<Empleado> workers, String path) {

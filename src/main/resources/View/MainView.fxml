@@ -16,7 +16,7 @@
             <Label text="Sistema de Nómina" textFill="WHITE">
                 <font><Font name="System Bold" size="18.0" /></font>
             </Label>
-         <Region maxHeight="27.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="0.0" prefWidth="500.0" HBox.hgrow="ALWAYS" />
+         <Region maxHeight="27.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="0.0" prefWidth="450.0" HBox.hgrow="ALWAYS" />
          <Button fx:id="btnGuardarCambios" mnemonicParsing="false" onAction="#saveToOriginalJSON" text="Guardar Cambios" HBox.hgrow="ALWAYS" />
          <Region maxHeight="27.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="0.0" prefWidth="15.0" />
         </HBox>
