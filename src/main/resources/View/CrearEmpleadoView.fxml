@@ -2,18 +2,21 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefWidth="375.0" spacing="20.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CrearEmpleadoController">
+<VBox alignment="CENTER" prefWidth="375.0" spacing="15.0" styleClass="main-container" 
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.albalatro.controller.CrearEmpleadoController">
 
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
-    <Label styleClass="label-header" text="Registrar Nuevo Empleado">
+    <Label styleClass="label-header" text="Datos del Empleado">
         <VBox.margin>
             <Insets bottom="10.0" />
         </VBox.margin>
@@ -25,17 +28,26 @@
     </VBox>
 
     <VBox maxWidth="400.0" spacing="5.0">
-        <children>
-            <Label styleClass="label-subheader" text="Apellido paterno:" />
-            <TextField fx:id="txtApellidoP" prefHeight="40.0" promptText="Ej. Pérez" styleClass="text-field" />
-        </children>
+        <Label styleClass="label-subheader" text="Apellido paterno:" />
+        <TextField fx:id="txtApellidoP" prefHeight="40.0" promptText="Ej. Pérez" styleClass="text-field" />
     </VBox>
 
     <VBox maxWidth="400.0" spacing="5.0">
-        <children>
-            <Label styleClass="label-subheader" text="Apellido materno:" />
-            <TextField fx:id="txtApellidoM" prefHeight="40.0" promptText="Ej. Martínez" styleClass="text-field" />
-        </children>
+        <Label styleClass="label-subheader" text="Apellido materno:" />
+        <TextField fx:id="txtApellidoM" prefHeight="40.0" promptText="Ej. Martínez" styleClass="text-field" />
+    </VBox>
+
+    <VBox maxWidth="400.0" spacing="5.0" style="-fx-padding: 10 0 10 0;">
+        <Label styleClass="label-subheader" text="Asignar Salario:" />
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <ComboBox fx:id="comboSalarios" prefHeight="40.0" promptText="Seleccione un salario..." 
+                      maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="combo-box" />
+            
+            <Button onAction="#abrirCrearSalarioModal" prefHeight="40.0" prefWidth="50.0" 
+                    text="+" styleClass="button, button-secondary" 
+                    style="-fx-font-weight: bold; -fx-font-size: 18px;" />
+        </HBox>
+        <Label text="* Si crea uno nuevo, selecciónelo en la lista después." textFill="#888888" style="-fx-font-size: 11px;"/>
     </VBox>
 
     <Label fx:id="lblError" styleClass="label-error" text="" visible="false" />
@@ -44,19 +56,13 @@
         <VBox.margin>
             <Insets top="10.0" />
         </VBox.margin>
-        
         <Button onAction="#cancelar" prefHeight="40.0" prefWidth="120.0" styleClass="button, button-secondary" text="Cancelar" />
-                
-        <Button fx:id="btnGuardar" onAction="#guardar" prefHeight="40.0" prefWidth="180.0" styleClass="button, button-primary" text="Guardar Empleado" />
+        <Button fx:id="btnGuardar" onAction="#guardar" prefHeight="40.0" prefWidth="180.0" styleClass="button, button-primary" text="Guardar" />
     </HBox>
 
     <VBox alignment="CENTER" maxWidth="400.0" spacing="10.0">
-        <children>
-            <Button fx:id="btnAlta" onAction="#darDeAlta" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-primary" text="Dar de Alta" />
-
-            <Button fx:id="btnBaja" onAction="#darDeBaja" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-danger" text="Dar de Baja" />
-        </children>
+        <Button fx:id="btnAlta" onAction="#darDeAlta" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-primary" text="Recontratar (Alta)" />
+        <Button fx:id="btnBaja" onAction="#darDeBaja" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-danger" text="Dar de Baja" />
     </VBox>
-   <Button fx:id="btnSalario" mnemonicParsing="false" onAction="#gestionarSalario" prefHeight="34.0" prefWidth="188.0" text="Gestionar Salario $" />
 
 </VBox>

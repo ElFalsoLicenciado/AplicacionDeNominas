@@ -8,7 +8,7 @@
       
     <Label style="-fx-font-size: 24px;" text="Bienvenido" />
     
-    <Button onAction="#irAVer" prefHeight="50" prefWidth="200" text="Ver Lista" />
+    <Button onAction="#irAVer" prefHeight="50" prefWidth="200" text="Ver Lista de Empleados" />
     <Button onAction="#irACrear" prefHeight="50" prefWidth="200" text="Nuevo Empleado" />
-   <Button onAction="#irSalario" prefHeight="50" prefWidth="200" text="Salario base" />
+   <Button onAction="#irSalario" prefHeight="50" prefWidth="200" text="Gestionar Salarios" />
 </VBox>

@@ -164,3 +164,66 @@
     -fx-border-color: #BDC3C7;
     -fx-cursor: hand;
 }
+
+/* ... (Tus estilos anteriores se mantienen igual) ... */
+
+/* =============================================================================
+   CONTROLES DE FORMULARIO EXTRA (ComboBox, Spinner, Radio, Check)
+   ============================================================================= */
+
+/* ComboBox y Spinner: Que parezcan TextFields */
+.combo-box, .spinner {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 1px;
+    -fx-padding: 2px; /* Ajuste para alinear con text-field */
+}
+
+.combo-box:focused, .spinner:focused {
+    -fx-border-color: #2980B9;
+    -fx-effect: dropshadow(three-pass-box, rgba(41, 128, 185, 0.2), 3, 0, 0, 0);
+}
+
+/* El cuerpo del ComboBox */
+.combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Radio Buttons y CheckBoxes */
+.radio-button, .check-box {
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.radio-button .radio, .check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #BDC3C7;
+    -fx-border-radius: 3px;
+}
+
+.radio-button:selected .radio .dot, .check-box:selected .mark {
+    -fx-background-color: #27AE60; /* Verde al seleccionar */
+}
+
+/* =============================================================================
+   ESTILOS ESPECÍFICOS PARA LISTAS (Lista de Salarios)
+   ============================================================================= */
+.list-item-button {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 10 20 10 20;
+}
+
+.list-item-button:hover {
+    -fx-background-color: #e3f2fd; /* Azul muy claro */
+    -fx-border-color: #2196F3;
+}

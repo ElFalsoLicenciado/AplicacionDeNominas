@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -7,31 +8,56 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="720.0" prefWidth="454.0" spacing="20.0" style="-fx-padding: 50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.SalarioController">
-   <children>
-      <Label alignment="TOP_CENTER" prefHeight="64.0" prefWidth="433.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="EDITOR DE SALARIOS" textAlignment="CENTER" wrapText="true" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" VBox.vgrow="NEVER">
-         <children>
-            <RadioButton fx:id="choiceHora" mnemonicParsing="false" onAction="#setPago" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por hora">
+<VBox alignment="CENTER" prefWidth="420.0" spacing="15.0" styleClass="card"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.albalatro.controller.SalarioController">
+   
+   <padding>
+       <Insets top="20" right="30" bottom="20" left="30"/>
+   </padding>
+
+    <Label styleClass="label-header" text="Editor de Salario" />
+      
+    <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10; -fx-background-color: #F8F9F9; -fx-background-radius: 5;">
+         <Label style="-fx-font-weight: bold; -fx-text-fill: #7F8C8D; -fx-font-size: 12px;" text="TIPO DE PAGO"/>
+         <HBox alignment="CENTER" spacing="30.0">
+            <RadioButton fx:id="choiceHora" text="Por Hora" styleClass="radio-button">
                <toggleGroup>
                   <ToggleGroup fx:id="groupPago" />
                </toggleGroup>
             </RadioButton>
-            <Region prefHeight="30.0" prefWidth="50.0" />
-            <RadioButton fx:id="choiceFijo" minWidth="77.0" mnemonicParsing="false" onAction="#setPago" prefWidth="77.0" style="-fx-font-weight: bold; -fx-font-size: 13px;" text="Por día" toggleGroup="$groupPago" />
-         </children>
-      </VBox>
-      <Region prefHeight="5.0" prefWidth="0.0" />
-      <Label fx:id="labelNormal1" alignment="CENTER" prefHeight="19.0" prefWidth="435.0" style="-fx-font-size: 13px;" text="Nombre del salario" textAlignment="CENTER" />
-      <TextField fx:id="fieldNombre" maxWidth="250.0" minWidth="100.0" prefHeight="25.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
-      <CheckBox fx:id="choiceTodos" mnemonicParsing="false" onAction="#setDias" text="Todos los dias" />
-      <Label fx:id="labelNormal" alignment="CENTER" prefHeight="19.0" prefWidth="433.0" style="-fx-font-size: 13px;" text="Entre semana" textAlignment="CENTER" />
-      <Spinner fx:id="spinnerNormal" editable="true" />
-      <Label fx:id="labelDomingo" alignment="CENTER" prefHeight="19.0" prefWidth="433.0" style="-fx-font-size: 13px;" text="Domingos" textAlignment="CENTER" />
-      <Spinner fx:id="spinnerDomingo" editable="true" />
-      <Button fx:id="btnGuardar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" />
-   </children>
+            <RadioButton fx:id="choiceFijo" text="Por Día (Fijo)" toggleGroup="$groupPago" styleClass="radio-button"/>
+         </HBox>
+    </VBox>
+
+    <VBox spacing="5.0" maxWidth="350.0">
+        <Label styleClass="label-subheader" text="Nombre del salario:" />
+        <TextField fx:id="fieldNombre" promptText="Ej. Cajero Matutino" styleClass="text-field"/>
+    </VBox>
+
+    <CheckBox fx:id="choiceTodos" onAction="#setDias" text="Aplicar mismo monto todos los días" styleClass="check-box"/>
+
+    <HBox spacing="15.0" alignment="CENTER_LEFT" maxWidth="350.0">
+        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+            <Label fx:id="labelNormal" text="Entre semana ($):" style="-fx-font-weight: bold;"/>
+            <Spinner fx:id="spinnerNormal" editable="true" maxWidth="Infinity" styleClass="spinner"/>
+        </VBox>
+
+        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+            <Label fx:id="labelDomingo" text="Domingos ($):" style="-fx-font-weight: bold;"/>
+            <Spinner fx:id="spinnerDomingo" editable="true" maxWidth="Infinity" styleClass="spinner"/>
+        </VBox>
+    </HBox>
+
+    <Region prefHeight="10.0" />
+
+    <HBox alignment="CENTER" spacing="15.0">
+        <Button onAction="#cancelar" text="Cancelar" prefHeight="40.0" prefWidth="120.0" styleClass="button, button-secondary"/>
+        <Button fx:id="btnGuardar" onAction="#guardar" text="Guardar Salario" prefHeight="40.0" prefWidth="150.0" styleClass="button, button-primary"/>
+    </HBox>
+
 </VBox>

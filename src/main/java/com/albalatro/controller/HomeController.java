@@ -1,6 +1,5 @@
 package com.albalatro.controller;
 
-import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
 
@@ -28,7 +27,6 @@ public class HomeController {
 
     @FXML
     void irSalario(ActionEvent event) {
-        Session.setSalarioSeleccionado(JSONService.getSalario("BASE"));
-        Navigation.cambiarVista("/View/SalarioView.fxml");
+        Navigation.cambiarVista("/View/ListaSalariosView.fxml");
     }
 }

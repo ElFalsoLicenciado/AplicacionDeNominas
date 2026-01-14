@@ -36,6 +36,7 @@ public class ListaEmpleadosController {
     @FXML private Button btnCambiarStatus;
     @FXML private Button btnExportar;
     @FXML private Button btnImportar;
+    
     private ArrayList<Empleado> empleados;
     private Status status;
     

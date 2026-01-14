@@ -2,8 +2,10 @@ package com.albalatro.controller;
 
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
+import com.albalatro.utils.Utils;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
@@ -31,5 +33,6 @@ public class MainController {
     @FXML
     public void saveToOriginalJSON() {
         JSONService.saveChanges();
+        Utils.showAlert("Cambios guardados", null, "Los cambios se han guardado correctamente", Alert.AlertType.INFORMATION);
     }
 }
