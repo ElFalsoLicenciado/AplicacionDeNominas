@@ -52,6 +52,8 @@ public class SelectorSalarioController {
         choiceBoxSalario.getItems().addAll(listaSalarios);
         choiceBoxSalario.setOnAction(this::seleccionarSalario);
         choiceBoxSalario.setValue(Session.getSalarioSeleccionado());
+
+        salarioSeleccionado = Session.getSalarioSeleccionado();
     }
     
     @FXML
@@ -80,6 +82,8 @@ public class SelectorSalarioController {
         
         choiceBoxSalario.getItems().clear();
         choiceBoxSalario.getItems().addAll(listaSalarios);
+
+        editarSalario();
     }
     
     @FXML
@@ -89,7 +93,13 @@ public class SelectorSalarioController {
             return;
         }
         
-        Salario nuevoSalarioSeleccionado = listaSalarios.get(listaSalarios.indexOf(salarioSeleccionado) - 1);
+        int index = 0;
+        for (int i = 0; i < listaSalarios.size(); i++) {
+            if(listaSalarios.get(i).getId().equals(salarioSeleccionado.getId())) break;
+            index ++;
+        }
+
+        Salario nuevoSalarioSeleccionado = listaSalarios.get(index-1);
         listaSalarios.remove(salarioSeleccionado);
         
         switch (salarioSeleccionado.getId()) {
@@ -113,13 +123,13 @@ public class SelectorSalarioController {
     
     @FXML
     public void seleccionarSalario(ActionEvent event) {
-        salarioSeleccionado = choiceBoxSalario.getValue();
+            salarioSeleccionado = choiceBoxSalario.getValue();
         
         if (salarioSeleccionado.getId().equals("BASE")) {
             btnBorrar.setVisible(false);
-            btnNuevo.setVisible(!salarioIndividual || !salarioCustom);
+            btnNuevo.setVisible((!salarioIndividual && casoSalario.equals("EMPLEADO")) || (!salarioCustom && casoSalario.equals("CUSTOM")));
             btnEditar.setVisible(false);
-        } else if (salarioSeleccionado.getId().equals(emp.getSalario())) {
+        } else if (salarioSeleccionado.getId().equals(emp.getId())) {
             btnBorrar.setVisible(true);
             btnNuevo.setVisible(!salarioCustom && casoSalario.equals("CUSTOM"));
             btnEditar.setVisible(true);
