@@ -14,22 +14,20 @@
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
-   <HBox prefHeight="8.0" prefWidth="200.0">
-      <children>
-         <Button fx:id="btnImportar" mnemonicParsing="false" onAction="#importarJSON" text="Importar Empleados" />
-         <Region prefHeight="100.0" prefWidth="71.0" HBox.hgrow="ALWAYS" />
-         <Button fx:id="btnExportar" mnemonicParsing="false" onAction="#exportarJSON" text="Respaldar Empleados" />
-      </children>
-   </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+         <Button fx:id="btnImportar" mnemonicParsing="false" onAction="#importarJSON" styleClass="button, button-secondary" text="📥 Importar" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Button fx:id="btnExportar" mnemonicParsing="false" onAction="#exportarJSON" styleClass="button, button-secondary" text="📤 Respaldar" />
+    </HBox>
 
     <Label styleClass="label-header" text="Empleados Registrados" />
 
-    <Button fx:id="btnCambiarStatus" mnemonicParsing="false" onAction="#cambiarStatus" styleClass="button, button-secondary" text="Cambiar a antiguos empleados" />
+    <Button fx:id="btnCambiarStatus" mnemonicParsing="false" onAction="#cambiarStatus" styleClass="button, button-ghost" text="Ver Empleados Inactivos" />
 
     <StackPane VBox.vgrow="ALWAYS">
         
-        <Label fx:id="lblSinEmpleados" styleClass="label-subheader" text="Aún no hay empleados registrados." textFill="#888888" visible="false">
-            </Label>
+        <Label fx:id="lblSinEmpleados" styleClass="label-subheader" text="Aún no hay empleados registrados." textFill="#888888" visible="false" />
 
         <ScrollPane fx:id="scrollContainer" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
             <content>

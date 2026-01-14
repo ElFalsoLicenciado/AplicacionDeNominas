@@ -21,12 +21,12 @@
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#irCrearSalario" styleClass="button, button-primary" text="+ Nuevo Salario" />
     </HBox>
-   <HBox alignment="CENTER_LEFT">
+    
+   <HBox alignment="CENTER_LEFT" spacing="10">
       <children>
-         <Button onAction="#importarJSON" styleClass="button, button-ghost" text="Importar Salarios" />
+         <Button onAction="#importarJSON" styleClass="button, button-secondary" text="📥 Importar" />
          <Region HBox.hgrow="ALWAYS" />
-         <Region HBox.hgrow="ALWAYS" />
-         <Button onAction="#exportarJSON" styleClass="button, button-primary" text="Respaldar Salarios" />
+         <Button onAction="#exportarJSON" styleClass="button, button-secondary" text="📤 Respaldar" />
       </children>
    </HBox>
 
@@ -38,7 +38,7 @@
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
                 </padding>
-                </VBox>
+            </VBox>
         </content>
     </ScrollPane>
 

@@ -5,25 +5,23 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainContainer" prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.MainController">
+<BorderPane fx:id="mainContainer" prefHeight="750.0" prefWidth="1000.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.MainController">
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="top-bar">
-            <Button fx:id="btnAtras" onAction="#regresar" style="-fx-background-color: white; -fx-cursor: hand;" text="← Atrás" visible="false" />
+            <Button fx:id="btnAtras" onAction="#regresar" styleClass="button, button-toolbar" text="← Atrás" visible="false" />
             
-            <Label text="Sistema de Nómina" textFill="WHITE">
-                <font><Font name="System Bold" size="18.0" /></font>
-            </Label>
-         <Region maxHeight="27.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="0.0" prefWidth="450.0" HBox.hgrow="ALWAYS" />
-         <Button fx:id="btnGuardarCambios" mnemonicParsing="false" onAction="#saveToOriginalJSON" text="Guardar Cambios" HBox.hgrow="ALWAYS" />
-         <Region maxHeight="27.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="0.0" prefWidth="15.0" />
+            <Label styleClass="label-title-light" text="Sistema de Nómina" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <Button fx:id="btnGuardarCambios" mnemonicParsing="false" onAction="#saveToOriginalJSON" styleClass="button, button-toolbar" text="💾 Guardar Cambios" />
         </HBox>
     </top>
 
     <center>
-        <Label text="Cargando..." />
+        <Label styleClass="label-subheader" text="Cargando..." />
     </center>
 
 </BorderPane>

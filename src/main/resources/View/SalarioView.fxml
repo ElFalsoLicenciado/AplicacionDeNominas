@@ -22,7 +22,7 @@
 
     <Label styleClass="label-header" text="Editor de Salario" />
       
-    <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 10; -fx-background-color: #F8F9F9; -fx-background-radius: 5;">
+    <VBox alignment="CENTER" spacing="10.0" styleClass="sub-panel">
          <Label style="-fx-font-weight: bold; -fx-text-fill: #7F8C8D; -fx-font-size: 12px;" text="TIPO DE PAGO"/>
          <HBox alignment="CENTER" spacing="30.0">
             <RadioButton fx:id="choiceHora" text="Por Hora" styleClass="radio-button">
@@ -57,7 +57,7 @@
 
     <HBox alignment="CENTER" spacing="15.0">
         <Button onAction="#cancelar" text="Cancelar" prefHeight="40.0" prefWidth="120.0" styleClass="button, button-secondary"/>
-        <Button fx:id="btnGuardar" onAction="#guardar" text="Guardar Salario" prefHeight="40.0" prefWidth="150.0" styleClass="button, button-primary"/>
+        <Button fx:id="btnGuardar" onAction="#guardar" text="Guardar" prefHeight="40.0" prefWidth="150.0" styleClass="button, button-primary"/>
     </HBox>
 
 </VBox>

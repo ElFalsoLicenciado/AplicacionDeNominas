@@ -4,11 +4,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="328.0" prefWidth="300.0" spacing="20" style="-fx-padding: 50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.HomeController">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20" styleClass="main-container"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.HomeController">
       
-    <Label style="-fx-font-size: 24px;" text="Bienvenido" />
+    <Label styleClass="label-header" text="Bienvenido" />
     
-    <Button onAction="#irAVer" prefHeight="50" prefWidth="200" text="Ver Lista de Empleados" />
-    <Button onAction="#irACrear" prefHeight="50" prefWidth="200" text="Nuevo Empleado" />
-   <Button onAction="#irSalario" prefHeight="50" prefWidth="200" text="Gestionar Salarios" />
+    <Button onAction="#irAVer" prefWidth="280" styleClass="button, menu-button" text="📂  Ver Lista de Empleados" />
+    <Button onAction="#irACrear" prefWidth="280" styleClass="button, menu-button" text="➕  Nuevo Empleado" />
+    <Button onAction="#irSalario" prefWidth="280" styleClass="button, menu-button" text="💰  Gestionar Salarios" />
 </VBox>
