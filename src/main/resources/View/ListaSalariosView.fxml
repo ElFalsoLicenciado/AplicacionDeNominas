@@ -24,9 +24,9 @@
     
    <HBox alignment="CENTER_LEFT" spacing="10">
       <children>
-         <Button onAction="#importarJSON" styleClass="button, button-secondary" text="📥 Importar" />
+         <Button fx:id="btnImportar" onAction="#importarJSON" styleClass="button, button-secondary" text="📥 Importar" />
          <Region HBox.hgrow="ALWAYS" />
-         <Button onAction="#exportarJSON" styleClass="button, button-secondary" text="📤 Respaldar" />
+         <Button fx:id="btnExportar" onAction="#exportarJSON" styleClass="button, button-secondary" text="📤 Respaldar" />
       </children>
    </HBox>
 
