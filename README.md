@@ -31,21 +31,11 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado)
 
-3. Botón para guardar los cambios del empleado en el JSON.
+3. Poder gestionar el salario de un solo dia.
 
-4. Poder gestionar el salario de los empleados: (EN JSON)
-   1. Individual.
-      1. Aumento de salario por hora.
-      2. Salario fijo por día.
-   2. Grupal.
+4. Seleccionar un rango de días a pagar. 
 
-5. Justificacion de faltas por día.
-
-6. Agregar botón de observaciones a la hora de gestionar un empleado (Editar sus datos).
-
-7. Seleccionar un rango de días a pagar. 
-
-8. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
+5. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
 ```text
 src/
 └── main/

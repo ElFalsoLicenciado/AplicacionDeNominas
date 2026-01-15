@@ -3,8 +3,6 @@ package com.albalatro.model;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.albalatro.utils.Utils;
-
 /** <h1> Clase {@code Empleado}</h1>
 *  <p> POJO del Empleado, contiene los siguientes atributos:</p>
 *  <ul>
@@ -23,7 +21,7 @@ public class Empleado implements java.io.Serializable{
     private String apellidoM;
     private Log log;
     private String salario;
-    private ArrayList<String> observaciones;
+    private ArrayList<Observacion> observaciones;
     private Status status;
     
     public Empleado() {
@@ -42,7 +40,7 @@ public class Empleado implements java.io.Serializable{
         status = Status.ALTA;
     }
     
-    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario, ArrayList<String> observaciones, Status status) {
+    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario, ArrayList<Observacion> observaciones, Status status) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
@@ -119,11 +117,11 @@ public class Empleado implements java.io.Serializable{
         this.salario = salario;
     }
     
-    public ArrayList<String> getObservaciones() {
+    public ArrayList<Observacion> getObservaciones() {
         return observaciones;
     }
     
-    public void setObservaciones(ArrayList<String> observaciones) {
+    public void setObservaciones(ArrayList<Observacion> observaciones) {
         this.observaciones = observaciones;
     }
     
@@ -148,7 +146,6 @@ public class Empleado implements java.io.Serializable{
         "nombre= '" + nombre + '\'' +
         ", apellidoP= '" + apellidoP + '\'' +
         ", apellidoM= '" + apellidoM + '\'' +
-        ", observaciones= '" + Utils.stringArrayToStringBreak(observaciones) + '\'' +
         '}';
     }
     

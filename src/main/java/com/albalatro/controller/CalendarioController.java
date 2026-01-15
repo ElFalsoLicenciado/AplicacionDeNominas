@@ -34,7 +34,7 @@ public class CalendarioController {
     @FXML private Label lblTotalSueldo;
     @FXML private Label lblMesAno;
     @FXML private GridPane gridCalendario;
-    @FXML private Button btnGestionar;
+    @FXML private Button btnGestionar, btnObservaciones;
 
     private YearMonth mesActual;
     private Empleado empleado;
@@ -90,6 +90,11 @@ public class CalendarioController {
         System.out.println("Gestionando empleado " + empleado.getNombre());
         Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
         Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
+    }
+
+    @FXML
+    public void observacionesPressed() {
+        Navigation.cambiarVista("/View/ListaObservacionesView.fxml");
     }
 
     private void actualizarVista() {

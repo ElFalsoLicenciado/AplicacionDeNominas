@@ -24,7 +24,6 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 
 public class CrearEmpleadoController {

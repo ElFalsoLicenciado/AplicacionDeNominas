@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="400.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.ListaObservacionesController">
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   
+   <top>
+      <Label alignment="CENTER" styleClass="label-header" text="Observaciones del empleado" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   
+   <bottom>
+      <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <children>
+            <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#nuevo" styleClass="button-secondary" text="NUEVA OBSERVACIÓN" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrar" styleClass="button-danger" text="BORRAR ACTUAL" />
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarCambios" styleClass="button-primary" text="GUARDAR CAMBIOS" />
+         </children>
+      </HBox>
+   </bottom>
+   
+   <center>
+      <VBox alignment="CENTER" spacing="15.0">
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+         
+         <!-- Contador de observaciones -->
+         <HBox alignment="CENTER" spacing="5.0">
+            <Label fx:id="lblContador" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+         </HBox>
+         
+         <!-- Fecha -->
+         <HBox alignment="CENTER" spacing="10.0">
+            <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#anterior" prefWidth="40.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="◀" />
+            <DatePicker fx:id="datePickerFecha" prefWidth="150.0" />
+            <Button fx:id="btnNext" mnemonicParsing="false" onAction="#siguiente" prefWidth="40.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="▶" />
+         </HBox>
+         
+         <!-- Área de texto para la observación -->
+         <VBox alignment="CENTER" spacing="5.0">
+            <Label style="-fx-font-size: 14px;" text="Observación:" />
+            <TextArea fx:id="txtObservacion" maxWidth="600.0" prefHeight="200.0" prefWidth="500.0" style="-fx-font-size: 14px; -fx-padding: 5px;" wrapText="true" VBox.vgrow="ALWAYS" />
+         </VBox>
+         
+         <!-- Indicador cuando no hay observaciones -->
+         <Label fx:id="lblSinObservaciones" style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-padding: 20px;" text="No hay observaciones disponibles" visible="false" />
+      </VBox>
+   </center>
+</BorderPane>
