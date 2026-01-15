@@ -11,7 +11,6 @@ public class DailyLog {
     private List<Periodo> periodos = new ArrayList<>();
     private Salario salario;
     
-    // Inicializamos en 0 para evitar nulls en el JSON
     private Long totalMinutosTrabajados = 0L;
     private Double totalPagoDia = 0.0;
     private String falta;
@@ -22,7 +21,7 @@ public class DailyLog {
         this.salario = salario;
         this.date = date;
         this.periodos = periodos;
-        actualizarCalculos(); // Calculamos una vez al crear
+        actualizarCalculos(); 
     }
     
     public Salario getSalario() {
@@ -31,6 +30,7 @@ public class DailyLog {
 
     public void setSalario(Salario salario) {
         this.salario = salario;
+        actualizarCalculos(); 
     }
 
     public Long getTotalMinutosTrabajados() {
@@ -49,28 +49,23 @@ public class DailyLog {
         return periodos;
     }
     
-    
     public void setDate(LocalDate date) {
         this.date = date;
-        // Si cambia la fecha, puede cambiar si es domingo o no, así que recalculamos
         actualizarCalculos(); 
     }
     
     public void setPeriodos(ArrayList<Periodo> periodos) {
         this.periodos = periodos;
-        // Si cambiamos toda la lista, recalculamos todo
         actualizarCalculos();
     }
     
     public void addPeriodo(Periodo periodo) {
         this.periodos.add(periodo);
-        // Al agregar un periodo, sumamos sus minutos y actualizamos pago
         actualizarCalculos();
     }
     
     public void removePeriodo(Periodo periodo) {
         if (this.periodos.remove(periodo)) {
-            // Solo recalculamos si realmente se borró algo
             actualizarCalculos();
         }
     }
@@ -83,16 +78,11 @@ public class DailyLog {
         this.falta = falta;
     }
     
-    /**
-    * Este método privado es el único responsable de hacer las matemáticas.
-    * Se llama automáticamente cuando los datos cambian.
-    */
     private void actualizarCalculos() {
         // 1. Calcular Minutos
         long totalMinutos = 0L;
         if (periodos != null) {
             for (Periodo p : periodos) {
-                // Asumiendo que Periodo tiene un método getMinutosTrabajados que devuelve Long
                 if (p != null) {
                     totalMinutos += p.getMinutosTrabajados();
                 }
@@ -100,13 +90,13 @@ public class DailyLog {
         }
         this.totalMinutosTrabajados = totalMinutos;
         
-        // 2. Calcular Pago (Depende de los minutos recién calculados)
-        if (date == null) {
+        // 2. Calcular Pago 
+        // --- PROTECCIÓN CONTRA NULOS AÑADIDA ---
+        if (date == null || salario == null) {
             this.totalPagoDia = 0.0;
             return;
         }
         
-        // double tarifa = (date.getDayOfWeek() == DayOfWeek.SUNDAY) ? tarifa : tarifa_normal;
         switch (salario.getPago()) {
             case TipoPago.FIJO -> this.totalPagoDia = salario.getNormal();
             case TipoPago.HORA -> {
@@ -114,8 +104,6 @@ public class DailyLog {
                 this.totalPagoDia = (this.totalMinutosTrabajados / 60.0) * tarifa;
                 this.totalPagoDia = Math.round(this.totalPagoDia * 100.0) / 100.0;
             }            
-            
         }
     }
 }
-

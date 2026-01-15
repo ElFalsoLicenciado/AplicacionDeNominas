@@ -224,3 +224,17 @@
     -fx-background-color: #e3f2fd;
     -fx-border-color: #2196F3;
 }
+
+/* Botón de Información / Acción Especial (Azul) */
+.button-info {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-border-color: #2980B9;
+}
+.button-info:hover {
+    -fx-background-color: #2980B9;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.4), 5, 0, 0, 2);
+}
+.button-info:pressed {
+    -fx-background-color: #2471A3;
+}

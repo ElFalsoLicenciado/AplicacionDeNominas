@@ -261,7 +261,7 @@ public class CalendarioController {
                 stageDetalle.setResizable(false);
                 
                 // Hacer que aparezca siempre encima
-                stageDetalle.setAlwaysOnTop(true); 
+                stageDetalle.setAlwaysOnTop(false); 
                 
                 stageDetalle.show();
             } else {

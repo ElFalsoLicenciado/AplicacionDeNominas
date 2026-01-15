@@ -31,11 +31,9 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado)
 
-3. Poder gestionar el salario de un solo dia.
+3. Seleccionar un rango de días a pagar. 
 
-4. Seleccionar un rango de días a pagar. 
-
-5. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
+4. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
 ```text
 src/
 └── main/

@@ -1,5 +1,6 @@
 package com.albalatro.controller;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,192 +15,284 @@ import com.albalatro.model.Log;
 import com.albalatro.model.Periodo;
 import com.albalatro.model.Salario;
 import com.albalatro.service.JSONService;
+import com.albalatro.utils.Session;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class DetalleController {
 
     @FXML private Label lblFechaActual;
     @FXML private VBox containerPeriodos;
     @FXML private Label lblTotalDinero;
+    @FXML private ComboBox<Salario> comboSalarioDiario;
 
     private LocalDate fechaActual;
     private Empleado empleadoActual;
-    private Salario salario;
-    private Runnable onDatosGuardados; // El "Callback" para avisar al calendario
+    private Salario salario; // Salario base para este día
+    private Runnable onDatosGuardados; 
 
-    // Formateadores de hora
+    // Formateadores
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEEE dd MMM", new Locale("es", "ES"));
-    // --- MÉTODOS DE INICIALIZACIÓN ---
+
+    @FXML
+    public void initialize() {
+        // Configuración visual inicial (sin seleccionar nada todavía)
+        configurarComboSalarios();
+    }
 
     public void setOnDatosGuardados(Runnable onDatosGuardados) {
         this.onDatosGuardados = onDatosGuardados;
     }
 
-    /**
-     * Este es el método principal que llama el Calendario para reciclar la ventana
-     */
+    // --- CONFIGURACIÓN Y CARGA ---
+
+    private void configurarComboSalarios() {
+        ArrayList<Salario> salarios = JSONService.readWagesEdit();
+        comboSalarioDiario.setItems(FXCollections.observableArrayList(salarios));
+
+        comboSalarioDiario.setConverter(new StringConverter<Salario>() {
+            @Override
+            public String toString(Salario s) {
+                if (s == null) return null;
+                return s.getNombre() + " - $" + s.getNormal(); 
+            }
+            @Override
+            public Salario fromString(String string) { return null; }
+        });
+    }
+
     public void cargarDatosDia(LocalDate fecha, Empleado emp) {
         this.fechaActual = fecha;
         this.empleadoActual = emp;
         
-        // 1. Actualizar Título
         lblFechaActual.setText(fecha.format(dateFormatter).toUpperCase());
-
-        // 2. Limpiar filas anteriores
         containerPeriodos.getChildren().clear();
+        this.salario = null;
 
-        // 3. Buscar datos existentes
+        // 1. Recuperar datos existentes del día (si los hay)
         if (emp.getLog() != null && emp.getLog().getLogs() != null) {
             DailyLog logDia = emp.getLog().getLogs().get(fecha);
-            
-            if (logDia != null && logDia.getPeriodos() != null) {
-                salario = logDia.getSalario();
-
-                // Actualizar total visual
+            if (logDia != null) {
+                this.salario = logDia.getSalario();
                 lblTotalDinero.setText(String.format("$%.2f", logDia.getTotalPagoDia()));
 
-                // Crear filas visuales para cada periodo existente
-                for (Periodo p : logDia.getPeriodos()) {
-                    agregarFilaVisual(p.getEntrada(), p.getSalida());
+                if (logDia.getPeriodos() != null) {
+                    for (Periodo p : logDia.getPeriodos()) {
+                        agregarFilaVisual(p.getEntrada(), p.getSalida());
+                    }
                 }
-            } else {
-                lblTotalDinero.setText("$0.00");
-                
+            } 
+        }
+        
+        // 2. Si no hay salario específico guardado, usar el default del empleado
+        if (this.salario == null) {
+             this.salario = JSONService.getSalario(emp.getSalario());
+             lblTotalDinero.setText("$0.00");
+        }
+
+        // 3. Seleccionar en el combo de manera segura
+        if (this.salario != null) {
+            for (Salario s : comboSalarioDiario.getItems()) {
+                if (s.getId().equals(this.salario.getId())) {
+                    comboSalarioDiario.getSelectionModel().select(s);
+                    break;
+                }
             }
         }
-        salario = JSONService.getSalario(empleadoActual.getSalario());
     }
 
     // --- MÉTODOS DE INTERACCIÓN ---
 
     @FXML
-    public void diaAnterior() {
-        cargarDatosDia(fechaActual.minusDays(1), empleadoActual);
-    }
+    public void diaAnterior() { cargarDatosDia(fechaActual.minusDays(1), empleadoActual); }
 
     @FXML
-    public void diaSiguiente() {
-        cargarDatosDia(fechaActual.plusDays(1), empleadoActual);
-    }
+    public void diaSiguiente() { cargarDatosDia(fechaActual.plusDays(1), empleadoActual); }
 
     @FXML
     public void agregarNuevoPeriodo() {
-        // Agrega una fila vacía para que el usuario escriba
+        // Crea una fila nueva (con horas vacías o default)
         agregarFilaVisual(null, null);
     }
 
     @FXML
     public void guardarCambios() {
-        // 1. Recolectar datos de los TextField
         ArrayList<Periodo> nuevosPeriodos = new ArrayList<>();
+        boolean huboErrores = false;
         
+        // --- 1. VALIDACIÓN DE HORAS ---
         for (var node : containerPeriodos.getChildren()) {
             if (node instanceof HBox) {
                 HBox row = (HBox) node;
                 TextField txtEntrada = (TextField) row.getChildren().get(0);
-                TextField txtSalida = (TextField) row.getChildren().get(2); // Indice 1 es el separador "a"
+                TextField txtSalida = (TextField) row.getChildren().get(2); 
 
                 String strEntrada = txtEntrada.getText().trim();
                 String strSalida = txtSalida.getText().trim();
 
-                if (!strEntrada.isEmpty() && !strSalida.isEmpty()) {
-                    try {
-                        LocalTime in = LocalTime.parse(strEntrada, timeFormatter);
-                        LocalTime out = LocalTime.parse(strSalida, timeFormatter);
-                        
-                        // Crear objeto Periodo (Ajusta según tu constructor)
-                        Periodo p = new Periodo(); 
-                        p.setEntrada(in);
-                        p.setSalida(out);
-                        p.getMinutosTrabajados(); // Importante si tu clase no lo hace auto
-                        
-                        nuevosPeriodos.add(p);
-                    } catch (DateTimeParseException e) {
-                        System.out.println("Formato de hora inválido en fila: " + strEntrada);
-                        // Aquí podrías mostrar una alerta al usuario
-                    }
+                // Ignoramos filas vacías
+                if (strEntrada.isEmpty() || strSalida.isEmpty()) continue; 
+
+                try {
+                    // Autocorrección inteligente (ej: "9:00" -> "09:00")
+                    if(strEntrada.indexOf(':') == 1) strEntrada = "0" + strEntrada;
+                    if(strSalida.indexOf(':') == 1) strSalida = "0" + strSalida;
+
+                    LocalTime in = LocalTime.parse(strEntrada, timeFormatter);
+                    LocalTime out = LocalTime.parse(strSalida, timeFormatter);
+                    
+                    Periodo p = new Periodo(); 
+                    p.setEntrada(in);
+                    p.setSalida(out);
+                    nuevosPeriodos.add(p);
+                    
+                    // Limpiamos estilos de error si los había
+                    txtEntrada.setStyle(null);
+                    txtSalida.setStyle(null);
+                } catch (DateTimeParseException e) {
+                    huboErrores = true;
+                    txtEntrada.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                    txtSalida.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 }
             }
         }
 
-        // 2. Actualizar el Modelo (DailyLog)
-        if (empleadoActual.getLog() == null) {
-            empleadoActual.setLog(new Log(new HashMap<>()));
-        }
-        if (empleadoActual.getLog().getLogs() == null) {
-            empleadoActual.getLog().setLogs(new HashMap<>());
+        if (huboErrores) {
+            mostrarAlerta("Error de formato", "Por favor usa el formato HH:mm (Ejemplo: 09:00).");
+            return; // Detenemos el guardado
         }
 
-        // Creamos o actualizamos el DailyLog
+        // --- 2. ACTUALIZACIÓN DEL MODELO ---
+        // Aseguramos estructura de mapas
+        if (empleadoActual.getLog() == null) empleadoActual.setLog(new Log(new HashMap<>()));
+        if (empleadoActual.getLog().getLogs() == null) empleadoActual.getLog().setLogs(new HashMap<>());
+
+        // Obtenemos el salario del combo (o el fallback)
+        Salario salarioSeleccionado = comboSalarioDiario.getValue();
+        if (salarioSeleccionado == null) salarioSeleccionado = this.salario;
+
         DailyLog logDia = empleadoActual.getLog().getLogs().get(fechaActual);
+        
         if (logDia == null) {
-            logDia = new DailyLog(salario,  fechaActual, nuevosPeriodos);
+            // Nuevo Log
+            logDia = new DailyLog(salarioSeleccionado, fechaActual, nuevosPeriodos);
             empleadoActual.getLog().getLogs().put(fechaActual, logDia);
         } else {
+            // Actualizar existente: Gracias a tu arreglo en DailyLog, el orden ya no importa tanto,
+            // pero es buena práctica asignar salario primero.
+            logDia.setSalario(salarioSeleccionado);
             logDia.setPeriodos(nuevosPeriodos);
         }
 
-        // 3. Persistencia (Guardar JSON)
-        // Necesitas actualizar la lista general de empleados y guardar
-        // Como aquí solo tenemos 1 empleado, lo ideal es recargar la lista, buscar este empleado y actualizarlo,
-        // o pasar la lista completa. Por simplicidad, asumimos que manejas la persistencia:
+        // --- 3. GUARDADO EN DISCO ---
         ArrayList<Empleado> listaActualizada = JSONService.readWorkersEdit();
-        // Lógica para reemplazar el empleado actual en la lista y guardar...
+        boolean encontrado = false;
+        
         for(int i=0; i<listaActualizada.size(); i++) {
             if(listaActualizada.get(i).getId().equals(empleadoActual.getId())) {
                 listaActualizada.set(i, empleadoActual);
+                encontrado = true;
                 break;
             }
         }
-        JSONService.writeWorkersEdit(listaActualizada);
-
-        // 4. Refrescar vista actual (Totales)
-        cargarDatosDia(fechaActual, empleadoActual);
-
-        // 5. Avisar al Calendario Principal
-        if (onDatosGuardados != null) {
-            onDatosGuardados.run();
-        }
+        if (!encontrado) listaActualizada.add(empleadoActual);
         
-        // Opcional: Cerrar ventana
-        // ((Stage) lblFechaActual.getScene().getWindow()).close();
+        if (JSONService.writeWorkersEdit(listaActualizada)) {
+            // Éxito: Notificar y Cerrar
+            if (onDatosGuardados != null) onDatosGuardados.run();
+            cerrarVentana();
+        } else {
+            mostrarAlerta("Error", "No se pudo guardar en el archivo de base de datos.");
+        }
     }
 
-    // --- HELPER VISUAL ---
-    
+    // --- MÉTODOS AUXILIARES ---
+
     private void agregarFilaVisual(LocalTime entrada, LocalTime salida) {
         HBox row = new HBox(10);
         row.setAlignment(Pos.CENTER_LEFT);
         row.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 5; -fx-background-radius: 5;");
 
-        TextField txtIn = new TextField(entrada != null ? entrada.format(timeFormatter) : "");
-        txtIn.setPromptText("09:00");
+        // Valores por defecto "prompt" para guiar al usuario
+        String valEntrada = (entrada != null) ? entrada.format(timeFormatter) : "09:00";
+        String valSalida = (salida != null) ? salida.format(timeFormatter) : "17:00";
+
+        TextField txtIn = new TextField(valEntrada);
         txtIn.setPrefWidth(70);
 
         Label lblSep = new Label("a");
 
-        TextField txtOut = new TextField(salida != null ? salida.format(timeFormatter) : "");
-        txtOut.setPromptText("17:00");
+        TextField txtOut = new TextField(valSalida);
         txtOut.setPrefWidth(70);
 
         Button btnEliminar = new Button("✕");
-        btnEliminar.setStyle("-fx-text-fill: red; -fx-background-color: transparent; -fx-cursor: hand;");
+        btnEliminar.setStyle("-fx-text-fill: red; -fx-background-color: transparent; -fx-cursor: hand; -fx-font-weight: bold;");
         btnEliminar.setOnAction(e -> containerPeriodos.getChildren().remove(row));
 
-        // Espaciador para empujar el botón X a la derecha
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         row.getChildren().addAll(txtIn, lblSep, txtOut, spacer, btnEliminar);
         containerPeriodos.getChildren().add(row);
+    }
+    
+    private void cerrarVentana() {
+        Stage stage = (Stage) lblFechaActual.getScene().getWindow();
+        stage.close();
+    }
+    
+    private void mostrarAlerta(String titulo, String contenido) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(contenido);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void abrirCrearSalarioModal() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/SalarioView.fxml"));
+            Parent root = loader.load();
+            
+            SalarioController controller = loader.getController();
+            controller.setEsModal(true); 
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            // Recargar combo
+            Salario seleccionPrevia = comboSalarioDiario.getValue();
+            configurarComboSalarios(); 
+            
+            if (seleccionPrevia != null) {
+                for(Salario s : comboSalarioDiario.getItems()){
+                     if(s.getId().equals(seleccionPrevia.getId())){
+                         comboSalarioDiario.getSelectionModel().select(s);
+                         break;
+                     }
+                }
+            }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }
