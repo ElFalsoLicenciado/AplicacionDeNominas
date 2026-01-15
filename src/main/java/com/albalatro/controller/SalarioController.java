@@ -74,7 +74,7 @@ public class SalarioController {
             salario.setPago(TipoPago.HORA);
             choiceHora.setSelected(true);
 
-            salario.setNombre("Nuevo salario");
+            salario.setNombre("Naco y estupido");
             fieldNombre.setText(salario.getNombre());
 
             salario.setNormal(spinnerNormal.getValue());

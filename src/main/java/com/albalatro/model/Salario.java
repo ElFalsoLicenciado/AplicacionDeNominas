@@ -11,7 +11,7 @@ public class Salario {
         
     }
     
-    public Salario(Double domingo, TipoPago pago, String id, String nombre, Double normal) {
+    public Salario(String id, String nombre, TipoPago pago ,Double normal, Double domingo) {
         this.id = id;
         this.nombre = nombre;
         this.pago = pago;
