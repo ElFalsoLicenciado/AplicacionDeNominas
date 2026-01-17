@@ -29,11 +29,9 @@ también muestre las horas de entrada y de salida (de ese día claro)
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo
 
-2. Decidir donde se pondrá el botón para exportar el PDF. (Es un PDF por empleado)
+2. Seleccionar un rango de días a pagar. 
 
-3. Seleccionar un rango de días a pagar. 
-
-4. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
+3. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
 ```text
 src/
 └── main/

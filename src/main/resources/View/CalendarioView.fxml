@@ -18,7 +18,9 @@
          <HBox alignment="CENTER_LEFT">
             <children>
                     <Button onAction="#regresar" styleClass="button, button-ghost" text="← Volver a Lista" />
-                    <Region prefHeight="25.0" prefWidth="79.0" HBox.hgrow="ALWAYS" />
+                    <Region prefHeight="25.0" prefWidth="38.0" HBox.hgrow="ALWAYS" />
+               <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#generarPDF" styleClass="button-ghost" text="PDF" />
+               <Region prefHeight="25.0" prefWidth="38.0" />
                <Button fx:id="btnObservaciones" mnemonicParsing="false" onAction="#observacionesPressed" styleClass="button-ghost" text="Observaciones" />
                <Region prefHeight="25.0" prefWidth="19.0" />
                     <Button fx:id="btnGestionar" onAction="#gestionarPressed" styleClass="button, button-ghost" text="Gestionar Empleado ⚙" />
