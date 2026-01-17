@@ -124,8 +124,8 @@ public class JSONService {
         
     }
 
-    public static Empleado testing1() {
-        return readWorkers().getFirst();
+    public static Empleado testing1(int index) {
+        return readWorkers().get(index);
     }
     
     // ==========================================

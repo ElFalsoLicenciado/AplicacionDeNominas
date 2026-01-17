@@ -30,4 +30,11 @@ public class Observacion {
     public void setTexto(String texto) {
         this.texto = texto;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Fecha: %s\n%s" , fecha, texto);
+    }
+
+
 }

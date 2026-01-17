@@ -47,6 +47,8 @@ public class CalendarioController {
     
     private YearMonth mesActual;
     private Empleado empleado;
+    private Double totalHoras = 0.0;
+    private Double totalSueldo = 0.0;
     
     private Stage stageDetalle = null;
     private DetalleController controllerDetalle = null;
@@ -417,7 +419,7 @@ public class CalendarioController {
 
         if (file == null) return;
         
-        if (PDFService.getPdf(empleado, file.toPath().toString()))
+        if (PDFService.getPdf(empleado, totalHoras, totalSueldo ,file.toPath().toString()))
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
     }
 
