@@ -1,7 +1,10 @@
 package com.albalatro.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import net.bytebuddy.asm.Advice.Local;
 
 /** <h1> Clase {@code Empleado}</h1>
 *  <p> POJO del Empleado, contiene los siguientes atributos:</p>
@@ -23,6 +26,8 @@ public class Empleado implements java.io.Serializable{
     private String salario;
     private ArrayList<Observacion> observaciones;
     private Status status;
+    private LocalDate fechaContratacion;
+    private LocalDate ultimaFechaPagada;
     
     public Empleado() {
         salario = "BASE";
@@ -40,7 +45,8 @@ public class Empleado implements java.io.Serializable{
         status = Status.ALTA;
     }
     
-    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario, ArrayList<Observacion> observaciones, Status status) {
+    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario,
+            ArrayList<Observacion> observaciones, Status status, LocalDate ultimaFechaPagada, LocalDate fechaContratacion) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
@@ -49,6 +55,12 @@ public class Empleado implements java.io.Serializable{
         this.salario = salario;
         this.observaciones = observaciones;
         this.status = status;
+        this.ultimaFechaPagada = ultimaFechaPagada;
+        this.fechaContratacion = fechaContratacion;
+
+        if (ultimaFechaPagada == null) {
+            ultimaFechaPagada = this.fechaContratacion;
+        }
     }
     
     public String getId() {
@@ -137,16 +149,30 @@ public class Empleado implements java.io.Serializable{
         return nombre + " " + apellidoP + " " + apellidoM;
     }
     
+    public LocalDate getUltimaFechaPagada() {
+        return ultimaFechaPagada;
+    }
+
+    public void setUltimaFechaPagada(LocalDate ultimaFechaPagada) {
+        this.ultimaFechaPagada = ultimaFechaPagada;
+    }
+
+    public LocalDate getFechaContratacion() {
+        return fechaContratacion;
+    }
+
+    public void setFechaContratacion(LocalDate fechaContratacion) {
+        this.fechaContratacion = fechaContratacion;
+    }
+
     /** 
     * @return String
     */
     @Override
     public String toString() {
-        return "Empleado{" +
-        "nombre= '" + nombre + '\'' +
-        ", apellidoP= '" + apellidoP + '\'' +
-        ", apellidoM= '" + apellidoM + '\'' +
-        '}';
+        return "Empleado [id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM
+                + ", log=" + log + ", salario=" + salario + ", observaciones=" + observaciones + ", status=" + status
+                + ", fechaContratacion=" + fechaContratacion + ", ultimaFechaPagada=" + ultimaFechaPagada + "]";
     }
     
 }

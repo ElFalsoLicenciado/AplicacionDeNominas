@@ -40,4 +40,9 @@ public class Log {
     public DailyLog getDailyLog(String date) {
         return this.logs.get(LocalDate.parse(date));
     }
+
+    @Override
+    public String toString() {
+        return "Log [logs=" + logs + "]";
+    }
 }

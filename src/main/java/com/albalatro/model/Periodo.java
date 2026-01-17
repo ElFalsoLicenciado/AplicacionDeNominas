@@ -38,6 +38,4 @@ public class Periodo {
     public String toString() {
         return String.format("%s-%s", entrada, salida);
     }
-
-    
 }

@@ -23,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -42,7 +43,7 @@ public class CalendarioController {
     @FXML private Label lblMesAno;
     @FXML private GridPane gridCalendario;
     @FXML private Button btnGestionar, btnObservaciones, btnPDF, toggleBtn, btnSeleccionarFecha;
-    @FXML private DatePicker datePicker;
+    @FXML private DatePicker datePickerCorte;
     
     private YearMonth mesActual;
     private Empleado empleado;
@@ -56,9 +57,22 @@ public class CalendarioController {
     
     @FXML
     public void initialize() {
-        datePicker.setValue(LocalDate.now());
-        datePicker.setVisible(generandoFechaDeCorte);
-        datePicker.setManaged(generandoFechaDeCorte);
+        datePickerCorte.setValue(LocalDate.now());
+        datePickerCorte.setDayCellFactory(param -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                // Si la fecha es mayor que la fecha actual (mañana en adelante)...
+                if (date.isAfter(LocalDate.now())) {
+                    setDisable(true); // ... no se puede hacer clic.
+                    setStyle("-fx-background-color: #ffc0cb;"); // Opcional: píntalo rojo suave para indicar error.
+                }
+            }
+        });
+
+        datePickerCorte.setVisible(generandoFechaDeCorte);
+        datePickerCorte.setManaged(generandoFechaDeCorte);
 
         btnSeleccionarFecha.setVisible(generandoFechaDeCorte);
         btnSeleccionarFecha.setManaged(generandoFechaDeCorte);
@@ -339,8 +353,8 @@ public class CalendarioController {
 
         //-------------------------------------------------
 
-        datePicker.setManaged(generandoFechaDeCorte);
-        datePicker.setVisible(generandoFechaDeCorte);
+        datePickerCorte.setManaged(generandoFechaDeCorte);
+        datePickerCorte.setVisible(generandoFechaDeCorte);
 
         btnSeleccionarFecha.setManaged(generandoFechaDeCorte);
         btnSeleccionarFecha.setVisible(generandoFechaDeCorte);
@@ -350,10 +364,12 @@ public class CalendarioController {
 
     @FXML
     private void generarFechaDeCorte() {
-        LocalDate fechaSeleccionada = datePicker.getValue();
+        LocalDate fechaSeleccionada = datePickerCorte.getValue();
         if (fechaSeleccionada != null) {
-            mesActual = YearMonth.from(fechaSeleccionada);
-            actualizarVista();
+            empleado.setUltimaFechaPagada(fechaSeleccionada);
+            Utils.showAlert("Fecha de corte actualizada.", 
+                "La fecha de corte se ha actualizado a " + fechaSeleccionada.toString(), 
+                "", Alert.AlertType.INFORMATION);
         }
     }
 }
