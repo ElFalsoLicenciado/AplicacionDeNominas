@@ -238,3 +238,164 @@
 .button-info:pressed {
     -fx-background-color: #2471A3;
 }
+
+/* =============================================================================
+   ESTILOS NUEVOS: FECHA DE CORTE Y CONTROLES
+   ============================================================================= */
+
+/* 1. Indicador Visual en el Calendario (Celda de Pago) */
+.calendar-cell-pago {
+    -fx-background-color: #FFF8E1; /* Fondo Amarillo Suave */
+    -fx-border-color: #FFC107;     /* Borde Dorado */
+    -fx-border-width: 2px;
+}
+
+.label-corte {
+    -fx-background-color: #FFC107;
+    -fx-text-fill: #3E2723;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 4px;
+    -fx-alignment: CENTER;
+}
+
+/* 2. Estilo Moderno para el DatePicker */
+.date-picker .text-field {
+    -fx-background-radius: 4px 0 0 4px;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 1px 0 1px 1px;
+}
+.date-picker .text-field:focused {
+    -fx-border-color: #2980B9;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #2980B9; /* Azul Principal */
+    -fx-background-radius: 0 4px 4px 0;
+    -fx-cursor: hand;
+}
+.date-picker .arrow-button:hover {
+    -fx-background-color: #1F618D;
+}
+.date-picker .arrow-button .arrow {
+    -fx-background-color: white; /* Flecha blanca */
+}
+
+/* Celdas del popup del calendario */
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #D6EAF8;
+}
+.date-picker-popup .selected {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+}
+
+/* 3. Botones de Acción Especiales */
+
+/* Botón Toggle (Opciones Avanzadas) - Estilo "Link" o "Fantasma Activo" */
+.button-toggle {
+    -fx-background-color: transparent;
+    -fx-text-fill: #5D6D7E;
+    -fx-border-color: #5D6D7E;
+    -fx-border-style: dashed;
+}
+.button-toggle:hover {
+    -fx-background-color: #EBEDEF;
+    -fx-text-fill: #2C3E50;
+    -fx-border-style: solid;
+}
+
+/* Botón Confirmar Fecha (Acción Primaria Pequeña) */
+.button-action-small {
+    -fx-background-color: #27AE60;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 6px 12px;
+}
+.button-action-small:hover {
+    -fx-background-color: #219150;
+    -fx-effect: dropshadow(three-pass-box, rgba(39, 174, 96, 0.3), 5, 0, 0, 1);
+}
+
+/* =============================================================================
+   ESTILO PARA DÍAS TRABAJADOS ANTERIORES AL CORTE
+   ============================================================================= */
+.calendar-cell-pagado {
+    -fx-background-color: #E9F7EF; /* Verde menta muy pálido */
+    -fx-border-color: #D4E6F1;     /* Borde azul grisáceo suave */
+    -fx-opacity: 0.9;              /* Ligeramente atenuado para dar sensación de "pasado" */
+}
+
+/* Opcional: Si quieres que el texto de esos días se vea un poco diferente */
+.calendar-cell-pagado .label {
+    -fx-text-fill: #5D6D7E; /* Texto grisáceo para reducir importancia visual */
+}
+
+/* =============================================================================
+   BOTÓN DE TOGGLE PARA EL RESUMEN (MES vs PENDIENTE)
+   ============================================================================= */
+.button-text-toggle {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7F8C8D; /* Mismo color que el label original */
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-padding: 2px 5px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 1px 0; /* Subrayado sutil */
+    -fx-border-style: dashed;
+}
+
+.button-text-toggle:hover {
+    -fx-text-fill: #2980B9;
+    -fx-border-color: #2980B9;
+    -fx-background-color: rgba(41, 128, 185, 0.05);
+}
+
+/* =============================================================================
+   COLOR PARA DEUDA ACUMULADA (PERIODO)
+   ============================================================================= */
+.label-money-period {
+    -fx-font-family: "Consolas", "Monospaced", sans-serif;
+    -fx-text-fill: #16A085; /* Azul Verdoso (Teal) */
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+/* =============================================================================
+   BOTÓN DE INTERCAMBIO DE VISTA (Estilo "Píldora" o "Chip")
+   ============================================================================= */
+.button-pill-toggle {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15px; /* Bordes totalmente redondeados */
+    -fx-border-radius: 15px;
+    -fx-border-color: #AED6F1;   /* Borde azul muy suave */
+    -fx-border-width: 1px;
+    
+    -fx-text-fill: #2980B9;      /* Texto azul primario */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    
+    -fx-cursor: hand;
+    -fx-padding: 4px 12px;       /* Relleno lateral para dar cuerpo */
+    -fx-alignment: CENTER;
+    
+    /* Sombra sutil para dar sensación de elemento flotante */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 3, 0, 0, 1);
+    -fx-transition: all 0.2s;
+}
+
+.button-pill-toggle:hover {
+    -fx-background-color: #EBF5FB; /* Fondo azul muy pálido al pasar el mouse */
+    -fx-border-color: #2980B9;     /* El borde se oscurece */
+    -fx-text-fill: #154360;        /* El texto se oscurece */
+    -fx-effect: dropshadow(three-pass-box, rgba(41, 128, 185, 0.25), 5, 0, 0, 2);
+}
+
+.button-pill-toggle:pressed {
+    -fx-background-color: #D6EAF8;
+    -fx-effect: innerShadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-translate-y: 1px; /* Efecto de hundimiento */
+}

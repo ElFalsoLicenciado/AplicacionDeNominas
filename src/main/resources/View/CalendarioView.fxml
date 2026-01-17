@@ -12,26 +12,33 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-padding: 20;" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
+<BorderPane style="-fx-padding: 20;" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
 
     <top>
         <VBox spacing="15.0" BorderPane.alignment="CENTER">
-         <HBox alignment="CENTER_LEFT">
-            <children>
-                    <Button fx:id="toggleBtn" onAction="#toggleButtons" styleClass="button, button-ghost" text="Generar fecha de corte" />
+            
+            <HBox alignment="CENTER_LEFT">
+                <children>
+                    <Button fx:id="toggleBtn" onAction="#toggleButtons" styleClass="button, button-toggle" text="Generar fecha de corte" />
+                    
                     <Region prefHeight="25.0" prefWidth="38.0" HBox.hgrow="ALWAYS" />
-               <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#generarPDF" styleClass="button-ghost" text="PDF" />
-               <Region prefHeight="25.0" prefWidth="38.0" />
-               <Button fx:id="btnObservaciones" mnemonicParsing="false" onAction="#observacionesPressed" styleClass="button-ghost" text="Observaciones" />
-               <Region prefHeight="25.0" prefWidth="19.0" />
+        
+                    <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#generarPDF" styleClass="button-ghost" text="PDF" />
+                    <Region prefHeight="25.0" prefWidth="38.0" />
+                    
+                    <Button fx:id="btnObservaciones" mnemonicParsing="false" onAction="#observacionesPressed" styleClass="button-ghost" text="Observaciones" />
+                    <Region prefHeight="25.0" prefWidth="19.0" />
+                    
                     <Button fx:id="btnGestionar" onAction="#gestionarPressed" styleClass="button, button-ghost" text="Gestionar Empleado ⚙" />
-               <DatePicker fx:id="datePickerCorte" />
-               <Region prefHeight="25.0" prefWidth="19.0" />
-               <Button fx:id="btnSeleccionarFecha" onAction="#generarFechaDeCorte" styleClass="button, button-ghost" text="Seleccionar Fecha" />
-            </children>
-         </HBox>
+  
+                    <DatePicker fx:id="datePickerCorte" promptText="Seleccionar fecha" />
+                    <Region prefHeight="25.0" prefWidth="19.0" />
+                    <Button fx:id="btnSeleccionarFecha" onAction="#generarFechaDeCorte" styleClass="button, button-action-small" text="Confirmar Fecha" />
+                </children>
+            </HBox>
 
             <HBox alignment="CENTER_LEFT" spacing="30.0" styleClass="sub-panel">
+         
                 <VBox spacing="2.0">
                     <Label text="Nombre" textFill="#888888"><font><Font size="10.0" /></font></Label>
                     <Label fx:id="lblNombre" style="-fx-text-fill: #2C3E50;" styleClass="label-subheader" text="---" />
@@ -48,7 +55,11 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <VBox alignment="CENTER_RIGHT" spacing="5.0">
-                    <Label styleClass="label-subheader" text="RESUMEN DEL MES" textFill="#888888"><font><Font name="System Bold" size="10.0" /></font></Label>
+                    <Button fx:id="btnToggleResumen" 
+                        text="⇄ VISTA: MES ACTUAL" 
+                        onAction="#toggleResumenMode" 
+                        styleClass="button-pill-toggle" />
+ 
                     <HBox alignment="CENTER_RIGHT" spacing="15">
                         <VBox alignment="CENTER_RIGHT">
                             <Label style="-fx-font-size: 12px;" styleClass="label-subheader" text="Horas:" textFill="#666" />
@@ -63,7 +74,7 @@
             </HBox>
 
             <HBox alignment="CENTER" spacing="20.0" style="-fx-padding: 10 0 0 0;">
-                <Button onAction="#mesAnterior" styleClass="button, button-ghost" text="◀ Anterior" />
+                 <Button onAction="#mesAnterior" styleClass="button, button-ghost" text="◀ Anterior" />
                 <Label fx:id="lblMesAno" style="-fx-font-size: 18px;" styleClass="label-header" text="ENERO 2026" />
                 <Button onAction="#mesSiguiente" styleClass="button, button-ghost" text="Siguiente ▶" />
             </HBox>
@@ -74,7 +85,7 @@
         <VBox spacing="5" style="-fx-padding: 20 0 0 0;">
             
             <GridPane alignment="CENTER" hgap="5">
-                <columnConstraints>
+                 <columnConstraints>
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
@@ -83,7 +94,7 @@
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                 </columnConstraints>
-                 
+              
                 <Label styleClass="day-header, day-header-sunday" text="DOMINGO" GridPane.columnIndex="0" />
                 <Label styleClass="day-header" text="LUNES" GridPane.columnIndex="1" />
                 <Label styleClass="day-header" text="MARTES" GridPane.columnIndex="2" />
@@ -91,6 +102,7 @@
                 <Label styleClass="day-header" text="JUEVES" GridPane.columnIndex="4" />
                 <Label styleClass="day-header" text="VIERNES" GridPane.columnIndex="5" />
                 <Label styleClass="day-header" text="SÁBADO" GridPane.columnIndex="6" />
+                
                 <rowConstraints>
                    <RowConstraints />
                 </rowConstraints>

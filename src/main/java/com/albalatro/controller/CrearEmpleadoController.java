@@ -1,6 +1,7 @@
 package com.albalatro.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -131,6 +132,7 @@ public class CrearEmpleadoController {
 
         setData(target, n, ap, am);
         target.setSalario(comboSalarios.getValue().getId());
+        target.setFechaContratacion(LocalDate.now());
         
         if (empleado == null) {
             target.setId(UUID.randomUUID().toString());
