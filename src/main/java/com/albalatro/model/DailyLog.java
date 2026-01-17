@@ -106,4 +106,11 @@ public class DailyLog {
             }            
         }
     }
+
+    @Override
+    public String toString() {
+        return "DailyLog [date=" + date + ", periodos=" + periodos + ", salario=" + salario
+                + ", totalMinutosTrabajados=" + totalMinutosTrabajados + ", totalPagoDia=" + totalPagoDia
+                + ", falta=" + falta + "]";
+    }
 }
