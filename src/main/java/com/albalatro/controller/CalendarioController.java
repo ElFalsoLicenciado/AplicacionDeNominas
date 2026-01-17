@@ -23,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -40,16 +41,28 @@ public class CalendarioController {
     @FXML private Label lblTotalSueldo;
     @FXML private Label lblMesAno;
     @FXML private GridPane gridCalendario;
-    @FXML private Button btnGestionar, btnObservaciones, btnPDF;
+    @FXML private Button btnGestionar, btnObservaciones, btnPDF, toggleBtn, btnSeleccionarFecha;
+    @FXML private DatePicker datePicker;
     
     private YearMonth mesActual;
     private Empleado empleado;
     
     private Stage stageDetalle = null;
     private DetalleController controllerDetalle = null;
+
+    private boolean generandoFechaDeCorte = false;
+    private String fechaDeCorteValue = "Generar fecha de corte";
+    private String opcionesAvanzadasValue = "Opciones avanzadas";
     
     @FXML
     public void initialize() {
+        datePicker.setValue(LocalDate.now());
+        datePicker.setVisible(generandoFechaDeCorte);
+        datePicker.setManaged(generandoFechaDeCorte);
+
+        btnSeleccionarFecha.setVisible(generandoFechaDeCorte);
+        btnSeleccionarFecha.setManaged(generandoFechaDeCorte);
+
         // Obtener el empleado de la sesión
         lblTotalSueldo.setText("$0.00");
         empleado = Session.getEmpleadoSeleccionado();
@@ -310,5 +323,37 @@ public class CalendarioController {
         
         if (PDFService.getPdf(empleado, file.toPath().toString()))
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
+    }
+
+    @FXML
+    private void toggleButtons() {
+        generandoFechaDeCorte = !generandoFechaDeCorte;
+        btnGestionar.setManaged(!generandoFechaDeCorte);
+        btnGestionar.setVisible(!generandoFechaDeCorte);
+
+        btnObservaciones.setManaged(!generandoFechaDeCorte);
+        btnObservaciones.setVisible(!generandoFechaDeCorte);
+
+        btnPDF.setManaged(!generandoFechaDeCorte);
+        btnPDF.setVisible(!generandoFechaDeCorte);
+
+        //-------------------------------------------------
+
+        datePicker.setManaged(generandoFechaDeCorte);
+        datePicker.setVisible(generandoFechaDeCorte);
+
+        btnSeleccionarFecha.setManaged(generandoFechaDeCorte);
+        btnSeleccionarFecha.setVisible(generandoFechaDeCorte);
+
+        toggleBtn.setText(!generandoFechaDeCorte ? fechaDeCorteValue : opcionesAvanzadasValue);
+    }
+
+    @FXML
+    private void generarFechaDeCorte() {
+        LocalDate fechaSeleccionada = datePicker.getValue();
+        if (fechaSeleccionada != null) {
+            mesActual = YearMonth.from(fechaSeleccionada);
+            actualizarVista();
+        }
     }
 }
