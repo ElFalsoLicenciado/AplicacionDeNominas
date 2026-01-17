@@ -23,7 +23,7 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/CSS/styles.css").toExternalForm());
         
         try {
-            Image icon = new Image(getClass().getResourceAsStream("/Images/joker.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/Images/amogus.jpg"));
             primaryStage.getIcons().add(icon);
         } catch (Exception e) {
             System.out.println("No se pudo cargar el ícono: " + e.getMessage());

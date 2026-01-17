@@ -1,7 +1,6 @@
 package com.albalatro.controller;
 
 import java.io.File;
-import java.nio.file.FileSystem;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +21,7 @@ import com.albalatro.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -293,7 +293,7 @@ public class CalendarioController {
         
         FileChooser fc = new FileChooser();
         fc.setTitle("Selecciona un directorio para guardar");
-        fc.setInitialFileName("Salario.pdf");
+        fc.setInitialFileName("Registros de "+empleado.getNombre()+".pdf");
         fc.getExtensionFilters().add(
             new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf")  
         );
@@ -308,7 +308,7 @@ public class CalendarioController {
 
         if (file == null) return;
         
-        
-        PDFService.getPdf(empleado, file.toPath().toString());
+        if (PDFService.getPdf(empleado, file.toPath().toString()))
+            Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
     }
 }

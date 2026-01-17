@@ -123,6 +123,10 @@ public class JSONService {
         .create();
         
     }
+
+    public static Empleado testing1() {
+        return readWorkers().getFirst();
+    }
     
     // ==========================================
     // LECTURA
