@@ -31,6 +31,7 @@ public class Main extends Application {
         
         primaryStage.setTitle("Albalatro - Aplicacion de Nominas");
         primaryStage.setScene(scene);
+        primaryStage.setHeight(900);
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
         primaryStage.show();
