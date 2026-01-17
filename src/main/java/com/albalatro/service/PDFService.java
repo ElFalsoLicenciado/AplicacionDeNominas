@@ -4,14 +4,17 @@ import java.io.IOException;
 
 import com.albalatro.model.Empleado;
 import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.Style;
 import com.itextpdf.layout.element.MulticolContainer;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.renderer.IRenderer;
 import com.itextpdf.layout.renderer.MulticolRenderer;
@@ -19,12 +22,12 @@ import com.itextpdf.layout.renderer.MulticolRenderer;
 public class PDFService {
     
     public static void main(String[] args) {
-        PDFService.getPdf(JSONService.testing1(), "C:/Users/User/Desktop/Salarios.pdf");
+        PDFService.getPdf(JSONService.testing1(2), 67.0, 13.0, "Salarios.pdf");
     }
     
     
     
-    public static boolean getPdf(Empleado empleado, String path){
+    public static boolean getPdf(Empleado empleado, Double horas, Double sueldo, String path){
         try{
             // VARIABLES DEL PDF
             
@@ -37,9 +40,8 @@ public class PDFService {
             PdfFont docFont = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             
             // VARIABLES DE LAS COLUMNAS
-            // float offSet = 36;
-            // float columnWidth = (ps.getWidth() - offSet * 2 + 10 ) / 3;
-            // float columnHeight = ps.getHeight() - offSet * 2;
+            int columnas = 1;
+            if (! (empleado.getObservaciones().isEmpty() || empleado.getObservaciones() == null)) columnas = 2;
             
             // DEFINIR LAS COLUMNAS
             // Rectangle[] columns = {
@@ -48,24 +50,70 @@ public class PDFService {
             //     new Rectangle(offSet + columnWidth * 2 + 5, offSet, columnWidth, columnHeight)
             // };
             
+            // VARIABLES PARA LAS FUENTES A UTILIZAR EN LAS CELDAS.
+            
+            Style fuenteCelda = new Style()
+            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+            .setFontSize(11)
+            .setFontColor(ColorConstants.GREEN);
+            
+            
+            Style fuenteHoras = new Style()
+            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+            .setFontSize(11)
+            .setFontColor(ColorConstants.RED);
+            
+            Style fuenteSueldo = new Style()
+            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+            .setFontSize(11)
+            .setFontColor(ColorConstants.GREEN);
             
             try (Document doc = new Document(pdf, ps)) {
                 doc.setFont(docFont);
                 MulticolContainer container = new MulticolContainer();
-                container.setProperty(Property.COLUMN_COUNT, 2);
+                container.setProperty(Property.COLUMN_COUNT, columnas);
                 container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
                 
-                Paragraph div = new Paragraph(
-                    "Nombre del empleado:" + empleado.getNombreCompleto()
-                );
-                container.add(div);
-                doc.add(container);
+                String status = "";
 
-                doc.add(new Paragraph("asdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpbasdjasdkasdbuasbdabsidbuasdiuasdaisdiahsoidhaoishdoashodahsdhoisahdoisahdosaiiiiiiiiña7bpb"));
+                switch (empleado.getStatus()) {
+                    case ALTA -> status = "Activo";
+                    case BAJA -> status = "Antiguo";
+                }
+
+                //EL contenedor divide la cantidad de lineas en 2, si hay 6, 3 en cada lado.
+                Paragraph div1 = new Paragraph(
+                    "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
+                    + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
+                    + String.format("Sueldo a pagar: $%.2f", sueldo)+ "\n"
+                    + "Status del empleado:" + status +"\n"
+                    + "4.\n"
+                    + "5.\n"
+                );
+                container.add(div1);
+                
+                    // Paragraph div2 = new Paragraph(
+                    //     "Nombre del empleado:" + empleado.getNombreCompleto()
+                    // );
+                    // container.add(div2);
+                
+                doc.add(container);
+                
                 
                 // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
-
+                
                 // doc.add(amogus);
+
+                float cellWidth = 70;
+                float cellHeight = 70;
+
+                Table calendario = new Table(new float[] {cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth});
+                calendario.setHeight(cellHeight);
+                for (int i = 0; i < 7; i++) {
+                    calendario.addCell((i+1)+".");
+                }
+
+                doc.add(calendario);
             }
             
             return true;

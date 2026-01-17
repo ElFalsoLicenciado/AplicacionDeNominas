@@ -47,6 +47,8 @@ public class CalendarioController {
     
     private Stage stageDetalle = null;
     private DetalleController controllerDetalle = null;
+    private Double sueldo = 0.0;
+    private Double horas = 0.0;
     
     @FXML
     public void initialize() {
@@ -182,6 +184,9 @@ public class CalendarioController {
         // Actualizar etiquetas de resumen
         lblTotalHoras.setText(String.format("%.1f h", totalHorasMes / 60.0));
         lblTotalSueldo.setText(String.format("$%.2f", totalSueldoMes));
+
+        sueldo = totalSueldoMes;
+        horas = totalHorasMes / 60.0;
     }
     
     private VBox crearCeldaDia(int numeroDia, LocalDate fechaExacta, String textoHoras, String colorHex) {
@@ -308,7 +313,7 @@ public class CalendarioController {
 
         if (file == null) return;
         
-        if (PDFService.getPdf(empleado, file.toPath().toString()))
+        if (PDFService.getPdf(empleado, horas, sueldo ,file.toPath().toString()))
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
     }
 }
