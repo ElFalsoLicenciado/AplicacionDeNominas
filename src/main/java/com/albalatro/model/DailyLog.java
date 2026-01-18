@@ -13,7 +13,7 @@ public class DailyLog {
     
     private Long totalMinutosTrabajados = 0L;
     private Double totalPagoDia = 0.0;
-    private String falta;
+    private String notas;
     
     public DailyLog() { }
     
@@ -71,11 +71,11 @@ public class DailyLog {
     }
 
     public String getFalta() {
-        return falta;
+        return notas;
     }
 
-    public void setFalta(String falta) {
-        this.falta = falta;
+    public void setFalta(String notas) {
+        this.notas = notas;
     }
     
     private void actualizarCalculos() {
@@ -111,6 +111,6 @@ public class DailyLog {
     public String toString() {
         return "DailyLog [date=" + date + ", periodos=" + periodos + ", salario=" + salario
                 + ", totalMinutosTrabajados=" + totalMinutosTrabajados + ", totalPagoDia=" + totalPagoDia
-                + ", falta=" + falta + "]";
+                + ", falta=" + notas + "]";
     }
 }

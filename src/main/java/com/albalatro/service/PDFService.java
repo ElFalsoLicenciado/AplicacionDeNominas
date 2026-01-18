@@ -1,6 +1,8 @@
 package com.albalatro.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import com.albalatro.model.Empleado;
 import com.itextpdf.io.font.constants.StandardFonts;
@@ -12,10 +14,14 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.MulticolContainer;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.Property;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.layout.renderer.IRenderer;
 import com.itextpdf.layout.renderer.MulticolRenderer;
 
@@ -25,6 +31,11 @@ public class PDFService {
         PDFService.getPdf(JSONService.testing1(2), 67.0, 13.0, "Salarios.pdf");
     }
     
+    public static int getNumeroDeMeses(LocalDate beginning, LocalDate end ) {
+        if (end.isBefore(beginning)) return 0;
+
+        return (int) ChronoUnit.MONTHS.between(beginning, end);
+    }
     
     
     public static boolean getPdf(Empleado empleado, Double horas, Double sueldo, String path){
@@ -39,22 +50,6 @@ public class PDFService {
             // VARIABLES DE LAS FUENTES
             PdfFont docFont = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             
-            // VARIABLES DE LAS COLUMNAS
-            int columnas = 1;
-            int filas = 4;
-            int espacios = 0;
-            int observaciones = 0;
-            
-            if (! (empleado.getObservaciones().isEmpty() || empleado.getObservaciones() == null)) {
-                columnas = 2;
-                observaciones = empleado.getObservaciones().size();
-            }
-            // DEFINIR LAS COLUMNAS
-            // Rectangle[] columns = {
-            //     new Rectangle(offSet - 5, offSet, columnWidth, columnHeight),
-            //     new Rectangle(offSet + columnWidth, offSet, columnWidth, columnHeight),
-            //     new Rectangle(offSet + columnWidth * 2 + 5, offSet, columnWidth, columnHeight)
-            // };
             
             // VARIABLES PARA LAS FUENTES A UTILIZAR EN LAS CELDAS.
             
@@ -74,56 +69,104 @@ public class PDFService {
             .setFontSize(11)
             .setFontColor(ColorConstants.GREEN);
             
+            // FORMACION DE LA CADENA DE LA CABECERA.
+            
+            String datosEmpleado = "";    
+            
+            // VARIABLES DE LAS COLUMNAS
+            Style fuenteColumna = new Style()
+            .setTextAlignment(TextAlignment.RIGHT)
+            .setFontSize(15);
+            
+            int columnas = 1;
+            int filas = 3;
+            int espacios = 4;
+            int observaciones = 0;
+            
+            if (! (empleado.getObservaciones().isEmpty() || empleado.getObservaciones() == null)) {
+                columnas = 2;
+                observaciones = empleado.getObservaciones().size();
+            }
+            
+            if (observaciones > 0) {
+                int filasTexto = filas + observaciones + 1;
+                
+                // SI EL NUMERO DE FILAS ES PAR: AMBOS TIENEN LA MITAD DE FILAS.
+                // SI EL NUMERO DE FILAS ES IMPAR: EL IZQUIERDO TIENE N//2 Y EL DERECHO TIENE N//2+1
+                // EJEMPLO: 13: Izquierda = 6, Derecha = 7.
+                
+                // SI ES PAR.
+                if(filasTexto%2 == 0) {
+                    
+                } else {
+                    
+                }
+            }
+            
+            for (int i = 0; i < espacios; i++) {
+                datosEmpleado += "\n";
+            }
+            
+            datosEmpleado +=
+            "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
+            + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
+            + String.format("Sueldo a pagar: $%.2f", sueldo)+ "\n";
+                        
+            
             try (Document doc = new Document(pdf, ps)) {
                 doc.setFont(docFont);
                 MulticolContainer container = new MulticolContainer();
                 container.setProperty(Property.COLUMN_COUNT, columnas);
                 container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
                 
-                String status = "";
-                
-                switch (empleado.getStatus()) {
-                    case ALTA -> status = "Activo";
-                    case BAJA -> status = "Antiguo";
-                }
-                
-                String datosEmpleado =    
-                "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
-                + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
-                + String.format("Sueldo a pagar: $%.2f", sueldo)+ "\n"
-                + "Status del empleado:" + status +"\n";
-
-                // SI EL NUMERO DE FILAS ES PAR: AMBOS TIENEN LA MITAD DE FILAS.
-                // SI EL NUMERO DE FILAS ES IMPAR: EL IZQUIERDO TIENE N//2 Y EL DERECHO TIENE N//2+1
-                // EJEMPLO: 13: Izquierda = 6, Derecha = 7.
-
-                for (int i = 0; i < 3; i++) {
-                    datosEmpleado += (i+1)+".\n";
-                }
-                
-                //EL contenedor divide la cantidad de lineas en 2, si hay 6, 3 en cada lado.
-                Paragraph div1 = new Paragraph(datosEmpleado);
+                // ==================================
+                // PARRAFO DE LOS DATOS DEL EMPLEADO.
+                // ==================================
+                Paragraph div1 = new Paragraph(datosEmpleado)
+                .addStyle(fuenteColumna);
                 container.add(div1);
-                
-                // Paragraph div2 = new Paragraph(
-                //     "Nombre del empleado:" + empleado.getNombreCompleto()
-                // );
-                // container.add(div2);
                 
                 doc.add(container);
                 
-                
                 // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
-                
                 // doc.add(amogus);
                 
+                for (int i = 0; i < 2; i++) {
+                    doc.add(new Paragraph("\n"));
+                }
+                
+                // ==================================
+                // TABLA(S) DE HORAS.
+                // ==================================
+
                 float cellWidth = 70;
                 float cellHeight = 70;
                 
-                Table calendario = new Table(new float[] {cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth});
-                calendario.setHeight(cellHeight);
-                for (int i = 0; i < 7; i++) {
-                    calendario.addCell((i+1)+".");
+                Table calendario = new Table(new float[] {cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth})
+                .useAllAvailableWidth();
+                
+                Cell cabecera = new Cell(1, 7) // 1 fila, 5 columnas
+                .add(new Paragraph("REGISTRO DE NOMINA")
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                .setFontSize(18)
+                .setFontColor(ColorConstants.BLACK))
+                // .setBackgroundColor(colorTitulo)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setPadding(15)
+                .setBorder(new SolidBorder(ColorConstants.WHITE, 0))
+                .setMarginBottom(5);
+                
+                calendario.addCell(cabecera);
+
+
+                for (int i = 0; i < 31; i++) {
+                    Cell celda = new Cell()
+                    .add(new Paragraph((i+1)+"."))
+                    .setMinHeight(cellHeight)
+                    .setMinWidth(cellWidth);
+
+                    calendario.addCell(celda);
                 }
                 
                 doc.add(calendario);
@@ -135,6 +178,8 @@ public class PDFService {
             return false;
         }
     }
+
+
     public static class MultiColRendererAllow10RetriesRenderer extends MulticolRenderer {
         
         /**

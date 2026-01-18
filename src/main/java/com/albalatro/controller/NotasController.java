@@ -20,7 +20,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-public class ListaObservacionesController {
+public class NotasController {
     
     @FXML private Button btnPrevious;
     @FXML private Button btnNext;

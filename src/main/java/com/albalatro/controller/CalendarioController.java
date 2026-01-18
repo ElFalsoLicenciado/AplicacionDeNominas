@@ -45,7 +45,7 @@ public class CalendarioController {
     @FXML private GridPane gridCalendario;
     
     // Botones de acción
-    @FXML private Button btnGestionar, btnObservaciones, btnPDF, toggleBtn, btnSeleccionarFecha;
+    @FXML private Button btnGestionar, btnPDF, toggleBtn, btnSeleccionarFecha;
     @FXML private Button btnToggleResumen; // Botón para alternar resumen (Mes/Periodo)
     
     // Controles de fecha (Rango)
@@ -58,10 +58,10 @@ public class CalendarioController {
     
     private Stage stageDetalle = null;
     private DetalleController controllerDetalle = null;
-
+    
     private boolean generandoFechaDeCorte = false;
     private boolean verResumenMensual = true; // Estado del toggle de resumen
-
+    
     private String fechaDeCorteValue = "Generar fecha de corte";
     private String opcionesAvanzadasValue = "Cancelar Pago"; // Cambiado texto para claridad
     
@@ -98,7 +98,7 @@ public class CalendarioController {
                 }
             }
         });
-
+        
         // Fin: No futuro y No antes que inicio
         datePickerFin.setDayCellFactory(param -> new DateCell() {
             @Override
@@ -107,17 +107,17 @@ public class CalendarioController {
                 LocalDate inicio = datePickerInicio.getValue();
                 boolean esFuturo = date.isAfter(LocalDate.now());
                 boolean esAnteriorAlInicio = (inicio != null) && date.isBefore(inicio);
-
+                
                 if (esFuturo || esAnteriorAlInicio) {
                     setDisable(true);
                     setStyle("-fx-background-color: #ffc0cb;");
                 }
             }
         });
-
+        
         // Ocultar controles de pago al inicio
         toggleControlesRango(false);
-
+        
         // Inicializar calendario en mes actual
         mesActual = YearMonth.now();
         actualizarVista();
@@ -144,11 +144,6 @@ public class CalendarioController {
     public void gestionarPressed() {
         Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
         Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
-    }
-    
-    @FXML
-    public void observacionesPressed() {
-        Navigation.cambiarVista("/View/ListaObservacionesView.fxml");
     }
     
     // --- LÓGICA DE VISUALIZACIÓN ---
@@ -269,7 +264,7 @@ public class CalendarioController {
         }
         lblTotalSueldo.setStyle(""); 
     }
-
+    
     @FXML
     private void toggleResumenMode() {
         verResumenMensual = !verResumenMensual;
@@ -289,10 +284,10 @@ public class CalendarioController {
         }
         boolean hayLog = (logDelDia != null);
         LocalDate fechaCorte = empleado.getUltimaFechaPagada();
-
+        
         boolean esFechaCorte = (fechaCorte != null) && fechaExacta.isEqual(fechaCorte);
         boolean esAnteriorYTrabajado = (fechaCorte != null) && fechaExacta.isBefore(fechaCorte) && hayLog;
-
+        
         // Estilos CSS
         if (esFechaCorte) {
             celda.getStyleClass().add("calendar-cell-pago"); 
@@ -318,13 +313,13 @@ public class CalendarioController {
         
         ArrayList<javafx.scene.Node> nodos = new ArrayList<>();
         nodos.add(lblDia);
-
+        
         if (esFechaCorte) {
             Label lblIndicador = new Label("CORTE"); // Texto más corto para ahorrar espacio
             lblIndicador.getStyleClass().add("label-corte");
             nodos.add(lblIndicador);
         }
-
+        
         if (hayLog) {
             ArrayList<String> array = new ArrayList<>(); 
             for(Periodo p : logDelDia.getPeriodos()) {
@@ -345,7 +340,7 @@ public class CalendarioController {
         } else {
             nodos.add(lblHoras);
         }
-
+        
         celda.getChildren().addAll(nodos);
         
         // Eventos
@@ -403,74 +398,74 @@ public class CalendarioController {
     }
     
     @FXML
-private void generarPDF() {
-    Stage stage = (Stage) btnPDF.getScene().getWindow();
-    String userDesktop = System.getProperty("user.desktop"); 
-    File escritorio = FileSystemView.getFileSystemView().getHomeDirectory();
-    
-    FileChooser fc = new FileChooser();
-    fc.setTitle("Selecciona un directorio para guardar");
-    fc.setInitialFileName("Registros de " + empleado.getNombre() + ".pdf");
-    fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
-
-    if (escritorio.exists() && escritorio.isDirectory()) {
-        fc.setInitialDirectory(escritorio);
-    } else {
-        fc.setInitialDirectory(new File(userDesktop));
-    }
-
-    File file = fc.showSaveDialog(stage);
-    if (file == null) return;
-    
-    // --- NUEVO: Calcular los totales para pasarlos al PDF ---
-    double totalSueldo = 0.0;
-    double totalHoras = 0.0;
-
-    // Usamos la misma lógica que usaste para el modo "Pendiente" o "Mes Actual"
-    // Lo más lógico para un reporte PDF es imprimir TODO lo pendiente o lo del mes visible.
-    // Asumiremos que quieres imprimir lo que se ve actualmente en pantalla (lo que controla el toggle):
-    
-    LocalDate hoy = LocalDate.now();
-    LocalDate ultimaFechaPagada = empleado.getUltimaFechaPagada();
-    
-    if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
-        for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
-            LocalDate fechaLog = entry.getKey();
-            DailyLog log = entry.getValue();
-            
-            // Lógica: Si verResumenMensual es true, filtramos por mes. Si es false, todo lo pendiente.
-            boolean incluir = false;
-            
-            if (verResumenMensual) {
-                // Filtro por Mes Actual
-                if (YearMonth.from(fechaLog).equals(mesActual)) {
-                    incluir = true;
+    private void generarPDF() {
+        Stage stage = (Stage) btnPDF.getScene().getWindow();
+        String userDesktop = System.getProperty("user.desktop"); 
+        File escritorio = FileSystemView.getFileSystemView().getHomeDirectory();
+        
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Selecciona un directorio para guardar");
+        fc.setInitialFileName("Registros de " + empleado.getNombre() + ".pdf");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
+        
+        if (escritorio.exists() && escritorio.isDirectory()) {
+            fc.setInitialDirectory(escritorio);
+        } else {
+            fc.setInitialDirectory(new File(userDesktop));
+        }
+        
+        File file = fc.showSaveDialog(stage);
+        if (file == null) return;
+        
+        // --- NUEVO: Calcular los totales para pasarlos al PDF ---
+        double totalSueldo = 0.0;
+        double totalHoras = 0.0;
+        
+        // Usamos la misma lógica que usaste para el modo "Pendiente" o "Mes Actual"
+        // Lo más lógico para un reporte PDF es imprimir TODO lo pendiente o lo del mes visible.
+        // Asumiremos que quieres imprimir lo que se ve actualmente en pantalla (lo que controla el toggle):
+        
+        LocalDate hoy = LocalDate.now();
+        LocalDate ultimaFechaPagada = empleado.getUltimaFechaPagada();
+        
+        if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
+            for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
+                LocalDate fechaLog = entry.getKey();
+                DailyLog log = entry.getValue();
+                
+                // Lógica: Si verResumenMensual es true, filtramos por mes. Si es false, todo lo pendiente.
+                boolean incluir = false;
+                
+                if (verResumenMensual) {
+                    // Filtro por Mes Actual
+                    if (YearMonth.from(fechaLog).equals(mesActual)) {
+                        incluir = true;
+                    }
+                } else {
+                    // Filtro por Pendientes
+                    boolean esPosteriorAlCorte = (ultimaFechaPagada == null) || fechaLog.isAfter(ultimaFechaPagada);
+                    boolean esAnteriorOIgualHoy = !fechaLog.isAfter(hoy);
+                    if (esPosteriorAlCorte && esAnteriorOIgualHoy) {
+                        incluir = true;
+                    }
                 }
-            } else {
-                // Filtro por Pendientes
-                boolean esPosteriorAlCorte = (ultimaFechaPagada == null) || fechaLog.isAfter(ultimaFechaPagada);
-                boolean esAnteriorOIgualHoy = !fechaLog.isAfter(hoy);
-                if (esPosteriorAlCorte && esAnteriorOIgualHoy) {
-                    incluir = true;
-                }
-            }
-            
-            if (incluir) {
-                totalSueldo += log.getTotalPagoDia();
-                if(log.getTotalMinutosTrabajados() != null) {
-                    totalHoras += log.getTotalMinutosTrabajados() / 60.0; 
+                
+                if (incluir) {
+                    totalSueldo += log.getTotalPagoDia();
+                    if(log.getTotalMinutosTrabajados() != null) {
+                        totalHoras += log.getTotalMinutosTrabajados() / 60.0; 
+                    }
                 }
             }
         }
+        // -------------------------------------------------------
+        
+        // AHORA SÍ, pasamos los 4 argumentos:
+        if (PDFService.getPdf(empleado, totalHoras, totalSueldo, file.toPath().toString())) {
+            Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
+        }
     }
-    // -------------------------------------------------------
-
-    // AHORA SÍ, pasamos los 4 argumentos:
-    if (PDFService.getPdf(empleado, totalHoras, totalSueldo, file.toPath().toString())) {
-        Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
-    }
-}
-
+    
     @FXML
     private void toggleButtons() {
         generandoFechaDeCorte = !generandoFechaDeCorte;
@@ -478,17 +473,15 @@ private void generarPDF() {
         // Botones normales
         btnGestionar.setManaged(!generandoFechaDeCorte);
         btnGestionar.setVisible(!generandoFechaDeCorte);
-        btnObservaciones.setManaged(!generandoFechaDeCorte);
-        btnObservaciones.setVisible(!generandoFechaDeCorte);
         btnPDF.setManaged(!generandoFechaDeCorte);
         btnPDF.setVisible(!generandoFechaDeCorte);
-
+        
         // Controles de Rango
         toggleControlesRango(generandoFechaDeCorte);
-
+        
         toggleBtn.setText(!generandoFechaDeCorte ? fechaDeCorteValue : opcionesAvanzadasValue);
     }
-
+    
     private void toggleControlesRango(boolean visible) {
         datePickerInicio.setManaged(visible);
         datePickerInicio.setVisible(visible);
@@ -500,11 +493,11 @@ private void generarPDF() {
         
         datePickerFin.setManaged(visible);
         datePickerFin.setVisible(visible);
-
+        
         btnSeleccionarFecha.setManaged(visible);
         btnSeleccionarFecha.setVisible(visible);
     }
-
+    
     @FXML
     private void generarFechaDeCorte() {
         LocalDate fechaInicio = datePickerInicio.getValue();
@@ -523,7 +516,7 @@ private void generarPDF() {
             Utils.showAlert("Fecha Futura", "No puedes pagar días futuros.", "", Alert.AlertType.WARNING);
             return;
         }
-
+        
         // Calcular pago en rango
         double totalPagar = 0.0;
         
@@ -558,9 +551,11 @@ private void generarPDF() {
         if (guardado) {
             JSONService.writeWorkersEdit(listaEmpleados);
             Utils.showAlert("Pago Registrado", 
-                "Periodo: " + fechaInicio + " al " + fechaFin, 
-                "Monto liquidado: $" + String.format("%.2f", totalPagar), 
-                Alert.AlertType.INFORMATION);
+            "Periodo: " + fechaInicio + " al " + fechaFin, 
+            "Monto liquidado: $" + String.format("%.2f", totalPagar), 
+            Alert.AlertType.INFORMATION);
+            
+            Session.setChanges(true);
             
             toggleButtons(); 
             actualizarVista();

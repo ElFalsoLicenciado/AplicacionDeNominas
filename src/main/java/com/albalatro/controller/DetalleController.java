@@ -241,6 +241,7 @@ public class DetalleController {
             // Éxito: Notificar y Cerrar
             if (onDatosGuardados != null) onDatosGuardados.run();
             cerrarVentana();
+            Session.setChanges(true);
         } else {
             mostrarAlerta("Error", "No se pudo guardar en el archivo de base de datos.");
         }

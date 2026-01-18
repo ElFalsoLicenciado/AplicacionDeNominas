@@ -142,8 +142,10 @@ public class CrearEmpleadoController {
             actualizarEnLista(lista, target);
         }
 
-        if (JSONService.writeWorkersEdit(lista))
+        if (JSONService.writeWorkersEdit(lista)) {
             Navigation.empleadoGuardadoCustomHistory(target);
+            Session.setChanges(true);
+        }
         else
             mostrarError("Error al escribir en el archivo JSON.");
     }

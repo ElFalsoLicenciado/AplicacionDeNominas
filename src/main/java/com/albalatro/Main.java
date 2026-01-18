@@ -3,6 +3,7 @@ package com.albalatro;
 import java.util.Objects;
 
 import com.albalatro.service.JSONService;
+import com.albalatro.utils.Session;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +24,7 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/CSS/styles.css").toExternalForm());
         
         try {
-            Image icon = new Image(getClass().getResourceAsStream("/Images/amogus.jpg"));
+            Image icon = new Image(getClass().getResourceAsStream("/Images/base.png"));
             primaryStage.getIcons().add(icon);
         } catch (Exception e) {
             System.out.println("No se pudo cargar el ícono: " + e.getMessage());
@@ -58,6 +59,12 @@ public class Main extends Application {
         alert.setHeaderText("¿Estás seguro de que quieres salir?");
         alert.setContentText("¿Has guardado todos los cambios?");
         
+        if(! Session.getChanges()) {
+            stage.close();
+            JSONService.removeEdits();
+            return;
+        } 
+
         if (alert.showAndWait().get() == ButtonType.OK) {
             stage.close();
             JSONService.removeEdits();

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-padding: 10;" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
+<BorderPane style="-fx-padding: 10;" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
 
     <top>
         <VBox spacing="10.0" BorderPane.alignment="CENTER">
@@ -25,13 +25,11 @@
         
                     <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#generarPDF" styleClass="button-ghost" text="PDF" />
                     
-                    <Button fx:id="btnObservaciones" mnemonicParsing="false" onAction="#observacionesPressed" styleClass="button-ghost" text="Observaciones" />
-                    
                     <Button fx:id="btnGestionar" onAction="#gestionarPressed" styleClass="button, button-ghost" text="Gestionar Empleado ⚙" />
   
                     <DatePicker fx:id="datePickerInicio" prefWidth="110.0" promptText="Inicio" />
                     
-                    <Label fx:id="lblGuion" text="-" style="-fx-font-weight:bold; -fx-text-fill:#888;" visible="false" managed="false" />
+                    <Label fx:id="lblGuion" managed="false" style="-fx-font-weight:bold; -fx-text-fill:#888;" text="-" visible="false" />
                     
                     <DatePicker fx:id="datePickerFin" prefWidth="110.0" promptText="Fin (Corte)" />
 

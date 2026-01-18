@@ -29,9 +29,16 @@ también muestre las horas de entrada y de salida (de ese día claro)
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
    Día/Mes/Año: Entrada-Salida  Horas  Sueldo
 
-2. Seleccionar un rango de días a pagar. 
+2. Seleccionar un rango de días a pagar. MOSTRAR INICIO Y CORTE.
 
-3. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.  
+3. A la hora de crear un salario temporal, ocultar el 2ndo spinner. (Como es de un solo dia no importa si es domingo o no).
+
+4. Agregar notas por dia.
+
+5. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.
+
+6. BUGS
+   
 ```text
 src/
 └── main/
