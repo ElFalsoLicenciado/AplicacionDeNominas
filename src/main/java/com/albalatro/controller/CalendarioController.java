@@ -78,8 +78,8 @@ public class CalendarioController {
             
             // --- 2. CONFIGURACIÓN DE FECHAS DEFAULT ---
             // Inicio: Día siguiente al último pago, o fecha contratación, o hoy.
-            LocalDate ultimoPago = empleado.getUltimaFechaPagada();
-            LocalDate fechaInicioDefault = (ultimoPago != null) ? ultimoPago.plusDays(1) : empleado.getFechaContratacion();
+            LocalDate ultimoPago = empleado.getFinCorte();
+            LocalDate fechaInicioDefault = (ultimoPago != null) ? ultimoPago.plusDays(1) : empleado.getInicioCorte();
             if (fechaInicioDefault == null) fechaInicioDefault = LocalDate.now();
             
             datePickerInicio.setValue(fechaInicioDefault);
@@ -235,7 +235,7 @@ public class CalendarioController {
         double totalPendienteDinero = 0;
         long totalPendienteMinutos = 0;
         
-        LocalDate ultimaFechaPagada = empleado.getUltimaFechaPagada();
+        LocalDate ultimaFechaPagada = empleado.getFinCorte();
         LocalDate hoy = LocalDate.now();
         
         if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
@@ -283,7 +283,7 @@ public class CalendarioController {
             logDelDia = empleado.getLog().getLogs().get(fechaExacta); 
         }
         boolean hayLog = (logDelDia != null);
-        LocalDate fechaCorte = empleado.getUltimaFechaPagada();
+        LocalDate fechaCorte = empleado.getFinCorte();
         
         boolean esFechaCorte = (fechaCorte != null) && fechaExacta.isEqual(fechaCorte);
         boolean esAnteriorYTrabajado = (fechaCorte != null) && fechaExacta.isBefore(fechaCorte) && hayLog;
@@ -405,7 +405,7 @@ public class CalendarioController {
         
         FileChooser fc = new FileChooser();
         fc.setTitle("Selecciona un directorio para guardar");
-        fc.setInitialFileName("Registros de " + empleado.getNombre() + ".pdf");
+        fc.setInitialFileName("Registros de " + empleado.getNombreCompleto() + ".pdf");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo PDF (*.pdf)", "*.pdf"));
         
         if (escritorio.exists() && escritorio.isDirectory()) {
@@ -426,7 +426,7 @@ public class CalendarioController {
         // Asumiremos que quieres imprimir lo que se ve actualmente en pantalla (lo que controla el toggle):
         
         LocalDate hoy = LocalDate.now();
-        LocalDate ultimaFechaPagada = empleado.getUltimaFechaPagada();
+        LocalDate ultimaFechaPagada = empleado.getFinCorte();
         
         if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
             for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
@@ -534,7 +534,7 @@ public class CalendarioController {
             }
         }
         
-        empleado.setUltimaFechaPagada(fechaFin);
+        empleado.setFinCorte(fechaFin);
         
         // Persistencia
         ArrayList<Empleado> listaEmpleados = JSONService.readWorkersEdit();

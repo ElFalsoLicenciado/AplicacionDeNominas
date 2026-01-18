@@ -70,11 +70,11 @@ public class DailyLog {
         }
     }
 
-    public String getFalta() {
+    public String getNotas() {
         return notas;
     }
 
-    public void setFalta(String notas) {
+    public void setNotas(String notas) {
         this.notas = notas;
     }
     
@@ -111,6 +111,6 @@ public class DailyLog {
     public String toString() {
         return "DailyLog [date=" + date + ", periodos=" + periodos + ", salario=" + salario
                 + ", totalMinutosTrabajados=" + totalMinutosTrabajados + ", totalPagoDia=" + totalPagoDia
-                + ", falta=" + notas + "]";
+                + ", notas=" + notas + "]";
     }
 }

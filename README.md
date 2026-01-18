@@ -38,7 +38,8 @@ también muestre las horas de entrada y de salida (de ese día claro)
 5. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.
 
 6. BUGS
-   
+   1. A la hora de abrir el creador de salarios, y darle guardar. Si le das a atras por alguna razon regresa al creador de salarios. Tienes que volver a dar atras para salir.
+   2. A la hora de remover todas las entradas de un dia se sigue viendo el texto del sueldo.
 ```text
 src/
 └── main/

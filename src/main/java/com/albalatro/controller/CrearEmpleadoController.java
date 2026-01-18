@@ -132,7 +132,7 @@ public class CrearEmpleadoController {
 
         setData(target, n, ap, am);
         target.setSalario(comboSalarios.getValue().getId());
-        target.setFechaContratacion(LocalDate.now());
+        target.setInicioCorte(LocalDate.now());
         
         if (empleado == null) {
             target.setId(UUID.randomUUID().toString());
