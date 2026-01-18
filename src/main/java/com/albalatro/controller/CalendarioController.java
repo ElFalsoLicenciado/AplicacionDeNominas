@@ -461,7 +461,7 @@ public class CalendarioController {
         // -------------------------------------------------------
         
         // AHORA SÍ, pasamos los 4 argumentos:
-        if (PDFService.getPdf(empleado, totalHoras, totalSueldo, file.toPath().toString())) {
+        if (PDFService.getPdf(empleado, file.toPath().toString())) {
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
         }
     }

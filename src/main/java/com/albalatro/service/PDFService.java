@@ -40,7 +40,7 @@ public class PDFService {
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("es", "ES"));
     
     public static void main(String[] args) {
-        PDFService.getPdf(JSONService.testing1(2), 67.0, 13.0, "Salarios.pdf");
+        PDFService.getPdf(JSONService.testing1(2), "Salarios.pdf");
     }
     
     public static int getNumeroDeMeses (LocalDate beginning, LocalDate end ) {
@@ -66,9 +66,13 @@ public class PDFService {
     }
     
     public static boolean getInBetween (LocalDate beginning, LocalDate end, LocalDate date) {
-        if(date.isAfter(beginning) && date.isBefore(end)) 
+        if (date.isAfter(beginning) && date.isBefore(end)) 
             IO.println(String.format("%s in between", date));
-        else IO.print(String.format("%s not between", date));
+        else IO.println(String.format("%s not between", date));
+        
+        if (date.isEqual(beginning)) return true;
+        if (date.isEqual(beginning)) return true;
+        
         return date.isAfter(beginning) && date.isBefore(end);
     }
     
@@ -77,7 +81,7 @@ public class PDFService {
     }
     
     
-    public static boolean getPdf(Empleado empleado, Double horas, Double sueldo, String path){
+    public static boolean getPdf(Empleado empleado, String path){
         try{
             // VARIABLES DEL PDF
             
@@ -114,46 +118,25 @@ public class PDFService {
             
             // FORMACION DE LA CADENA DE LA CABECERA.
             
-            String datosEmpleado = "";    
+            
+            
             
             // VARIABLES DE LAS COLUMNAS
             Style fuenteColumna = new Style()
             .setTextAlignment(TextAlignment.RIGHT)
             .setFontSize(15);
             
-            int espacios = 0;
-            
-            for (int i = 0; i < espacios; i++) {
-                datosEmpleado += "\n";
-            }
-            
-            datosEmpleado +=
-            "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
-            + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
-            + String.format("Sueldo a pagar: $%.2f", sueldo)+ "\n";
-            
             
             try (Document doc = new Document(pdf, ps)) {
+                double horas = 0.0, sueldo = 0.0;
+                
                 doc.setFont(docFont);
+                
                 MulticolContainer container = new MulticolContainer();
                 container.setProperty(Property.COLUMN_COUNT, 1);
                 container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
                 
-                // ==================================
-                // PARRAFO DE LOS DATOS DEL EMPLEADO.
-                // ==================================
-                Paragraph div1 = new Paragraph(datosEmpleado)
-                .addStyle(fuenteColumna);
-                container.add(div1);
                 
-                doc.add(container);
-                
-                // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
-                // doc.add(amogus);
-                
-                for (int i = 0; i < 2; i++) {
-                    doc.add(new Paragraph("\n"));
-                }
                 
                 // ==================================
                 // TABLA(S) DE HORAS.
@@ -188,6 +171,7 @@ public class PDFService {
                 int celdas = semanas * 7;
                 
                 LocalDate indice = primerDia;
+                
                 
                 for (int i = 0; i < celdas; i++) {
                     
@@ -226,12 +210,16 @@ public class PDFService {
                             
                             celda.add(periodosParrafo);
                             
+                            horas += logDia.getTotalMinutosTrabajados()/60.0;
+                            
                             Paragraph horasParrafo = new Paragraph(
-                                String.format("%.1f h", logDia.getTotalMinutosTrabajados()/60.0)
+                                String.format("%,.1f h", logDia.getTotalMinutosTrabajados()/60.0)
                             )
                             .addStyle(fuenteHoras);
                             
                             celda.add(horasParrafo);
+                            
+                            sueldo += logDia.getTotalPagoDia();
                             
                             Paragraph sueldoParrafo = new Paragraph(
                                 String.format("$%.2f", logDia.getTotalPagoDia())
@@ -246,14 +234,42 @@ public class PDFService {
                                 logDia.getNotas()
                             )
                             .addStyle(fuenteFecha);
-
+                            
                             celda.add(notasParrafo);
                         }
                     }
                     calendario.addCell(celda);
                     
                     indice = indice.plusDays(1);
-                    
+                }
+                
+                String datosEmpleado = "";
+                
+                datosEmpleado +=
+                "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
+                + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
+                + String.format("Sueldo a pagar: $%,.2f", sueldo)+ "\n";
+                
+                // int espacios = 0;
+                
+                // for (int i = 0; i < espacios; i++) {
+                //     datosEmpleado += "\n";
+                // }
+                
+                // ==================================
+                // PARRAFO DE LOS DATOS DEL EMPLEADO.
+                // ==================================
+                Paragraph div1 = new Paragraph(datosEmpleado)
+                .addStyle(fuenteColumna);
+                container.add(div1);
+                
+                doc.add(container);
+                
+                // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
+                // doc.add(amogus);
+                
+                for (int i = 0; i < 2; i++) {
+                    doc.add(new Paragraph("\n"));
                 }
                 
                 doc.add(calendario);
