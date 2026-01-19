@@ -171,6 +171,8 @@ public class DetalleController {
         ArrayList<Periodo> nuevosPeriodos = new ArrayList<>();
         boolean huboErrores = false;
         
+        int periodos = 0;
+
         // --- 1. VALIDACIÓN DE HORAS ---
         for (var node : containerPeriodos.getChildren()) {
             if (node instanceof HBox) {
@@ -200,6 +202,7 @@ public class DetalleController {
                     // Limpiamos estilos de error si los había
                     txtEntrada.setStyle(null);
                     txtSalida.setStyle(null);
+                    periodos += 1;
                 } catch (DateTimeParseException e) {
                     huboErrores = true;
                     txtEntrada.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -215,6 +218,9 @@ public class DetalleController {
         
         // --- 2. ACTUALIZACIÓN DEL MODELO ---
         // Aseguramos estructura de mapas
+
+         boolean tieneContenido = (periodos > 0 || (notas != null && !notas.isEmpty()));
+
         if (empleadoActual.getLog() == null) empleadoActual.setLog(new Log(new HashMap<>()));
         if (empleadoActual.getLog().getLogs() == null) empleadoActual.getLog().setLogs(new HashMap<>());
         
@@ -223,6 +229,7 @@ public class DetalleController {
         if (salarioSeleccionado == null) salarioSeleccionado = this.salario;
         
         DailyLog logDia = empleadoActual.getLog().getLogs().get(fechaActual);
+        
         
         if (logDia == null) {
             // Nuevo Log
@@ -237,6 +244,10 @@ public class DetalleController {
         
         logDia.setNotas(notas);
         
+        if (periodos == 0 && notas == null) {
+            logDia = null;
+        }
+
         // --- 3. GUARDADO EN DISCO ---
         ArrayList<Empleado> listaActualizada = JSONService.readWorkersEdit();
         boolean encontrado = false;

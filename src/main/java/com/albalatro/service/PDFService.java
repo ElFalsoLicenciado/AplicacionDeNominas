@@ -15,6 +15,7 @@ import com.albalatro.model.Empleado;
 import com.albalatro.model.Periodo;
 import com.albalatro.utils.Utils;
 import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -26,6 +27,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.MulticolContainer;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -116,27 +118,10 @@ public class PDFService {
             .setFontSize(cellFontSize)
             .setFontColor(new DeviceRgb(46, 125, 50));
             
-            // FORMACION DE LA CADENA DE LA CABECERA.
-            
-            
-            
-            
-            // VARIABLES DE LAS COLUMNAS
-            Style fuenteColumna = new Style()
-            .setTextAlignment(TextAlignment.RIGHT)
-            .setFontSize(15);
-            
-            
             try (Document doc = new Document(pdf, ps)) {
                 double horas = 0.0, sueldo = 0.0;
                 
                 doc.setFont(docFont);
-                
-                MulticolContainer container = new MulticolContainer();
-                container.setProperty(Property.COLUMN_COUNT, 1);
-                container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
-                
-                
                 
                 // ==================================
                 // TABLA(S) DE HORAS.
@@ -243,12 +228,7 @@ public class PDFService {
                     indice = indice.plusDays(1);
                 }
                 
-                String datosEmpleado = "";
                 
-                datosEmpleado +=
-                "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
-                + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
-                + String.format("Sueldo a pagar: $%,.2f", sueldo)+ "\n";
                 
                 // int espacios = 0;
                 
@@ -256,10 +236,37 @@ public class PDFService {
                 //     datosEmpleado += "\n";
                 // }
                 
+                // VARIABLES DE LAS COLUMNAS
+                Style fuenteColumna = new Style()
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontSize(15);
+                
                 // ==================================
                 // PARRAFO DE LOS DATOS DEL EMPLEADO.
                 // ==================================
-                Paragraph div1 = new Paragraph(datosEmpleado)
+                
+                
+
+                MulticolContainer container = new MulticolContainer();
+                container.setProperty(Property.COLUMN_COUNT, 2);
+                container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
+                
+                float imgSize = (float) 0.25;
+                
+                Image logo = new Image(ImageDataFactory.create("src/main/resources/Images/logo.jpg"))
+                .scale(imgSize, imgSize);
+                
+                String datosEmpleado = "";
+                
+                datosEmpleado +=
+                "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
+                + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
+                + String.format("Sueldo a pagar: $%,.2f", sueldo)+ "\n";
+                
+                Paragraph div1 = new Paragraph()
+                .add(logo)
+                .add("\n")
+                .add(datosEmpleado)
                 .addStyle(fuenteColumna);
                 container.add(div1);
                 
@@ -268,9 +275,9 @@ public class PDFService {
                 // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
                 // doc.add(amogus);
                 
-                for (int i = 0; i < 2; i++) {
-                    doc.add(new Paragraph("\n"));
-                }
+                // for (int i = 0; i < 1; i++) {
+                //     doc.add(new Paragraph("\n"));
+                // }
                 
                 doc.add(calendario);
             }
