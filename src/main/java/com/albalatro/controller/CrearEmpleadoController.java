@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class CrearEmpleadoController {
-
+    
     @FXML private TextField txtNombre, txtApellidoP, txtApellidoM;
     @FXML private Label lblError;
     @FXML private Button btnGuardar, btnAlta, btnBaja; // btnSalario eliminado
@@ -35,33 +35,33 @@ public class CrearEmpleadoController {
     @FXML private ComboBox<Salario> comboSalarios; 
     
     private Empleado empleado;
-
+    
     @FXML
     public void initialize() {
         empleado = Session.getEmpleadoSeleccionado();
         boolean isEdit = (empleado != null);
-
+        
         // NUEVO MÉTODO
         cargarSalariosEnCombo();
-
-        Salario salario = JSONService.getSalario(empleado.getSalario());
-
-        if (salario != null) {
-            for (Salario s : comboSalarios.getItems()) {
-                if (s.getId().equals(salario.getId())) {
-                    comboSalarios.getSelectionModel().select(s);
-                    break;
+        
+        if (isEdit) {
+            
+            Salario salario = JSONService.getSalario(empleado.getSalario());
+            
+            if (salario != null) {
+                for (Salario s : comboSalarios.getItems()) {
+                    if (s.getId().equals(salario.getId())) {
+                        comboSalarios.getSelectionModel().select(s);
+                        break;
+                    }
                 }
             }
-        }
-
-        if (isEdit) {
             txtNombre.setText(empleado.getNombre());
             txtApellidoP.setText(empleado.getApellidoP());
             txtApellidoM.setText(empleado.getApellidoM());
             // Aquí deberás añadir lógica para seleccionar el salario actual del empleado en el combo
         }
-
+        
         btnAlta.setVisible(isEdit && empleado.getStatus() == Status.BAJA);
         btnAlta.setManaged(isEdit && empleado.getStatus() == Status.BAJA);
         btnBaja.setManaged(isEdit && empleado.getStatus() == Status.ALTA);
@@ -81,7 +81,7 @@ public class CrearEmpleadoController {
                 btnGuardar.fire();
         });
     }
-
+    
     private void cargarSalariosEnCombo() {
         ArrayList<Salario> listado = JSONService.readWagesEdit();
         ArrayList<Salario> salarios = new ArrayList<>();
@@ -98,44 +98,44 @@ public class CrearEmpleadoController {
                 // Ejemplo de visualización: "Cajero - $200.00"
                 return s.getNombre() + " - $" + s.getNormal(); 
             }
-
+            
             @Override
             public Salario fromString(String string) {
                 // Este método no se suele usar en ComboBoxes de solo lectura/selección
                 return comboSalarios.getItems().stream()
-                        .filter(s -> s.getNombre().equals(string))
-                        .findFirst().orElse(null);
+                .filter(s -> s.getNombre().equals(string))
+                .findFirst().orElse(null);
             }
         });
     }
-
+    
     // NUEVO MÉTODO VACÍO (Reemplaza a gestionarSalario)
     @FXML
     private void abrirCrearSalarioModal() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/SalarioView.fxml"));
-        Parent root = loader.load();
-        
-        // Obtenemos el controlador
-        SalarioController controller = loader.getController();
-        controller.setEsModal(true); 
-        
-        // Configuración de datos si fuera necesario
-        // controller.setDatosSalario(null); // Es nuevo
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana de atrás
-        stage.showAndWait();
-        
-        // Al cerrarse (showAndWait termina), recargamos el combo
-        cargarSalariosEnCombo();
-        
-    } catch (IOException e) {
-        e.printStackTrace();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/SalarioView.fxml"));
+            Parent root = loader.load();
+            
+            // Obtenemos el controlador
+            SalarioController controller = loader.getController();
+            controller.setEsModal(true); 
+            
+            // Configuración de datos si fuera necesario
+            // controller.setDatosSalario(null); // Es nuevo
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana de atrás
+            stage.showAndWait();
+            
+            // Al cerrarse (showAndWait termina), recargamos el combo
+            cargarSalariosEnCombo();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
-
+    
     @FXML
     public void guardar() {
         String n = txtNombre.getText(), ap = txtApellidoP.getText(), am = txtApellidoM.getText();
@@ -143,10 +143,10 @@ public class CrearEmpleadoController {
             mostrarError("Por favor llena todos los campos.");
             return;
         }
-
+        
         ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         Empleado target = (empleado == null) ? new Empleado() : empleado;
-
+        
         setData(target, n, ap, am);
         target.setSalario(comboSalarios.getValue().getId());
         
@@ -157,7 +157,7 @@ public class CrearEmpleadoController {
             // target.setSalario(...); 
             actualizarEnLista(lista, target);
         }
-
+        
         if (JSONService.writeWorkersEdit(lista)) {
             Navigation.empleadoGuardadoCustomHistory(target);
             Session.setChanges(true);
@@ -165,37 +165,37 @@ public class CrearEmpleadoController {
         else
             mostrarError("Error al escribir en el archivo JSON.");
     }
-
+    
     @FXML
     public void cancelar() {
         Navigation.goBack();
     }
-
+    
     @FXML
     public void darDeBaja() {
         if (cambiarStatus(Status.BAJA)) {
             Navigation.irAListaEmpleados();
         }
     }
-
+    
     @FXML
     public void darDeAlta() {
         if (cambiarStatus(Status.ALTA)) {
             Navigation.irAListaEmpleados();
         }
     }
-
+    
     private boolean cambiarStatus(Status s) {
         empleado.setStatus(s);
         ArrayList<Empleado> lista = JSONService.readWorkersEdit();
         actualizarEnLista(lista, empleado);
-
+        
         boolean exito = JSONService.writeWorkersEdit(lista);
         if (exito)
             System.out.println("Status actualizado a " + s);
         return exito;
     }
-
+    
     private void actualizarEnLista(ArrayList<Empleado> lista, Empleado target) {
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).getId().equals(target.getId())) {
@@ -204,13 +204,13 @@ public class CrearEmpleadoController {
             }
         }
     }
-
+    
     private void setData(Empleado emp, String n, String ap, String am) {
         emp.setNombre(n);
         emp.setApellidoP(ap);
         emp.setApellidoM(am);
     }
-
+    
     private void mostrarError(String mensaje) {
         lblError.setText(mensaje);
         lblError.setVisible(true);
