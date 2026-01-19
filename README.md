@@ -38,7 +38,6 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 6. BUGS
    1. A la hora de abrir el creador de salarios, y darle guardar. Si le das a atras por alguna razon regresa al creador de salarios. Tienes que volver a dar atras para salir.
-   2. A  la hora de remover todas las entradas de un dia se sigue viendo el texto del sueldo.
    3. Arreglar el hover sobre las celdas del horario (el color de las celdas es como gris, pero despues de pasar el mouse se queda en blanco hasta refrescar la pagina).
    4. A la hora de gestionar el salario de un empleado, el salario correspondiente no se muestra.
 ```text

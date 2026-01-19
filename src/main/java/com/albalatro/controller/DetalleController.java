@@ -172,7 +172,7 @@ public class DetalleController {
         boolean huboErrores = false;
         
         int periodos = 0;
-
+        
         // --- 1. VALIDACIÓN DE HORAS ---
         for (var node : containerPeriodos.getChildren()) {
             if (node instanceof HBox) {
@@ -218,36 +218,41 @@ public class DetalleController {
         
         // --- 2. ACTUALIZACIÓN DEL MODELO ---
         // Aseguramos estructura de mapas
-
-         boolean tieneContenido = (periodos > 0 || (notas != null && !notas.isEmpty()));
-
+        
+        boolean tieneContenido = (periodos > 0 || (notas != null && !notas.isEmpty()));
+        
         if (empleadoActual.getLog() == null) empleadoActual.setLog(new Log(new HashMap<>()));
         if (empleadoActual.getLog().getLogs() == null) empleadoActual.getLog().setLogs(new HashMap<>());
         
-        // Obtenemos el salario del combo (o el fallback)
-        Salario salarioSeleccionado = comboSalarioDiario.getValue();
-        if (salarioSeleccionado == null) salarioSeleccionado = this.salario;
-        
         DailyLog logDia = empleadoActual.getLog().getLogs().get(fechaActual);
         
-        
-        if (logDia == null) {
-            // Nuevo Log
-            logDia = new DailyLog(salarioSeleccionado, fechaActual, nuevosPeriodos);
-            empleadoActual.getLog().getLogs().put(fechaActual, logDia);
+        if (tieneContenido) {        
+            // Obtenemos el salario del combo (o el fallback)
+            Salario salarioSeleccionado = comboSalarioDiario.getValue();
+            if (salarioSeleccionado == null) salarioSeleccionado = this.salario;
+            if (logDia == null) {
+                // Nuevo Log
+                logDia = new DailyLog(salarioSeleccionado, fechaActual, nuevosPeriodos);
+                empleadoActual.getLog().getLogs().put(fechaActual, logDia);
+            } else {
+                // Actualizar existente: Gracias a tu arreglo en DailyLog, el orden ya no importa tanto,
+                // pero es buena práctica asignar salario primero.
+                logDia.setSalario(salarioSeleccionado);
+                logDia.setPeriodos(nuevosPeriodos);
+            }
+            logDia.setNotas(notas);
         } else {
-            // Actualizar existente: Gracias a tu arreglo en DailyLog, el orden ya no importa tanto,
-            // pero es buena práctica asignar salario primero.
-            logDia.setSalario(salarioSeleccionado);
-            logDia.setPeriodos(nuevosPeriodos);
+            if (logDia != null) {
+                // Borrar DailyLog existente que quedó vacío
+                empleadoActual.getLog().getLogs().remove(fechaActual);
+                
+                // Si el mapa queda vacío, podemos limpiar la estructura
+                if (empleadoActual.getLog().getLogs().isEmpty()) {
+                    empleadoActual.setLog(null);
+                }
+            }
         }
         
-        logDia.setNotas(notas);
-        
-        if (periodos == 0 && notas == null) {
-            logDia = null;
-        }
-
         // --- 3. GUARDADO EN DISCO ---
         ArrayList<Empleado> listaActualizada = JSONService.readWorkersEdit();
         boolean encontrado = false;

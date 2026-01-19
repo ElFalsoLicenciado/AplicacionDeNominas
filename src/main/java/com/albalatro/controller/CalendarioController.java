@@ -334,8 +334,6 @@ public class CalendarioController {
             for(Periodo p : logDelDia.getPeriodos()) {
                 array.add(p.toString());
             }
-            
-            
             Label lblPeriodos = new Label(Utils.stringArrayToStringSpace(array));
             lblPeriodos.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
             lblPeriodos.setWrapText(true);
@@ -344,10 +342,11 @@ public class CalendarioController {
             Label lblPago = new Label(String.format("$%.2f", montoPago));
             lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;"); // Reducido a 14px
             
-            nodos.add(lblPeriodos);
-            nodos.add(lblHoras);
-            nodos.add(lblPago);
+            if(! lblPeriodos.getText().isEmpty()) nodos.add(lblPeriodos);
+            if(! lblPeriodos.getText().isEmpty()) nodos.add(lblHoras);
+            if(montoPago > 0)nodos.add(lblPago);
             
+
             if (logDelDia.getNotas() != null) {
                 Label lblNotas = new Label(logDelDia.getNotas());
                 lblNotas.setStyle("-fx-text-fill: #020101; -fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
