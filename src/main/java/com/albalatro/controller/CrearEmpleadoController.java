@@ -44,6 +44,17 @@ public class CrearEmpleadoController {
         // NUEVO MÉTODO
         cargarSalariosEnCombo();
 
+        Salario salario = JSONService.getSalario(empleado.getSalario());
+
+        if (salario != null) {
+            for (Salario s : comboSalarios.getItems()) {
+                if (s.getId().equals(salario.getId())) {
+                    comboSalarios.getSelectionModel().select(s);
+                    break;
+                }
+            }
+        }
+
         if (isEdit) {
             txtNombre.setText(empleado.getNombre());
             txtApellidoP.setText(empleado.getApellidoP());

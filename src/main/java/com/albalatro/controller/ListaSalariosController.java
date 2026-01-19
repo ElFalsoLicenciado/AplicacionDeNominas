@@ -52,14 +52,6 @@ public class ListaSalariosController {
     }
 
     private void mostrarSalarios() {
-        ArrayList<Salario> listado = JSONService.readWagesEdit();
-        
-        salarios = new ArrayList<>();
-        for (Salario w : listado) {
-            if (w.getStatus().equals(Status.ALTA))
-                salarios.add(w);
-        }
-        
         vboxListaSalarios.getChildren().clear();
 
         // scrollContainer.setVisible(true); // Si tienes label de "vacío", maneja la visibilidad aquí
