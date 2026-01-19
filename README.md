@@ -32,10 +32,15 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 3. Si ya hay un corte (rango de dias a pagar), poder borrarlo y que se borre tambien del empleado.
 
-4. BUGS
+4. En los detalles de un dia, agregar verificaciones para no agregar una entrada y salida que se encuentre dentro de otra.
+
+5. Habrá casos donde solo habran notas en un día pero no habrá ni horas ni sueldo.
+
+6. BUGS
    1. A la hora de abrir el creador de salarios, y darle guardar. Si le das a atras por alguna razon regresa al creador de salarios. Tienes que volver a dar atras para salir.
    2. A  la hora de remover todas las entradas de un dia se sigue viendo el texto del sueldo.
-   3. Arreglar el hover sobre las celdas del horario.
+   3. Arreglar el hover sobre las celdas del horario (el color de las celdas es como gris, pero despues de pasar el mouse se queda en blanco hasta refrescar la pagina).
+   4. A la hora de gestionar el salario de un empleado, el salario correspondiente no se muestra.
 ```text
 src/
 └── main/
