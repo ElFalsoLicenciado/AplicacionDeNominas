@@ -6,6 +6,7 @@ import com.albalatro.model.Salario;
 public class Session {
     private static Empleado empleadoSeleccionado;
     private static Salario salarioSeleccionado;
+    private static String notas;
     private static boolean changes = false;
 
     public static void setEmpleadoSeleccionado(Empleado empleado) {
@@ -22,6 +23,14 @@ public class Session {
 
     public static Salario getSalarioSeleccionado() {
         return salarioSeleccionado;
+    }
+
+    public static void setNotas(String notas) {
+        Session.notas = notas;
+    }
+
+    public static String getNotas() {
+        return notas;
     }
 
     public static void setChanges(boolean bool) {

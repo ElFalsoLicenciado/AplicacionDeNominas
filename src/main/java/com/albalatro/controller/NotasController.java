@@ -1,59 +1,64 @@
 package com.albalatro.controller;
 
+import com.albalatro.utils.Navigation;
+import com.albalatro.utils.Session;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 public class NotasController {
     
-    @FXML private Button btnGuardar;
+    @FXML private Button btnGuardar, btnBorrar;
     
     @FXML private TextArea txtObservacion;
     
+    private String notas;
+    private boolean modal = false;
         
     
     @FXML
     public void initialize() {
+        notas = Session.getNotas();
         
-        // Configurar eventos
-        configurarEventos();
-    }
-    
-    private void configurarEventos() {
-        // Detectar cambios para habilitar guardar
-        // datePickerFecha.valueProperty().addListener((obs, oldVal, newVal) -> {
-        //     if (indiceActual >= 0 && indiceActual < observaciones.size()) {
-        //         estaEditando = true;
-        //         btnGuardar.setDisable(false);
-        //     }
-        // });
-        
-        // txtObservacion.textProperty().addListener((obs, oldVal, newVal) -> {
-        //     if (indiceActual >= 0 && indiceActual < observaciones.size()) {
-        //         estaEditando = true;
-        //         btnGuardar.setDisable(false);
-        //     }
-        // });
+        if (notas != null) {
+            txtObservacion.setText(notas);
+        }
     }
     
     @FXML
     public void guardarCambios() {
         // Validar que haya texto
         if (txtObservacion.getText() == null || txtObservacion.getText().trim().isEmpty()) {
-            mostrarError("El texto de la observación es obligatorio");
+            borrar();
+            cerrarVentana();
             return;
         }
-        
-        
+        notas = txtObservacion.getText();
+        Session.setNotas(notas);
+        cerrarVentana();
     }
-    
-    private void mostrarError(String mensaje) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+
+    @FXML
+    public void borrar() {
+        notas = null;
+        txtObservacion.setText("");
+        Session.setNotas(notas);
+    }
+
+    private void cerrarVentana() {
+        if (this.modal) {
+            // MODO MODAL: Solo cerrar la ventanita actual
+            Stage stage = (Stage) btnGuardar.getScene().getWindow();
+            stage.close();
+        } else {
+            // MODO NAVEGACIÓN: Volver a la pantalla anterior (Lista de Salarios)
+            Navigation.cambiarVista("/View/DetalleView.fxml");
+        }
+    }
+
+    public void setEsModal(boolean modal) {
+        this.modal = modal;
     }
 }

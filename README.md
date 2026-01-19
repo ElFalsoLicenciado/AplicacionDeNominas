@@ -24,22 +24,18 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 # Cosas por hacer / TO DO:
 
-1. Entregar un PDF con el siguiente formato:    
-   Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
-   Día/Mes/Año: Entrada-Salida  Horas  Sueldo   
-   Día/Mes/Año: Entrada-Salida  Horas  Sueldo
+1. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo. (OPCIONAL)
 
-2. Seleccionar un rango de días a pagar. MOSTRAR INICIO Y CORTE.
+## FAVOR DE HACER ESTAS COSAS CANDE
 
-3. A la hora de crear un salario temporal, ocultar el 2ndo spinner. (Como es de un solo dia no importa si es domingo o no).
+2. Agregar boton para borrar salarios.
 
-4. Agregar notas por dia.
+3. Si ya hay un corte (rango de dias a pagar), poder borrarlo y que se borre tambien del empleado.
 
-5. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo.
-
-6. BUGS
+4. BUGS
    1. A la hora de abrir el creador de salarios, y darle guardar. Si le das a atras por alguna razon regresa al creador de salarios. Tienes que volver a dar atras para salir.
-   2. A la hora de remover todas las entradas de un dia se sigue viendo el texto del sueldo.
+   2. A  la hora de remover todas las entradas de un dia se sigue viendo el texto del sueldo.
+   3. Arreglar el hover sobre las celdas del horario.
 ```text
 src/
 └── main/

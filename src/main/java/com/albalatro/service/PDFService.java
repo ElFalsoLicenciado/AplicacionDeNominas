@@ -71,7 +71,7 @@ public class PDFService {
         else IO.println(String.format("%s not between", date));
         
         if (date.isEqual(beginning)) return true;
-        if (date.isEqual(beginning)) return true;
+        if (date.isEqual(end)) return true;
         
         return date.isAfter(beginning) && date.isBefore(end);
     }
@@ -109,12 +109,12 @@ public class PDFService {
             Style fuenteHoras = new Style()
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(cellFontSize)
-            .setFontColor(ColorConstants.RED);
+            .setFontColor(new DeviceRgb(211, 47, 47));
             
             Style fuenteSueldo = new Style()
             .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
             .setFontSize(cellFontSize)
-            .setFontColor(ColorConstants.GREEN);
+            .setFontColor(new DeviceRgb(46, 125, 50));
             
             // FORMACION DE LA CADENA DE LA CABECERA.
             

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.filechooser.FileSystemView;
 
 import com.albalatro.model.Salario;
+import com.albalatro.model.Status;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
@@ -38,14 +39,27 @@ public class ListaSalariosController {
     @FXML
     public void initialize() {
         // Cargar lista desde el servicio
-        salarios = JSONService.readWagesEdit();
+        ArrayList<Salario> listado = JSONService.readWagesEdit();
+        salarios = new ArrayList<>();
+
+        for (Salario w : listado) {
+            if (w.getStatus().equals(Status.ALTA))
+                salarios.add(w);
+        }
         
         // Generar la interfaz
         mostrarSalarios();
     }
 
     private void mostrarSalarios() {
-        salarios = JSONService.readWagesEdit();
+        ArrayList<Salario> listado = JSONService.readWagesEdit();
+        
+        salarios = new ArrayList<>();
+        for (Salario w : listado) {
+            if (w.getStatus().equals(Status.ALTA))
+                salarios.add(w);
+        }
+        
         vboxListaSalarios.getChildren().clear();
 
         // scrollContainer.setVisible(true); // Si tienes label de "vacío", maneja la visibilidad aquí

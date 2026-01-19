@@ -283,13 +283,18 @@ public class CalendarioController {
             logDelDia = empleado.getLog().getLogs().get(fechaExacta); 
         }
         boolean hayLog = (logDelDia != null);
-        LocalDate fechaCorte = empleado.getFinCorte();
         
-        boolean esFechaCorte = (fechaCorte != null) && fechaExacta.isEqual(fechaCorte);
-        boolean esAnteriorYTrabajado = (fechaCorte != null) && fechaExacta.isBefore(fechaCorte) && hayLog;
+
+        LocalDate inicioCorte = empleado.getInicioCorte();
+        LocalDate finCorte = empleado.getFinCorte();
+        
+        boolean esFechaInicioCorte = (inicioCorte != null) && fechaExacta.isEqual(inicioCorte);
+        boolean esFechaFinCorte = (finCorte != null) && fechaExacta.isEqual(finCorte);
+
+        boolean esAnteriorYTrabajado = (finCorte != null) && fechaExacta.isBefore(finCorte) && hayLog;
         
         // Estilos CSS
-        if (esFechaCorte) {
+        if (esFechaFinCorte || esFechaInicioCorte) {
             celda.getStyleClass().add("calendar-cell-pago"); 
         } else if (esAnteriorYTrabajado) {
             celda.getStyleClass().add("calendar-cell-pagado"); 
@@ -314,8 +319,12 @@ public class CalendarioController {
         ArrayList<javafx.scene.Node> nodos = new ArrayList<>();
         nodos.add(lblDia);
         
-        if (esFechaCorte) {
-            Label lblIndicador = new Label("CORTE"); // Texto más corto para ahorrar espacio
+        if (esFechaFinCorte || esFechaInicioCorte) {
+            String ind = "";
+            if (esFechaInicioCorte) ind = "INICIO CORTE";
+            if (esFechaFinCorte) ind = "FIN CORTE";
+
+            Label lblIndicador = new Label(ind); // Texto más corto para ahorrar espacio
             lblIndicador.getStyleClass().add("label-corte");
             nodos.add(lblIndicador);
         }
@@ -325,6 +334,7 @@ public class CalendarioController {
             for(Periodo p : logDelDia.getPeriodos()) {
                 array.add(p.toString());
             }
+            
             
             Label lblPeriodos = new Label(Utils.stringArrayToStringSpace(array));
             lblPeriodos.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
@@ -337,6 +347,15 @@ public class CalendarioController {
             nodos.add(lblPeriodos);
             nodos.add(lblHoras);
             nodos.add(lblPago);
+            
+            if (logDelDia.getNotas() != null) {
+                Label lblNotas = new Label(logDelDia.getNotas());
+                lblNotas.setStyle("-fx-text-fill: #020101; -fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
+                lblNotas.setWrapText(true);
+                nodos.add(lblNotas);
+            }
+            
+            
         } else {
             nodos.add(lblHoras);
         }
@@ -351,7 +370,7 @@ public class CalendarioController {
         });
         
         celda.setOnMouseExited(e -> {
-            if (esFechaCorte) {
+            if (esFechaFinCorte || esFechaInicioCorte) {
                 celda.setStyle(""); 
             } else if (esAnteriorYTrabajado) {
                 celda.setStyle(""); 
@@ -399,6 +418,11 @@ public class CalendarioController {
     
     @FXML
     private void generarPDF() {
+        if ( empleado.getInicioCorte() == null || empleado.getFinCorte() == null ) {
+            Utils.showAlert("Error a exportar PDF", "Selecciona un rango de dias para el corte.", "", Alert.AlertType.ERROR);
+            return;
+        }
+
         Stage stage = (Stage) btnPDF.getScene().getWindow();
         String userDesktop = System.getProperty("user.desktop"); 
         File escritorio = FileSystemView.getFileSystemView().getHomeDirectory();
@@ -416,48 +440,46 @@ public class CalendarioController {
         
         File file = fc.showSaveDialog(stage);
         if (file == null) return;
+
         
-        // --- NUEVO: Calcular los totales para pasarlos al PDF ---
-        double totalSueldo = 0.0;
-        double totalHoras = 0.0;
         
         // Usamos la misma lógica que usaste para el modo "Pendiente" o "Mes Actual"
         // Lo más lógico para un reporte PDF es imprimir TODO lo pendiente o lo del mes visible.
         // Asumiremos que quieres imprimir lo que se ve actualmente en pantalla (lo que controla el toggle):
         
-        LocalDate hoy = LocalDate.now();
-        LocalDate ultimaFechaPagada = empleado.getFinCorte();
+        // LocalDate hoy = LocalDate.now();
+        // LocalDate ultimaFechaPagada = empleado.getFinCorte();
         
-        if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
-            for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
-                LocalDate fechaLog = entry.getKey();
-                DailyLog log = entry.getValue();
+        // if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
+        //     for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
+        //         LocalDate fechaLog = entry.getKey();
+        //         DailyLog log = entry.getValue();
                 
-                // Lógica: Si verResumenMensual es true, filtramos por mes. Si es false, todo lo pendiente.
-                boolean incluir = false;
+        //         // Lógica: Si verResumenMensual es true, filtramos por mes. Si es false, todo lo pendiente.
+        //         boolean incluir = false;
                 
-                if (verResumenMensual) {
-                    // Filtro por Mes Actual
-                    if (YearMonth.from(fechaLog).equals(mesActual)) {
-                        incluir = true;
-                    }
-                } else {
-                    // Filtro por Pendientes
-                    boolean esPosteriorAlCorte = (ultimaFechaPagada == null) || fechaLog.isAfter(ultimaFechaPagada);
-                    boolean esAnteriorOIgualHoy = !fechaLog.isAfter(hoy);
-                    if (esPosteriorAlCorte && esAnteriorOIgualHoy) {
-                        incluir = true;
-                    }
-                }
+        //         if (verResumenMensual) {
+        //             // Filtro por Mes Actual
+        //             if (YearMonth.from(fechaLog).equals(mesActual)) {
+        //                 incluir = true;
+        //             }
+        //         } else {
+        //             // Filtro por Pendientes
+        //             boolean esPosteriorAlCorte = (ultimaFechaPagada == null) || fechaLog.isAfter(ultimaFechaPagada);
+        //             boolean esAnteriorOIgualHoy = !fechaLog.isAfter(hoy);
+        //             if (esPosteriorAlCorte && esAnteriorOIgualHoy) {
+        //                 incluir = true;
+        //             }
+        //         }
                 
-                if (incluir) {
-                    totalSueldo += log.getTotalPagoDia();
-                    if(log.getTotalMinutosTrabajados() != null) {
-                        totalHoras += log.getTotalMinutosTrabajados() / 60.0; 
-                    }
-                }
-            }
-        }
+        //         if (incluir) {
+        //             totalSueldo += log.getTotalPagoDia();
+        //             if(log.getTotalMinutosTrabajados() != null) {
+        //                 totalHoras += log.getTotalMinutosTrabajados() / 60.0; 
+        //             }
+        //         }
+        //     }
+        // }
         // -------------------------------------------------------
         
         // AHORA SÍ, pasamos los 4 argumentos:
@@ -534,6 +556,7 @@ public class CalendarioController {
             }
         }
         
+        empleado.setInicioCorte(fechaInicio);
         empleado.setFinCorte(fechaFin);
         
         // Persistencia

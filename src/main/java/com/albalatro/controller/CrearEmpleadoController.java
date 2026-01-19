@@ -12,18 +12,18 @@ import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
 import com.albalatro.utils.Session;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox; // Importado
+import javafx.scene.control.Button; // Importado
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.collections.FXCollections;
 import javafx.util.StringConverter;
 
 public class CrearEmpleadoController {
@@ -72,7 +72,13 @@ public class CrearEmpleadoController {
     }
 
     private void cargarSalariosEnCombo() {
-        ArrayList<Salario> salarios = JSONService.readWagesEdit();
+        ArrayList<Salario> listado = JSONService.readWagesEdit();
+        ArrayList<Salario> salarios = new ArrayList<>();
+        
+        for (Salario w : listado) {
+            if (w.getStatus().equals(Status.ALTA))
+                salarios.add(w);
+        }
         comboSalarios.setItems(FXCollections.observableArrayList(salarios));
         comboSalarios.setConverter(new StringConverter<Salario>() {
             @Override
@@ -132,7 +138,6 @@ public class CrearEmpleadoController {
 
         setData(target, n, ap, am);
         target.setSalario(comboSalarios.getValue().getId());
-        target.setInicioCorte(LocalDate.now());
         
         if (empleado == null) {
             target.setId(UUID.randomUUID().toString());

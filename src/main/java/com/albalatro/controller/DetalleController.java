@@ -14,6 +14,7 @@ import com.albalatro.model.Empleado;
 import com.albalatro.model.Log;
 import com.albalatro.model.Periodo;
 import com.albalatro.model.Salario;
+import com.albalatro.model.Status;
 import com.albalatro.model.TipoPago;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Session;
@@ -48,6 +49,7 @@ public class DetalleController {
     private LocalDate fechaActual;
     private Empleado empleadoActual;
     private Salario salario; // Salario base para este día
+    private String notas;
     private Runnable onDatosGuardados; 
     
     // Formateadores
@@ -59,7 +61,13 @@ public class DetalleController {
     }
     
     private void buscarSalarios() {
-        salarios = JSONService.readWagesEdit();
+        ArrayList<Salario> listado = JSONService.readWagesEdit();
+        
+        salarios = new ArrayList<>();
+        for (Salario w : listado) {
+            if (w.getStatus().equals(Status.ALTA))
+                salarios.add(w);
+        }
     }
     
     private void agregarSalario(Salario nuevo) {
@@ -120,6 +128,9 @@ public class DetalleController {
                     for (Periodo p : logDia.getPeriodos()) {
                         agregarFilaVisual(p.getEntrada(), p.getSalida());
                     }
+                }
+                if (logDia.getNotas() != null) {
+                    notas = logDia.getNotas();
                 }
             } 
         }
@@ -224,6 +235,8 @@ public class DetalleController {
             logDia.setPeriodos(nuevosPeriodos);
         }
         
+        logDia.setNotas(notas);
+        
         // --- 3. GUARDADO EN DISCO ---
         ArrayList<Empleado> listaActualizada = JSONService.readWorkersEdit();
         boolean encontrado = false;
@@ -295,7 +308,7 @@ public class DetalleController {
         try {
             Salario custom = new Salario(
                 "custom", "Salario temporal", TipoPago.HORA,
-                40.0, 50.0
+                40.0, 50.0, Status.ALTA
             );
             
             Session.setSalarioSeleccionado(custom);
@@ -329,9 +342,32 @@ public class DetalleController {
             
             Salario s = salarios.get(salarios.size()-1);
             comboSalarioDiario.getSelectionModel().select(s);
-
+            
             Session.setSalarioSeleccionado(null);
             
         } catch (IOException e) { e.printStackTrace(); }
+    }
+    
+    @FXML
+    private void abrirNotas () {
+        try {
+            Session.setNotas(notas);
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/NotasView.fxml"));
+            Parent root = loader.load();
+            
+            NotasController controller = loader.getController();
+            controller.setEsModal(true); 
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            notas = Session.getNotas();
+            
+            Session.setNotas(null);
+            
+        } catch (IOException e) {e.printStackTrace(); }
     }
 }

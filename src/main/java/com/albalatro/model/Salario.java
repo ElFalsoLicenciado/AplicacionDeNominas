@@ -6,17 +6,19 @@ public class Salario {
     private TipoPago pago;
     private Double normal;
     private Double domingo;
+    private Status status;
     
     public Salario() {
         
     }
     
-    public Salario(String id, String nombre, TipoPago pago ,Double normal, Double domingo) {
+    public Salario(String id, String nombre, TipoPago pago ,Double normal, Double domingo, Status status) {
         this.id = id;
         this.nombre = nombre;
         this.pago = pago;
         this.normal = normal;
         this.domingo = domingo;
+        this.status = status;
     }
     
     public void setId(String id) {
@@ -62,6 +64,14 @@ public class Salario {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
     

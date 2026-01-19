@@ -9,42 +9,37 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: white;"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="com.albalatro.controller.DetalleController">
+<BorderPane prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.DetalleController">
 
     <top>
         <HBox alignment="CENTER" spacing="15.0" styleClass="toolbar-light">
-            <Button text="◀" onAction="#diaAnterior" styleClass="button, button-ghost" />
-            <Label fx:id="lblFechaActual" text="DOMINGO 12 OCT" styleClass="label-subheader" style="-fx-text-fill: #2C3E50;"/>
-            <Button text="▶" onAction="#diaSiguiente" styleClass="button, button-ghost" />
+            <Button onAction="#diaAnterior" styleClass="button, button-ghost" text="◀" />
+            <Label fx:id="lblFechaActual" style="-fx-text-fill: #2C3E50;" styleClass="label-subheader" text="DOMINGO 12 OCT" />
+            <Button onAction="#diaSiguiente" styleClass="button, button-ghost" text="▶" />
         </HBox>
     </top>
 
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
             <VBox spacing="10.0">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
                 
-                <Label text="Periodos Trabajados" styleClass="label-subheader" style="-fx-font-size: 14px;"/>
+                <Label style="-fx-font-size: 14px;" styleClass="label-subheader" text="Periodos Trabajados" />
                 
                 <VBox fx:id="containerPeriodos" spacing="10.0" />
 
-                <Button text="+ Agregar Entrada/Salida" onAction="#agregarNuevoPeriodo" 
-                        maxWidth="Infinity" styleClass="button, button-secondary" />
+                <Button maxWidth="Infinity" onAction="#agregarNuevoPeriodo" styleClass="button, button-secondary" text="+ Agregar Entrada/Salida" />
 
                 <VBox spacing="5.0" style="-fx-padding: 15 0 0 0;">
                     <Label styleClass="label-subheader" text="Salario para este día:" />
-                    <HBox spacing="10.0" alignment="CENTER_LEFT">
-                        <ComboBox fx:id="comboSalarioDiario" prefHeight="40.0" promptText="Seleccione salario..." 
-                                  maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="combo-box" />
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <ComboBox fx:id="comboSalarioDiario" maxWidth="Infinity" prefHeight="40.0" promptText="Seleccione salario..." styleClass="combo-box" HBox.hgrow="ALWAYS" />
                         
-                        <Button onAction="#abrirCrearSalarioModal" prefHeight="40.0" prefWidth="50.0" 
-                                text="+" styleClass="button, button-secondary" 
-                                style="-fx-font-weight: bold; -fx-font-size: 18px;" />
+                        <Button onAction="#abrirCrearSalarioModal" prefHeight="40.0" prefWidth="50.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" styleClass="button, button-secondary" text="+" />
                     </HBox>
-                    <Label text="* Cambiar esto solo afecta al cálculo de este día." textFill="#888888" style="-fx-font-size: 10px;"/>
+                    <Label style="-fx-font-size: 10px;" text="* Cambiar esto solo afecta al cálculo de este día." textFill="#888888" />
                 </VBox>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#abrirNotas" text="Agregar notas" />
 
             </VBox>
         </ScrollPane>
@@ -53,13 +48,11 @@
     <bottom>
         <VBox spacing="10.0" styleClass="toolbar-footer">
             <HBox alignment="CENTER_RIGHT" spacing="20.0">
-                <Label text="Total del Día:" style="-fx-font-weight: bold;"/>
-                <Label fx:id="lblTotalDinero" text="\$0.00" styleClass="label-money" style="-fx-font-size: 18px;" />
+                <Label style="-fx-font-weight: bold;" text="Total del Día:" />
+                <Label fx:id="lblTotalDinero" style="-fx-font-size: 18px;" styleClass="label-money" text="\$0.00" />
             </HBox>
             
-            <Button text="GUARDAR CAMBIOS" onAction="#guardarCambios" 
-                    maxWidth="Infinity" prefHeight="40.0" 
-                    styleClass="button, button-primary" />
+            <Button maxWidth="Infinity" onAction="#guardarCambios" prefHeight="40.0" styleClass="button, button-primary" text="GUARDAR CAMBIOS" />
         </VBox>
     </bottom>
 

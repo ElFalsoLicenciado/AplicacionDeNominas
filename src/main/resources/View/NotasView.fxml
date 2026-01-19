@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,7 +15,7 @@
    </padding>
    
    <top>
-      <Label alignment="CENTER" styleClass="label-header" text="Observaciones del empleado" BorderPane.alignment="CENTER">
+      <Label alignment="CENTER" styleClass="label-header" text="Notas del dia" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="10.0" />
          </BorderPane.margin>
@@ -29,10 +28,9 @@
             <Insets top="10.0" />
          </padding>
          <children>
-            <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#nuevo" styleClass="button-secondary" text="NUEVA OBSERVACIÓN" />
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarCambios" styleClass="button-primary" text="GUARDAR" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrar" styleClass="button-danger" text="BORRAR ACTUAL" />
-            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarCambios" styleClass="button-primary" text="GUARDAR CAMBIOS" />
+            <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrar" styleClass="button-danger" text="BORRAR" />
          </children>
       </HBox>
    </bottom>
@@ -43,26 +41,10 @@
             <Insets bottom="10.0" top="10.0" />
          </padding>
          
-         <!-- Contador de observaciones -->
-         <HBox alignment="CENTER" spacing="5.0">
-            <Label fx:id="lblContador" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-         </HBox>
-         
-         <!-- Fecha -->
-         <HBox alignment="CENTER" spacing="10.0">
-            <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#anterior" prefWidth="40.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="◀" />
-            <DatePicker fx:id="datePickerFecha" prefWidth="150.0" />
-            <Button fx:id="btnNext" mnemonicParsing="false" onAction="#siguiente" prefWidth="40.0" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="▶" />
-         </HBox>
-         
          <!-- Área de texto para la observación -->
          <VBox alignment="CENTER" spacing="5.0">
-            <Label style="-fx-font-size: 14px;" text="Observación:" />
             <TextArea fx:id="txtObservacion" maxWidth="600.0" prefHeight="200.0" prefWidth="500.0" style="-fx-font-size: 14px; -fx-padding: 5px;" wrapText="true" VBox.vgrow="ALWAYS" />
          </VBox>
-         
-         <!-- Indicador cuando no hay observaciones -->
-         <Label fx:id="lblSinObservaciones" style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-padding: 20px;" text="No hay observaciones disponibles" visible="false" />
       </VBox>
    </center>
 </BorderPane>
