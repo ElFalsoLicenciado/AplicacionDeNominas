@@ -17,6 +17,8 @@
             <Region HBox.hgrow="ALWAYS" />
             
             <Button fx:id="btnGuardarCambios" mnemonicParsing="false" onAction="#saveToOriginalJSON" styleClass="button, button-toolbar" text="💾 Guardar Cambios" />
+            
+            <Button onAction="#showAbout" styleClass="button-circle-info" text="?" />
         </HBox>
     </top>
 

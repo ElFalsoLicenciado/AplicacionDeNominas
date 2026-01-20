@@ -18,11 +18,7 @@ public class MainController {
     
     @FXML
     public void initialize() {
-        // 1. Configuramos el sistema de navegación
         Navigation.setMainComponents(mainContainer, btnAtras);
-        
-        // 2. Cargamos la primera vista automáticamente (El Dashboard o Menú)
-        // Nota: Asegúrate de tener creado este FXML
         Navigation.cambiarVista("/View/HomeView.fxml");
     }
     
@@ -35,7 +31,18 @@ public class MainController {
     public void saveToOriginalJSON() {
         JSONService.saveChanges();
         Session.setChanges(false);
-        
         Utils.showAlert("Cambios guardados", null, "Los cambios se han guardado correctamente", Alert.AlertType.INFORMATION);
+    }
+
+    // --- NUEVO MÉTODO PARA MOSTRAR CRÉDITOS ---
+    @FXML
+    public void showAbout() {
+        Utils.showAlert(
+            "Acerca del Proyecto", 
+            "Créditos de Desarrollo", 
+            "Alberto Montoya Arriaga - chopytrollface@gmail.com\n" +
+            "Cándido Ortega Martínez - iowosyse@gmail.com\n\n", 
+            Alert.AlertType.INFORMATION
+        );
     }
 }
