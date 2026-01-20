@@ -308,7 +308,6 @@ public class CalendarioController {
     
     // --- CREACIÓN DE CELDAS (COMPACTO) ---
     private VBox crearCeldaDia(int numeroDia, LocalDate fechaExacta, String textoHoras, String colorHex) {
-        // CAMBIO: Spacing 0 para ahorrar espacio vertical
         VBox celda = new VBox(0); 
         celda.getStyleClass().add("calendar-cell");
         
@@ -326,7 +325,7 @@ public class CalendarioController {
         boolean esFechaFinCorte = (finCorte != null) && fechaExacta.isEqual(finCorte);
         boolean esAnteriorYTrabajado = (finCorte != null) && fechaExacta.isBefore(finCorte) && hayLog;
         
-        // Estilos CSS
+        // Asignar clases CSS especiales
         if (esFechaFinCorte || esFechaInicioCorte) {
             celda.getStyleClass().add("calendar-cell-pago"); 
         } else if (esAnteriorYTrabajado) {
@@ -334,17 +333,16 @@ public class CalendarioController {
         }
         
         celda.setAlignment(Pos.TOP_LEFT);
-        // CAMBIO: Padding reducido a 2px
         celda.setPadding(new Insets(2));
         celda.setMaxHeight(Double.MAX_VALUE); 
         
-        // Número del día 
+        // Construir contenido visual
         Label lblDia = new Label(String.valueOf(numeroDia));
         lblDia.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         
         Label lblHoras = new Label(textoHoras);
         if (!textoHoras.isEmpty()) {
-            lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold; -fx-font-size: 14px;"); // Fuente ligeramente reducida
+            lblHoras.setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold; -fx-font-size: 14px;");
         } else {
             lblHoras.setStyle("-fx-font-size: 1px;"); 
         }
@@ -357,7 +355,7 @@ public class CalendarioController {
             if (esFechaInicioCorte) ind = "INICIO CORTE";
             if (esFechaFinCorte) ind = "FIN CORTE";
 
-            Label lblIndicador = new Label(ind); // Texto más corto para ahorrar espacio
+            Label lblIndicador = new Label(ind); 
             lblIndicador.getStyleClass().add("label-corte");
             nodos.add(lblIndicador);
         }
@@ -368,33 +366,41 @@ public class CalendarioController {
                 array.add(p.toString());
             }
             Label lblPeriodos = new Label(Utils.stringArrayToStringSpace(array));
-            lblPeriodos.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
+            lblPeriodos.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
             lblPeriodos.setWrapText(true);
             
             double montoPago = logDelDia.getTotalPagoDia();
             Label lblPago = new Label(String.format("$%.2f", montoPago));
-            lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;"); // Reducido a 14px
+            lblPago.setStyle("-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;"); 
             
             if(! lblPeriodos.getText().isEmpty()) nodos.add(lblPeriodos);
             if(! lblPeriodos.getText().isEmpty()) nodos.add(lblHoras);
-            if(montoPago > 0)nodos.add(lblPago);
+            if(montoPago > 0) nodos.add(lblPago);
             
-
             if (logDelDia.getNotas() != null) {
                 Label lblNotas = new Label(logDelDia.getNotas());
-                lblNotas.setStyle("-fx-text-fill: #020101; -fx-font-weight: bold; -fx-font-size: 12px;"); // Reducido a 12px
+                lblNotas.setStyle("-fx-text-fill: #020101; -fx-font-weight: bold; -fx-font-size: 12px;");
                 lblNotas.setWrapText(true);
                 nodos.add(lblNotas);
             }
-            
-            
         } else {
             nodos.add(lblHoras);
         }
         
         celda.getChildren().addAll(nodos);
         
-        // Eventos
+        // --- CORRECCIÓN: APLICAR ESTILO INICIAL ---
+        // Aplicamos el color de fondo inmediatamente al crear la celda
+        if (esFechaFinCorte || esFechaInicioCorte) {
+            celda.setStyle(""); // Deja que CSS controle el color (Amarillo)
+        } else if (esAnteriorYTrabajado) {
+            celda.setStyle(""); // Deja que CSS controle el color (Verde pálido)
+        } else {
+            // Celdas normales: Aplicamos blanco o verde (si hubo trabajo) manualmente
+            celda.setStyle("-fx-border-color: #eee; -fx-background-color: " + colorHex + ";");
+        }
+        
+        // Eventos de Mouse
         final String finalColor = colorHex; 
         
         celda.setOnMouseEntered(e -> {
