@@ -34,7 +34,7 @@ public class SalarioController {
     
     private Salario salario;
     private boolean modal = false; 
-    private boolean esNuevo = false; // Bandera para saber si estamos creando
+    private boolean esNuevo = false;
     
     @FXML
     public void initialize() {
@@ -82,7 +82,7 @@ public class SalarioController {
             esNuevo = true;
             salario = new Salario();
             salario.setId(UUID.randomUUID().toString());
-            salario.setStatus(Status.ALTA); // Por defecto nace activo
+            salario.setStatus(Status.ALTA);
             
             salario.setPago(TipoPago.HORA);
             choiceHora.setSelected(true);
@@ -95,18 +95,16 @@ public class SalarioController {
         }
         
         spinnerShow();
-        configurarBotonesStatus(); // Configurar visibilidad de Alta/Baja
+        configurarBotonesStatus();
     }
     
     private void configurarBotonesStatus() {
-        // Si es un salario "custom" (temporal) o uno nuevo que aún no se guarda, no mostramos opciones de baja
         if (esNuevo || (salario.getId() != null && salario.getId().equals("custom"))) {
             if (btnAlta != null) { btnAlta.setVisible(false); btnAlta.setManaged(false); }
             if (btnBaja != null) { btnBaja.setVisible(false); btnBaja.setManaged(false); }
             return;
         }
 
-        // Si es edición, mostramos según el status
         boolean estaDeBaja = (salario.getStatus() == Status.BAJA);
         
         if (btnAlta != null) {
@@ -164,7 +162,8 @@ public class SalarioController {
             Stage stage = (Stage) btnGuardar.getScene().getWindow();
             stage.close();
         } else {
-            Navigation.cambiarVista("/View/ListaSalariosView.fxml");
+            // CORRECCIÓN: Usar goBack() en lugar de ruta fija
+            Navigation.goBack();
         }
     }
     
@@ -180,7 +179,6 @@ public class SalarioController {
         else
             salario.setDomingo(spinnerDomingo.getValue());
             
-        // Aseguramos que tenga un status (si es nuevo)
         if (salario.getStatus() == null) {
             salario.setStatus(Status.ALTA);
         }
@@ -210,8 +208,6 @@ public class SalarioController {
         cerrarVentana();
     }
     
-    // --- MÉTODOS PARA ALTA / BAJA ---
-
     @FXML
     public void darDeBaja() {
         cambiarStatus(Status.BAJA);
@@ -227,13 +223,12 @@ public class SalarioController {
         
         salario.setStatus(nuevoStatus);
         
-        // Actualizar en la base de datos (JSON)
         ArrayList<Salario> salarios = JSONService.readWagesEdit();
         boolean found = false;
         
         for (Salario w : salarios) {
             if (w.getId().equals(salario.getId())) {
-                w.setStatus(nuevoStatus); // Actualizamos el objeto en la lista
+                w.setStatus(nuevoStatus); 
                 found = true;
                 break;
             }

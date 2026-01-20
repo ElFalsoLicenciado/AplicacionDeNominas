@@ -26,10 +26,9 @@ también muestre las horas de entrada y de salida (de ese día claro)
 
 1. Cambiar el formato de introducción de la fecha, usar 2 spinners: horas y minutos para cada tiempo. (OPCIONAL)
 
-## FAVOR DE HACER ESTAS COSAS CANDE
-1. BUGS
-   1. A la hora de abrir el creador de salarios, y darle guardar. Si le das a atras por alguna razon regresa al creador de salarios. Tienes que volver a dar atras para salir.
-   2. Arreglar el hover sobre las celdas del horario (el color de las celdas es como gris, pero despues de pasar el mouse se queda en blanco hasta refrescar la pagina).
+## CANDE YA ACABÓ DE CHAMBEAR RAHHHHHHH
+
+
 ```text
 src/
 └── main/

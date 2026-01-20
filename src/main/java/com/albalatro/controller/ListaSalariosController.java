@@ -34,34 +34,30 @@ public class ListaSalariosController {
     @FXML private Button btnExportar;
     @FXML private Button btnImportar;
     
-    // Referencia al nuevo botón
     @FXML private Button btnCambiarStatus;
 
-    private ArrayList<Salario> salarios;
-    private Status statusActual; // Variable para controlar el filtro
+    private Status statusActual;
 
     @FXML
     public void initialize() {
-        // Por defecto mostramos los activos (ALTA)
         statusActual = Status.ALTA;
         mostrarSalarios();
+        
+        vboxListaSalarios.setOnMouseEntered(event -> {
+            mostrarSalarios();
+        });
     }
 
     private void mostrarSalarios() {
-        // 1. Limpiar la vista
         vboxListaSalarios.getChildren().clear();
         
-        // 2. Leer datos frescos
         ArrayList<Salario> listado = JSONService.readWagesEdit();
         
-        // 3. Filtrar y agregar botones
         for (Salario sal : listado) {
             
-            // Protección contra Nulos (Legacy Support)
             Status s = sal.getStatus();
             if (s == null) s = Status.ALTA; 
 
-            // Mostrar solo si coincide con el filtro actual
             if (s == statusActual) {
                 Button btn = crearBotonSalario(sal);
                 vboxListaSalarios.getChildren().add(btn);
@@ -71,17 +67,14 @@ public class ListaSalariosController {
     
     @FXML
     public void cambiarStatus() {
-        // Alternar entre ALTA y BAJA
         statusActual = (statusActual == Status.ALTA) ? Status.BAJA : Status.ALTA;
         
-        // Actualizar texto del botón
         if (statusActual == Status.ALTA) {
             btnCambiarStatus.setText("Ver Salarios Inactivos");
         } else {
             btnCambiarStatus.setText("Ver Salarios Activos");
         }
         
-        System.out.println("Cambiando vista de salarios a: " + statusActual);
         mostrarSalarios();
     }
 
@@ -145,9 +138,6 @@ public class ListaSalariosController {
         Navigation.cambiarVista("/View/HomeView.fxml");
     }
 
-    // ==========================================
-    // LÓGICA DE IMPORTACIÓN Y EXPORTACIÓN
-    // ==========================================
     @FXML
     private void importarJSON() {
         Stage stage = (Stage) btnImportar.getScene().getWindow(); 
@@ -194,7 +184,7 @@ public class ListaSalariosController {
             
             if(JSONService.writeWagesEdit(current)) {
                 Utils.showAlert("Éxito", "Salarios importados correctamente.", "", AlertType.INFORMATION);
-                mostrarSalarios(); // Refrescar vista actual
+                mostrarSalarios(); 
             } else {
                 Utils.showAlert("Error", "No se pudo guardar la base de datos.", "", AlertType.ERROR);
             }
