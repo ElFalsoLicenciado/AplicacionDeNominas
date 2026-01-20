@@ -169,17 +169,21 @@ public class DetalleController {
     @FXML
     public void guardarCambios() {
         ArrayList<Periodo> nuevosPeriodos = new ArrayList<>();
-        boolean huboErrores = false;
+        boolean huboErroresFormato = false;
         
-        int periodos = 0;
+        int periodosValidos = 0;
         
-        // --- 1. VALIDACIÓN DE HORAS ---
+        // --- 1. LECTURA Y VALIDACIÓN ---
         for (var node : containerPeriodos.getChildren()) {
             if (node instanceof HBox) {
                 HBox row = (HBox) node;
                 TextField txtEntrada = (TextField) row.getChildren().get(0);
                 TextField txtSalida = (TextField) row.getChildren().get(2); 
                 
+                // Limpiamos estilos previos
+                txtEntrada.setStyle(null);
+                txtSalida.setStyle(null);
+
                 String strEntrada = txtEntrada.getText().trim();
                 String strSalida = txtSalida.getText().trim();
                 
@@ -194,32 +198,56 @@ public class DetalleController {
                     LocalTime in = LocalTime.parse(strEntrada, timeFormatter);
                     LocalTime out = LocalTime.parse(strSalida, timeFormatter);
                     
+                    // VALIDACIÓN A: Salida no puede ser antes que Entrada
+                    if (out.isBefore(in)) {
+                        mostrarAlerta("Horario Inválido", "La hora de salida (" + strSalida + ") no puede ser anterior a la entrada (" + strEntrada + ").");
+                        txtEntrada.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                        txtSalida.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                        return;
+                    }
+
+                    // VALIDACIÓN B: Cruce de Horarios (Overlapping)
+                    // Recorremos los periodos que YA hemos validado y agregado a la lista temporal
+                    for (Periodo existente : nuevosPeriodos) {
+                        // Lógica: Se cruzan si (EntradaNueva < SalidaVieja) Y (EntradaVieja < SalidaNueva)
+                        if (in.isBefore(existente.getSalida()) && existente.getEntrada().isBefore(out)) {
+                            
+                            // Marcar error visual
+                            txtEntrada.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-background-color: #ffebee;");
+                            txtSalida.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-background-color: #ffebee;");
+                            
+                            mostrarAlerta("Cruce de Horarios", 
+                                "El horario " + strEntrada + "-" + strSalida + 
+                                " se cruza con uno ya registrado (" + existente.getEntrada() + "-" + existente.getSalida() + ").");
+                            return; // Detenemos el guardado
+                        }
+                    }
+
+                    // Si pasa todas las validaciones, lo agregamos
                     Periodo p = new Periodo(); 
                     p.setEntrada(in);
                     p.setSalida(out);
                     nuevosPeriodos.add(p);
                     
-                    // Limpiamos estilos de error si los había
-                    txtEntrada.setStyle(null);
-                    txtSalida.setStyle(null);
-                    periodos += 1;
+                    periodosValidos += 1;
+
                 } catch (DateTimeParseException e) {
-                    huboErrores = true;
+                    huboErroresFormato = true;
                     txtEntrada.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                     txtSalida.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 }
             }
         }
         
-        if (huboErrores) {
+        if (huboErroresFormato) {
             mostrarAlerta("Error de formato", "Por favor usa el formato HH:mm (Ejemplo: 09:00).");
-            return; // Detenemos el guardado
+            return;
         }
         
         // --- 2. ACTUALIZACIÓN DEL MODELO ---
-        // Aseguramos estructura de mapas
+        // (El resto del código de guardado permanece igual)
         
-        boolean tieneContenido = (periodos > 0 || (notas != null && !notas.isEmpty()));
+        boolean tieneContenido = (periodosValidos > 0 || (notas != null && !notas.isEmpty()));
         
         if (empleadoActual.getLog() == null) empleadoActual.setLog(new Log(new HashMap<>()));
         if (empleadoActual.getLog().getLogs() == null) empleadoActual.getLog().setLogs(new HashMap<>());
@@ -227,26 +255,20 @@ public class DetalleController {
         DailyLog logDia = empleadoActual.getLog().getLogs().get(fechaActual);
         
         if (tieneContenido) {        
-            // Obtenemos el salario del combo (o el fallback)
             Salario salarioSeleccionado = comboSalarioDiario.getValue();
             if (salarioSeleccionado == null) salarioSeleccionado = this.salario;
+            
             if (logDia == null) {
-                // Nuevo Log
                 logDia = new DailyLog(salarioSeleccionado, fechaActual, nuevosPeriodos);
                 empleadoActual.getLog().getLogs().put(fechaActual, logDia);
             } else {
-                // Actualizar existente: Gracias a tu arreglo en DailyLog, el orden ya no importa tanto,
-                // pero es buena práctica asignar salario primero.
                 logDia.setSalario(salarioSeleccionado);
                 logDia.setPeriodos(nuevosPeriodos);
             }
             logDia.setNotas(notas);
         } else {
             if (logDia != null) {
-                // Borrar DailyLog existente que quedó vacío
                 empleadoActual.getLog().getLogs().remove(fechaActual);
-                
-                // Si el mapa queda vacío, podemos limpiar la estructura
                 if (empleadoActual.getLog().getLogs().isEmpty()) {
                     empleadoActual.setLog(null);
                 }
@@ -267,7 +289,6 @@ public class DetalleController {
         if (!encontrado) listaActualizada.add(empleadoActual);
         
         if (JSONService.writeWorkersEdit(listaActualizada)) {
-            // Éxito: Notificar y Cerrar
             if (onDatosGuardados != null) onDatosGuardados.run();
             cerrarVentana();
             Session.setChanges(true);
@@ -283,7 +304,6 @@ public class DetalleController {
         row.setAlignment(Pos.CENTER_LEFT);
         row.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 5; -fx-background-radius: 5;");
         
-        // Valores por defecto "prompt" para guiar al usuario
         String valEntrada = (entrada != null) ? entrada.format(timeFormatter) : "09:00";
         String valSalida = (salida != null) ? salida.format(timeFormatter) : "17:00";
         
@@ -340,21 +360,9 @@ public class DetalleController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
             
-            // Recargar combo
-            // Salario seleccionPrevia = comboSalarioDiario.getValue();
-            
             buscarSalarios();
             agregarSalario(custom);
             configurarComboSalarios(); 
-            
-            // if (seleccionPrevia != null) {
-            //     for(Salario s : comboSalarioDiario.getItems()){
-            //         if(s.getId().equals(seleccionPrevia.getId())){
-            //             comboSalarioDiario.getSelectionModel().select(s);
-            //             break;
-            //         }
-            //     }
-            // }
             
             Salario s = salarios.get(salarios.size()-1);
             comboSalarioDiario.getSelectionModel().select(s);
@@ -381,7 +389,6 @@ public class DetalleController {
             stage.showAndWait();
             
             notas = Session.getNotas();
-            
             Session.setNotas(null);
             
         } catch (IOException e) {e.printStackTrace(); }
