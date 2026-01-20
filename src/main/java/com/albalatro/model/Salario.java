@@ -67,6 +67,9 @@ public class Salario {
     }
 
     public Status getStatus() {
+        if (status == null) {
+            return Status.ALTA;
+        }
         return status;
     }
 

@@ -25,12 +25,12 @@
     <VBox alignment="CENTER" spacing="10.0" styleClass="sub-panel">
          <Label style="-fx-font-weight: bold; -fx-text-fill: #7F8C8D; -fx-font-size: 12px;" text="TIPO DE PAGO"/>
          <HBox alignment="CENTER" spacing="30.0">
-            <RadioButton fx:id="choiceHora" text="Por Hora" styleClass="radio-button">
+            <RadioButton fx:id="choiceHora" onAction="#setPago" text="Por Hora" styleClass="radio-button">
                <toggleGroup>
                   <ToggleGroup fx:id="groupPago" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="choiceFijo" text="Por Día (Fijo)" toggleGroup="$groupPago" styleClass="radio-button"/>
+            <RadioButton fx:id="choiceFijo" onAction="#setPago" text="Por Día (Fijo)" toggleGroup="$groupPago" styleClass="radio-button"/>
          </HBox>
     </VBox>
 
@@ -53,11 +53,16 @@
         </VBox>
     </HBox>
 
-    <Region prefHeight="10.0" />
+    <Region prefHeight="5.0" />
 
     <HBox alignment="CENTER" spacing="15.0">
         <Button onAction="#cancelar" text="Cancelar" prefHeight="40.0" prefWidth="120.0" styleClass="button, button-secondary"/>
         <Button fx:id="btnGuardar" onAction="#guardar" text="Guardar" prefHeight="40.0" prefWidth="150.0" styleClass="button, button-primary"/>
     </HBox>
+
+    <VBox alignment="CENTER" maxWidth="350.0" spacing="10.0">
+        <Button fx:id="btnAlta" onAction="#darDeAlta" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-primary" text="Reactivar Salario" />
+        <Button fx:id="btnBaja" onAction="#darDeBaja" prefHeight="40.0" prefWidth="315.0" styleClass="button, button-danger" text="Dar de Baja" />
+    </VBox>
 
 </VBox>

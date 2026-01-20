@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.albalatro.model.Salario;
+import com.albalatro.model.Status;
 import com.albalatro.model.TipoPago;
 import com.albalatro.service.JSONService;
 import com.albalatro.utils.Navigation;
@@ -28,8 +29,12 @@ public class SalarioController {
     @FXML private Spinner<Double> spinnerNormal, spinnerDomingo;
     @FXML private Button btnGuardar;
     
+    // Botones nuevos para el status
+    @FXML private Button btnAlta, btnBaja;
+    
     private Salario salario;
     private boolean modal = false; 
+    private boolean esNuevo = false; // Bandera para saber si estamos creando
     
     @FXML
     public void initialize() {
@@ -50,6 +55,9 @@ public class SalarioController {
         this.salario = Session.getSalarioSeleccionado();
         
         if (salario != null) {
+            // EDICIÓN DE SALARIO EXISTENTE
+            esNuevo = false;
+            
             switch (salario.getPago()) {
                 case TipoPago.HORA -> choiceHora.setSelected(true);
                 case TipoPago.FIJO -> choiceFijo.setSelected(true);
@@ -68,9 +76,13 @@ public class SalarioController {
             valueFactory2.setValue(salario.getDomingo());
             spinnerDomingo.setValueFactory(valueFactory2);
             custom();
+            
         } else {
+            // CREACIÓN DE NUEVO SALARIO
+            esNuevo = true;
             salario = new Salario();
             salario.setId(UUID.randomUUID().toString());
+            salario.setStatus(Status.ALTA); // Por defecto nace activo
             
             salario.setPago(TipoPago.HORA);
             choiceHora.setSelected(true);
@@ -81,7 +93,31 @@ public class SalarioController {
             salario.setNormal(spinnerNormal.getValue());
             salario.setDomingo(spinnerDomingo.getValue());
         }
+        
         spinnerShow();
+        configurarBotonesStatus(); // Configurar visibilidad de Alta/Baja
+    }
+    
+    private void configurarBotonesStatus() {
+        // Si es un salario "custom" (temporal) o uno nuevo que aún no se guarda, no mostramos opciones de baja
+        if (esNuevo || (salario.getId() != null && salario.getId().equals("custom"))) {
+            if (btnAlta != null) { btnAlta.setVisible(false); btnAlta.setManaged(false); }
+            if (btnBaja != null) { btnBaja.setVisible(false); btnBaja.setManaged(false); }
+            return;
+        }
+
+        // Si es edición, mostramos según el status
+        boolean estaDeBaja = (salario.getStatus() == Status.BAJA);
+        
+        if (btnAlta != null) {
+            btnAlta.setVisible(estaDeBaja);
+            btnAlta.setManaged(estaDeBaja);
+        }
+        
+        if (btnBaja != null) {
+            btnBaja.setVisible(!estaDeBaja);
+            btnBaja.setManaged(!estaDeBaja);
+        }
     }
     
     public void setPago(ActionEvent event) {
@@ -125,18 +161,15 @@ public class SalarioController {
     
     private void cerrarVentana() {
         if (this.modal) {
-            // MODO MODAL: Solo cerrar la ventanita actual
             Stage stage = (Stage) btnGuardar.getScene().getWindow();
             stage.close();
         } else {
-            // MODO NAVEGACIÓN: Volver a la pantalla anterior (Lista de Salarios)
             Navigation.cambiarVista("/View/ListaSalariosView.fxml");
         }
     }
     
     public void guardar() {
         salario.setNombre(fieldNombre.getText());
-        
         salario.setNormal(spinnerNormal.getValue());
         
         TipoPago pago = choiceHora.isSelected() ? TipoPago.HORA : TipoPago.FIJO;
@@ -146,6 +179,11 @@ public class SalarioController {
             salario.setDomingo(spinnerNormal.getValue());
         else
             salario.setDomingo(spinnerDomingo.getValue());
+            
+        // Aseguramos que tenga un status (si es nuevo)
+        if (salario.getStatus() == null) {
+            salario.setStatus(Status.ALTA);
+        }
         
         Session.setSalarioSeleccionado(salario);
         
@@ -170,6 +208,44 @@ public class SalarioController {
         }
         
         cerrarVentana();
+    }
+    
+    // --- MÉTODOS PARA ALTA / BAJA ---
+
+    @FXML
+    public void darDeBaja() {
+        cambiarStatus(Status.BAJA);
+    }
+    
+    @FXML
+    public void darDeAlta() {
+        cambiarStatus(Status.ALTA);
+    }
+    
+    private void cambiarStatus(Status nuevoStatus) {
+        if (salario == null) return;
+        
+        salario.setStatus(nuevoStatus);
+        
+        // Actualizar en la base de datos (JSON)
+        ArrayList<Salario> salarios = JSONService.readWagesEdit();
+        boolean found = false;
+        
+        for (Salario w : salarios) {
+            if (w.getId().equals(salario.getId())) {
+                w.setStatus(nuevoStatus); // Actualizamos el objeto en la lista
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            if (JSONService.writeWagesEdit(salarios)) {
+                Session.setChanges(true);
+                System.out.println("Salario actualizado a: " + nuevoStatus);
+                cerrarVentana();
+            }
+        }
     }
     
     public void setEsModal(boolean modal) {

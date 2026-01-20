@@ -33,41 +33,61 @@ public class ListaSalariosController {
     @FXML private ScrollPane scrollContainer;
     @FXML private Button btnExportar;
     @FXML private Button btnImportar;
+    
+    // Referencia al nuevo botón
+    @FXML private Button btnCambiarStatus;
 
     private ArrayList<Salario> salarios;
+    private Status statusActual; // Variable para controlar el filtro
 
     @FXML
     public void initialize() {
-        // Cargar lista desde el servicio
-        ArrayList<Salario> listado = JSONService.readWagesEdit();
-        salarios = new ArrayList<>();
-
-        for (Salario w : listado) {
-            if (w.getStatus().equals(Status.ALTA))
-                salarios.add(w);
-        }
-        
-        // Generar la interfaz
+        // Por defecto mostramos los activos (ALTA)
+        statusActual = Status.ALTA;
         mostrarSalarios();
     }
 
     private void mostrarSalarios() {
+        // 1. Limpiar la vista
         vboxListaSalarios.getChildren().clear();
+        
+        // 2. Leer datos frescos
+        ArrayList<Salario> listado = JSONService.readWagesEdit();
+        
+        // 3. Filtrar y agregar botones
+        for (Salario sal : listado) {
+            
+            // Protección contra Nulos (Legacy Support)
+            Status s = sal.getStatus();
+            if (s == null) s = Status.ALTA; 
 
-        // scrollContainer.setVisible(true); // Si tienes label de "vacío", maneja la visibilidad aquí
-
-        for (Salario sal : salarios) {
-            // Aquí podrías filtrar si tuvieran status, por ahora mostramos todos
-            Button btn = crearBotonSalario(sal);
-            vboxListaSalarios.getChildren().add(btn);
+            // Mostrar solo si coincide con el filtro actual
+            if (s == statusActual) {
+                Button btn = crearBotonSalario(sal);
+                vboxListaSalarios.getChildren().add(btn);
+            }
         }
+    }
+    
+    @FXML
+    public void cambiarStatus() {
+        // Alternar entre ALTA y BAJA
+        statusActual = (statusActual == Status.ALTA) ? Status.BAJA : Status.ALTA;
+        
+        // Actualizar texto del botón
+        if (statusActual == Status.ALTA) {
+            btnCambiarStatus.setText("Ver Salarios Inactivos");
+        } else {
+            btnCambiarStatus.setText("Ver Salarios Activos");
+        }
+        
+        System.out.println("Cambiando vista de salarios a: " + statusActual);
+        mostrarSalarios();
     }
 
     private Button crearBotonSalario(Salario sal) {
-        // Usamos el nombre del salario para el botón
         Button btn = new Button(sal.getNombre());
         
-        // === ESTILOS VISUALES IDÉNTICOS A EMPLEADOS ===
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(60.0);
         btn.setAlignment(Pos.CENTER_LEFT);
@@ -82,7 +102,6 @@ public class ListaSalariosController {
             "-fx-padding: 0 0 0 20;"
         );
         
-        // Efecto Hover
         btn.setOnMouseEntered(e -> btn.setStyle(
             "-fx-background-color: #e3f2fd;" + 
             "-fx-border-color: #2196F3;" +
@@ -103,7 +122,6 @@ public class ListaSalariosController {
             "-fx-padding: 0 0 0 20;"
         ));
         
-        // Acción al hacer clic: Ir a editar este salario
         btn.setOnAction(event -> {
             irEditarSalario(sal);
         });
@@ -128,7 +146,7 @@ public class ListaSalariosController {
     }
 
     // ==========================================
-    // LÓGICA DE IMPORTACIÓN (MERGE)
+    // LÓGICA DE IMPORTACIÓN Y EXPORTACIÓN
     // ==========================================
     @FXML
     private void importarJSON() {
@@ -142,11 +160,9 @@ public class ListaSalariosController {
         
         if(file == null) return;
         
-        // 1. Lectura
-        ArrayList<Salario> current = JSONService.readWagesEdit(); // Método asumiendo que lee del archivo principal
-        ArrayList<Salario> additions = JSONService.readWages(file.getPath()); // Método sobrecargado para leer archivo externo
+        ArrayList<Salario> current = JSONService.readWagesEdit();
+        ArrayList<Salario> additions = JSONService.readWages(file.getPath());
         
-        // 2. Merge (Fusión por ID)
         int nuevos = 0;
         int actualizados = 0;
         
@@ -154,41 +170,37 @@ public class ListaSalariosController {
             boolean found = false;
             for(int i = 0; i < current.size(); i++) {
                 if(current.get(i).getId().equals(s.getId())) {
-                    current.set(i, s); // Actualizar existente
+                    current.set(i, s);
                     found = true;
                     actualizados++;
                     break;
                 }
             }
             if(! found) {
-                current.add(s); // Añadir nuevo
+                current.add(s);
                 nuevos++;
             }
         }
 
         if(nuevos == 0 && actualizados == 0) {
-            Utils.showAlert("Aviso", "El archivo importado no contiene salarios válidos o está vacío.", "", AlertType.WARNING);
+            Utils.showAlert("Aviso", "El archivo importado no contiene datos válidos.", "", AlertType.WARNING);
             return;
         }
         
-        // 3. Confirmación
         if(Utils.showAlert("Confirmar Importación", 
-                "Se procesarán " + additions.size() + " salarios.", 
+                "Se procesarán " + additions.size() + " registros.", 
                 "Nuevos: " + nuevos + " | Actualizados: " + actualizados + "\n¿Continuar?", 
                 AlertType.CONFIRMATION)) {
             
             if(JSONService.writeWagesEdit(current)) {
                 Utils.showAlert("Éxito", "Salarios importados correctamente.", "", AlertType.INFORMATION);
-                mostrarSalarios(); // Refrescar vista
+                mostrarSalarios(); // Refrescar vista actual
             } else {
                 Utils.showAlert("Error", "No se pudo guardar la base de datos.", "", AlertType.ERROR);
             }
         }
     }
 
-    // ==========================================
-    // LÓGICA DE EXPORTACIÓN
-    // ==========================================
     @FXML
     private void exportarJSON() {
         Stage stage = (Stage) btnExportar.getScene().getWindow();

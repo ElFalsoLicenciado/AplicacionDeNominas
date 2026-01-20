@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.ListaSalariosController">
+<VBox alignment="TOP_CENTER" spacing="20.0" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.ListaSalariosController">
 
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
@@ -22,7 +22,7 @@
         <Button onAction="#irCrearSalario" styleClass="button, button-primary" text="+ Nuevo Salario" />
     </HBox>
     
-   <HBox alignment="CENTER_LEFT" spacing="10">
+    <HBox alignment="CENTER_LEFT" spacing="10">
       <children>
          <Button fx:id="btnImportar" onAction="#importarJSON" styleClass="button, button-secondary" text="📥 Importar" />
          <Region HBox.hgrow="ALWAYS" />
@@ -30,11 +30,13 @@
       </children>
    </HBox>
 
+    <Button fx:id="btnCambiarStatus" mnemonicParsing="false" onAction="#cambiarStatus" styleClass="button, button-ghost" text="Ver Salarios Inactivos" />
+
     <Label styleClass="label-subheader" text="Selecciona un salario para editarlo o crea uno nuevo." />
 
     <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
         <content>
-            <VBox fx:id="vboxListaSalarios" spacing="10.0">
+            <VBox fx:id="vboxListaSalarios" alignment="TOP_CENTER" spacing="10.0">
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
                 </padding>
