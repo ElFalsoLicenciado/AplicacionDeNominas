@@ -1,18 +1,8 @@
 package com.albalatro.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
-
-/** <h1> Clase {@code Empleado}</h1>
-*  <p> POJO del Empleado, contiene los siguientes atributos:</p>
-*  <ul>
-*      <li> String {@link #nombre nombre}, String {@link #apellidoP} y String {@link #apellidoM} : Atributos para guardar el nombre del empleado. </li>
-*      <li> Map{@code <LocalDate, Dia>} {@link #entradasYSalidasPorDia}: Un {@code Map} que guarda la horas de entrada y salida de cada día</li>
-*      <li> Map{@code <LocalDate, Double>} {@link #horasRegistradasPorDia}: Un {@code Map} que guarda la cantidad de horas trabajadas de cada día</li>
-*      <li> ArrayList{@code <String>} {@link #observaciones}:  Un arreglo que permita guardar observaciones realizadas al empleado, esto sin depender de la fecha.</li>
-*  </ul>
-*
-* */
 
 public class Empleado implements java.io.Serializable{
     private String id;
@@ -22,12 +12,14 @@ public class Empleado implements java.io.Serializable{
     private Log log;
     private String salario;
     private Status status;
-    private LocalDate inicioCorte;
-    private LocalDate finCorte;
+    private LocalDate inicioCorte; // Fecha contratación o inicio absoluto
+    private LocalDate finCorte;    // Última fecha pagada
+    private ArrayList<Corte> historialPagos; 
     
     public Empleado() {
         salario = "BASE";
         status = Status.ALTA;
+        historialPagos = new ArrayList<>();
     }
     
     public Empleado(String nombre, String apellidoP, String apellidoM) {
@@ -37,128 +29,44 @@ public class Empleado implements java.io.Serializable{
         this.apellidoP = apellidoP;
         salario = "BASE";
         status = Status.ALTA;
+        historialPagos = new ArrayList<>();
     }
     
-    public Empleado(String id, String nombre, String apellidoP, String apellidoM, Log log, String salario
-        , Status status, LocalDate inicioCorte, LocalDate finCorte) {
-            this.id = id;
-            this.nombre = nombre;
-            this.apellidoP = apellidoP;
-            this.apellidoM = apellidoM;
-            this.log = log;
-            this.salario = salario;
-            this.status = status;
-            this.finCorte = inicioCorte;
-            this.inicioCorte = finCorte;
-            
-            if (inicioCorte == null) {
-                inicioCorte = this.inicioCorte;
-            }
-        }
-        
-        public String getId() {
-            return id;
-        }
-        
-        public void setId(String id) {
-            this.id = id;
-        }
-        
-        /** 
-        * @return String
-        */
-        public String getNombre() {
-            return nombre;
-        }
-        
-        /** 
-        * @param nombre
-        */
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
-        
-        /** 
-        * @return String
-        */
-        public String getApellidoP() {
-            return apellidoP;
-        }
-        
-        /** 
-        * @param apellidoP
-        */
-        public void setApellidoP(String apellidoP) {
-            this.apellidoP = apellidoP;
-        }
-        
-        /** 
-        * @return String
-        */
-        public String getApellidoM() {
-            return apellidoM;
-        }
-        
-        /** 
-        * @param apellidoM
-        */
-        public void setApellidoM(String apellidoM) {
-            this.apellidoM = apellidoM;
-        }
-        
-        public Log getLog() {
-            return log;
-        }
-        
-        public void setLog(Log log) {
-            this.log = log;
-        }
-        
-        public String getSalario() {
-            return salario;
-        }
-        
-        public void setSalario(String salario) {
-            this.salario = salario;
-        }
-        
-        public Status getStatus() {
-            return status;
-        }
-        
-        public void setStatus(Status status) {
-            this.status = status;
-        }
-        
-        public String getNombreCompleto() {
-            return nombre + " " + apellidoP + " " + apellidoM;
-        }
-        
-        public LocalDate getFinCorte() {
-            return finCorte;
-        }
-        
-        public void setFinCorte(LocalDate finCorte) {
-            this.finCorte = finCorte;
-        }
-        
-        public LocalDate getInicioCorte() {
-            return inicioCorte;
-        }
-        
-        public void setInicioCorte(LocalDate inicioCorte) {
-            this.inicioCorte = inicioCorte;
-        }
-        
-        /** 
-        * @return String
-        */
-        @Override
-        public String toString() {
-            return "Empleado [id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM
-            + ", log=" + log + ", salario=" + salario + ", status=" + status
-            + ", fechaContratacion=" + inicioCorte + ", ultimaFechaPagada=" + finCorte + "]";
-        }
-        
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getApellidoP() { return apellidoP; }
+    public void setApellidoP(String apellidoP) { this.apellidoP = apellidoP; }
+    public String getApellidoM() { return apellidoM; }
+    public void setApellidoM(String apellidoM) { this.apellidoM = apellidoM; }
+    public Log getLog() { return log; }
+    public void setLog(Log log) { this.log = log; }
+    public String getSalario() { return salario; }
+    public void setSalario(String salario) { this.salario = salario; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
+    
+    public String getNombreCompleto() {
+        return nombre + " " + apellidoP + " " + apellidoM;
     }
     
+    public LocalDate getFinCorte() { return finCorte; }
+    public void setFinCorte(LocalDate finCorte) { this.finCorte = finCorte; }
+    
+    public LocalDate getInicioCorte() { return inicioCorte; }
+    public void setInicioCorte(LocalDate inicioCorte) { this.inicioCorte = inicioCorte; }
+
+    public ArrayList<Corte> getHistorialPagos() {
+        if (historialPagos == null) historialPagos = new ArrayList<>();
+        return historialPagos;
+    }
+
+    public void setHistorialPagos(ArrayList<Corte> historialPagos) {
+        this.historialPagos = historialPagos;
+    }
+
+    public void agregarCorte(Corte corte) {
+        getHistorialPagos().add(corte);
+    }
+}

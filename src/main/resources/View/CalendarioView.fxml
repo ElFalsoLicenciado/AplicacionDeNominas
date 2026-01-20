@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-padding: 10;" styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
+<BorderPane style="-fx-padding: 10;"
+styleClass="main-container" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.albalatro.controller.CalendarioController">
 
     <top>
         <VBox spacing="10.0" BorderPane.alignment="CENTER">
@@ -20,63 +21,75 @@
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                 <children>
                     <Button fx:id="toggleBtn" onAction="#toggleButtons" styleClass="button, button-toggle" text="Generar fecha de corte" />
-                    
+            
                     <Region prefHeight="25.0" prefWidth="20.0" HBox.hgrow="ALWAYS" />
         
                     <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#generarPDF" styleClass="button-ghost" text="PDF" />
+                    
+                    <Button onAction="#abrirHistorial" styleClass="button, button-ghost" text="Historial Cortes 🕒" />
                     
                     <Button fx:id="btnGestionar" onAction="#gestionarPressed" styleClass="button, button-ghost" text="Gestionar Empleado ⚙" />
   
                     <DatePicker fx:id="datePickerInicio" prefWidth="110.0" promptText="Inicio" />
                     
-                    <Label fx:id="lblGuion" managed="false" style="-fx-font-weight:bold; -fx-text-fill:#888;" text="-" visible="false" />
+                    <Label fx:id="lblGuion" managed="false" style="-fx-font-weight:bold;
+-fx-text-fill:#888;" text="-" visible="false" />
                     
                     <DatePicker fx:id="datePickerFin" prefWidth="110.0" promptText="Fin (Corte)" />
 
                     <Button fx:id="btnSeleccionarFecha" onAction="#generarFechaDeCorte" styleClass="button, button-action-small" text="Confirmar Pago" />
                 </children>
-            </HBox>
-
-            <HBox alignment="CENTER_LEFT" spacing="30.0" styleClass="sub-panel">
+         
+           </HBox>
+<HBox alignment="CENTER_LEFT" spacing="30.0" styleClass="sub-panel">
          
                 <VBox spacing="2.0">
                     <Label text="Nombre" textFill="#888888"><font><Font size="10.0" /></font></Label>
                     <Label fx:id="lblNombre" style="-fx-text-fill: #2C3E50;" styleClass="label-subheader" text="---" />
+      
                 </VBox>
                 <VBox spacing="2.0">
-                    <Label text="Ap. Paterno" textFill="#888888"><font><Font size="10.0" /></font></Label>
+                    <Label text="Ap.
+Paterno" textFill="#888888"><font><Font size="10.0" /></font></Label>
                     <Label fx:id="lblApellidoP" style="-fx-text-fill: #2C3E50;" styleClass="label-subheader" text="---" />
                 </VBox>
                 <VBox spacing="2.0">
-                    <Label text="Ap. Materno" textFill="#888888"><font><Font size="10.0" /></font></Label>
+                    <Label text="Ap.
+Materno" textFill="#888888"><font><Font size="10.0" /></font></Label>
                     <Label fx:id="lblApellidoM" style="-fx-text-fill: #2C3E50;" styleClass="label-subheader" text="---" />
                 </VBox>
                 
                 <Region HBox.hgrow="ALWAYS" />
 
                 <VBox alignment="CENTER_RIGHT" spacing="5.0">
-                    
+   
+                 
                     <Button fx:id="btnToggleResumen" onAction="#toggleResumenMode" styleClass="button-pill-toggle" text="📅 VISTA: MES ACTUAL" />
  
                     <HBox alignment="CENTER_RIGHT" spacing="15">
                         <VBox alignment="CENTER_RIGHT">
+       
                             <Label style="-fx-font-size: 12px;" styleClass="label-subheader" text="Horas:" textFill="#666" />
-                            <Label fx:id="lblTotalHoras" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="0.0" />
+                            <Label fx:id="lblTotalHoras" style="-fx-font-size: 18px;
+-fx-font-weight: bold;" text="0.0" />
                         </VBox>
                         <VBox alignment="CENTER_RIGHT">
                             <Label style="-fx-font-size: 12px;" styleClass="label-subheader" text="A Pagar:" textFill="#666" />
+             
                             <Label fx:id="lblTotalSueldo" style="-fx-font-size: 18px;" styleClass="label-money" text="\$0.00" />
                         </VBox>
                     </HBox>
                 </VBox>
             </HBox>
 
+       
             <HBox alignment="CENTER" spacing="20.0" style="-fx-padding: 5 0 0 0;">
                  <Button onAction="#mesAnterior" styleClass="button, button-ghost" text="◀ Anterior" />
                 <Label fx:id="lblMesAno" style="-fx-font-size: 18px;" styleClass="label-header" text="ENERO 2026" />
                 <Button onAction="#mesSiguiente" styleClass="button, button-ghost" text="Siguiente ▶" />
             </HBox>
-        </VBox>
+        
+</VBox>
     </top>
 
     <center>
@@ -85,39 +98,46 @@
             <GridPane alignment="CENTER" hgap="5">
                  <columnConstraints>
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
+            
+        <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
-                    <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
-                    <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
+                    
+<ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                     <ColumnConstraints halignment="CENTER" percentWidth="14.28" />
                 </columnConstraints>
               
                 <Label styleClass="day-header, day-header-sunday" text="DOMINGO" GridPane.columnIndex="0" />
                 <Label styleClass="day-header" text="LUNES" GridPane.columnIndex="1" />
+   
                 <Label styleClass="day-header" text="MARTES" GridPane.columnIndex="2" />
                 <Label styleClass="day-header" text="MIÉRCOLES" GridPane.columnIndex="3" />
                 <Label styleClass="day-header" text="JUEVES" GridPane.columnIndex="4" />
                 <Label styleClass="day-header" text="VIERNES" GridPane.columnIndex="5" />
                 <Label styleClass="day-header" text="SÁBADO" GridPane.columnIndex="6" />
-                
+   
+             
                 <rowConstraints>
                    <RowConstraints />
                 </rowConstraints>
             </GridPane>
 
             <GridPane fx:id="gridCalendario" hgap="2" styleClass="calendar-grid" vgap="2" VBox.vgrow="ALWAYS">
-                <columnConstraints>
+      
+             <columnConstraints>
                     <ColumnConstraints percentWidth="14.28" />
                     <ColumnConstraints percentWidth="14.28" />
                     <ColumnConstraints percentWidth="14.28" />
                     <ColumnConstraints percentWidth="14.28" />
-                    <ColumnConstraints percentWidth="14.28" />
+  
+                  <ColumnConstraints percentWidth="14.28" />
                     <ColumnConstraints percentWidth="14.28" />
                     <ColumnConstraints percentWidth="14.28" />
                 </columnConstraints>
             </GridPane>
-        </VBox>
+        
+</VBox>
     </center>
 
 </BorderPane>

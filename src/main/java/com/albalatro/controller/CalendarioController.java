@@ -1,6 +1,7 @@
 package com.albalatro.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.Locale;
 
 import javax.swing.filechooser.FileSystemView;
 
+import com.albalatro.model.Corte;
 import com.albalatro.model.DailyLog;
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Periodo;
@@ -19,9 +21,11 @@ import com.albalatro.utils.Session;
 import com.albalatro.utils.Utils;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
@@ -32,6 +36,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class CalendarioController {
@@ -76,14 +81,7 @@ public class CalendarioController {
             lblApellidoP.setText(empleado.getApellidoP());
             lblApellidoM.setText(empleado.getApellidoM());
             
-            // --- 2. CONFIGURACIÓN DE FECHAS DEFAULT ---
-            // Inicio: Día siguiente al último pago, o fecha contratación, o hoy.
-            LocalDate ultimoPago = empleado.getFinCorte();
-            LocalDate fechaInicioDefault = (ultimoPago != null) ? ultimoPago.plusDays(1) : empleado.getInicioCorte();
-            if (fechaInicioDefault == null) fechaInicioDefault = LocalDate.now();
-            
-            datePickerInicio.setValue(fechaInicioDefault);
-            datePickerFin.setValue(LocalDate.now());
+            cargarFechasEnDatePicker();
         }
         
         // --- 3. RESTRICCIONES DE DATEPICKERS ---
@@ -122,6 +120,16 @@ public class CalendarioController {
         mesActual = YearMonth.now();
         actualizarVista();
     }
+
+    // Nuevo método para refrescar los datepickers (útil al regresar del historial)
+    private void cargarFechasEnDatePicker() {
+        LocalDate ultimoPago = empleado.getFinCorte();
+        LocalDate fechaInicioDefault = (ultimoPago != null) ? ultimoPago.plusDays(1) : empleado.getInicioCorte();
+        if (fechaInicioDefault == null) fechaInicioDefault = LocalDate.now();
+        
+        datePickerInicio.setValue(fechaInicioDefault);
+        datePickerFin.setValue(LocalDate.now());
+    }
     
     @FXML
     public void mesAnterior() {
@@ -144,6 +152,33 @@ public class CalendarioController {
     public void gestionarPressed() {
         Session.setSalarioSeleccionado(JSONService.getSalario(empleado.getSalario()));
         Navigation.cambiarVista("/View/CrearEmpleadoView.fxml");
+    }
+
+    // --- NUEVO: ABRIR HISTORIAL ---
+    @FXML
+    private void abrirHistorial() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/HistorialPagosView.fxml"));
+            Parent root = loader.load();
+            
+            HistorialPagosController controller = loader.getController();
+            
+            // Cuando se cierre el historial (y quizás se eliminó un corte), refrescamos:
+            controller.setOnCambioRealizado(() -> {
+                cargarFechasEnDatePicker();
+                actualizarVista();
+            });
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Historial de Cortes - " + empleado.getNombre());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            Utils.showAlert("Error", "No se pudo abrir el historial.", "", Alert.AlertType.ERROR);
+        }
     }
     
     // --- LÓGICA DE VISUALIZACIÓN ---
@@ -284,13 +319,11 @@ public class CalendarioController {
         }
         boolean hayLog = (logDelDia != null);
         
-
         LocalDate inicioCorte = empleado.getInicioCorte();
         LocalDate finCorte = empleado.getFinCorte();
         
         boolean esFechaInicioCorte = (inicioCorte != null) && fechaExacta.isEqual(inicioCorte);
         boolean esFechaFinCorte = (finCorte != null) && fechaExacta.isEqual(finCorte);
-
         boolean esAnteriorYTrabajado = (finCorte != null) && fechaExacta.isBefore(finCorte) && hayLog;
         
         // Estilos CSS
@@ -439,49 +472,7 @@ public class CalendarioController {
         
         File file = fc.showSaveDialog(stage);
         if (file == null) return;
-
         
-        
-        // Usamos la misma lógica que usaste para el modo "Pendiente" o "Mes Actual"
-        // Lo más lógico para un reporte PDF es imprimir TODO lo pendiente o lo del mes visible.
-        // Asumiremos que quieres imprimir lo que se ve actualmente en pantalla (lo que controla el toggle):
-        
-        // LocalDate hoy = LocalDate.now();
-        // LocalDate ultimaFechaPagada = empleado.getFinCorte();
-        
-        // if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
-        //     for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
-        //         LocalDate fechaLog = entry.getKey();
-        //         DailyLog log = entry.getValue();
-                
-        //         // Lógica: Si verResumenMensual es true, filtramos por mes. Si es false, todo lo pendiente.
-        //         boolean incluir = false;
-                
-        //         if (verResumenMensual) {
-        //             // Filtro por Mes Actual
-        //             if (YearMonth.from(fechaLog).equals(mesActual)) {
-        //                 incluir = true;
-        //             }
-        //         } else {
-        //             // Filtro por Pendientes
-        //             boolean esPosteriorAlCorte = (ultimaFechaPagada == null) || fechaLog.isAfter(ultimaFechaPagada);
-        //             boolean esAnteriorOIgualHoy = !fechaLog.isAfter(hoy);
-        //             if (esPosteriorAlCorte && esAnteriorOIgualHoy) {
-        //                 incluir = true;
-        //             }
-        //         }
-                
-        //         if (incluir) {
-        //             totalSueldo += log.getTotalPagoDia();
-        //             if(log.getTotalMinutosTrabajados() != null) {
-        //                 totalHoras += log.getTotalMinutosTrabajados() / 60.0; 
-        //             }
-        //         }
-        //     }
-        // }
-        // -------------------------------------------------------
-        
-        // AHORA SÍ, pasamos los 4 argumentos:
         if (PDFService.getPdf(empleado, file.toPath().toString())) {
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
         }
@@ -555,8 +546,13 @@ public class CalendarioController {
             }
         }
         
+        // --- GUARDAR CORTE Y ACTUALIZAR HISTORIAL ---
         empleado.setInicioCorte(fechaInicio);
         empleado.setFinCorte(fechaFin);
+        
+        // Añadir al historial
+        Corte nuevoCorte = new Corte(fechaInicio, fechaFin, totalPagar);
+        empleado.agregarCorte(nuevoCorte);
         
         // Persistencia
         ArrayList<Empleado> listaEmpleados = JSONService.readWorkersEdit();
@@ -580,11 +576,9 @@ public class CalendarioController {
             Session.setChanges(true);
             
             toggleButtons(); 
+            // Refrescar DatePickers para el próximo ciclo
+            cargarFechasEnDatePicker();
             actualizarVista();
-            
-            // Preparar siguiente periodo
-            datePickerInicio.setValue(fechaFin.plusDays(1));
-            datePickerFin.setValue(LocalDate.now());
             
         } else {
             Utils.showAlert("Error de Guardado", "No se pudo actualizar la base de datos.", "", Alert.AlertType.ERROR);
