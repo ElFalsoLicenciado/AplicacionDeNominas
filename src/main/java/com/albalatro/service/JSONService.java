@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import com.albalatro.model.Empleado;
 import com.albalatro.model.Salario;
+import com.albalatro.model.Status;
 import com.albalatro.model.TipoPago;
 import com.albalatro.utils.LocalDateTypeAdapter;
 import com.albalatro.utils.LocalTimeTypeAdapter;
@@ -102,6 +103,7 @@ public class JSONService {
         }
 
         writeWages(wages);
+        writeWagesEdit(wages);
     }
 
     private static Salario createBaseWage() {
@@ -111,6 +113,7 @@ public class JSONService {
         base.setPago(TipoPago.HORA);
         base.setNormal(40.0);
         base.setDomingo(50.0);
+        base.setStatus(Status.ALTA);
 
         return base;
     }
