@@ -1,6 +1,7 @@
 package com.albalatro.service;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -41,20 +42,20 @@ public class PDFService {
     
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("es", "ES"));
     
+    // Método main para pruebas rápidas
     public static void main(String[] args) {
-        PDFService.getPdf(JSONService.testing1(2), "Salarios.pdf");
+        // PDFService.getPdf(JSONService.testing1(2), "Salarios.pdf");
     }
     
     public static int getNumeroDeMeses (LocalDate beginning, LocalDate end ) {
         if (end.isBefore(beginning)) return 0;
-        
         return (int) ChronoUnit.MONTHS.between(beginning, end);
     }
     
     public static int getNumeroDeSemanas (LocalDate beginning, LocalDate end ) {
         if (end.isBefore(beginning)) return 0;
         
-        WeekFields weekFields = WeekFields.of(Locale.US); // O tu locale
+        WeekFields weekFields = WeekFields.of(Locale.US);
         
         // Encontrar el lunes de la semana de inicio
         LocalDate lunesInicio = beginning.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
@@ -68,13 +69,8 @@ public class PDFService {
     }
     
     public static boolean getInBetween (LocalDate beginning, LocalDate end, LocalDate date) {
-        if (date.isAfter(beginning) && date.isBefore(end)) 
-            IO.println(String.format("%s in between", date));
-        else IO.println(String.format("%s not between", date));
-        
         if (date.isEqual(beginning)) return true;
         if (date.isEqual(end)) return true;
-        
         return date.isAfter(beginning) && date.isBefore(end);
     }
     
@@ -82,68 +78,69 @@ public class PDFService {
         return fecha.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
     }
     
-    
-    public static boolean getPdf(Empleado empleado, String path){
+    /**
+     * Genera el reporte PDF con 4 argumentos: Empleado, Horas (calculadas), Sueldo (calculado) y Ruta.
+     * Nota: En tu código anterior solo tenías (Empleado, Path). He añadido los parámetros que faltaban
+     * para coincidir con tu llamada en el controlador.
+     */
+    public static boolean getPdf(Empleado empleado, Double totalHorasPeriodo, Double totalSueldoPeriodo, String path){
         try{
             // VARIABLES DEL PDF
-            
             PdfWriter writer = new PdfWriter(path);
             PageSize ps = PageSize.LETTER;
-            
             PdfDocument pdf = new PdfDocument(writer);
             
             // VARIABLES DE LAS FUENTES
             PdfFont docFont = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             
-            // VARIABLES PARA LAS FUENTES A UTILIZAR EN LAS CELDAS.
+            // ESTILOS
             float cellFontSize = 9;
             
             Style fuenteFecha = new Style()
-            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-            .setFontSize(cellFontSize)
-            .setFontColor(ColorConstants.BLACK);
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(cellFontSize)
+                .setFontColor(ColorConstants.BLACK);
             
             Style fuentePeriodos = new Style()
-            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-            .setFontSize(cellFontSize)
-            .setFontColor(ColorConstants.GRAY);
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(cellFontSize)
+                .setFontColor(ColorConstants.GRAY);
             
             Style fuenteHoras = new Style()
-            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-            .setFontSize(cellFontSize)
-            .setFontColor(new DeviceRgb(211, 47, 47));
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(cellFontSize)
+                .setFontColor(new DeviceRgb(211, 47, 47));
             
             Style fuenteSueldo = new Style()
-            .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-            .setFontSize(cellFontSize)
-            .setFontColor(new DeviceRgb(46, 125, 50));
+                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+                .setFontSize(cellFontSize)
+                .setFontColor(new DeviceRgb(46, 125, 50));
             
             try (Document doc = new Document(pdf, ps)) {
-                double horas = 0.0, sueldo = 0.0;
+                // Variables locales para cálculo interno si se necesitara recalcular
+                // double horasCalc = 0.0, sueldoCalc = 0.0;
                 
                 doc.setFont(docFont);
                 
                 // ==================================
-                // TABLA(S) DE HORAS.
+                // TABLA DE CALENDARIO
                 // ==================================
-                
                 float cellWidth = 70;
                 float cellHeight = 90;
                 
                 Table calendario = new Table(new float[] {cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth,cellWidth})
-                .useAllAvailableWidth();
+                    .useAllAvailableWidth();
                 
-                Cell cabecera = new Cell(1, 7) // 1 fila, 5 columnas
-                .add(new Paragraph("REGISTRO DE NOMINA")
-                .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
-                .setFontSize(18)
-                .setFontColor(ColorConstants.BLACK))
-                // .setBackgroundColor(colorTitulo)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setPadding(15)
-                .setBorder(new SolidBorder(ColorConstants.WHITE, 0))
-                .setMarginBottom(5);
+                Cell cabecera = new Cell(1, 7)
+                    .add(new Paragraph("REGISTRO DE NÓMINA")
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(18)
+                    .setFontColor(ColorConstants.BLACK))
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setPadding(15)
+                    .setBorder(new SolidBorder(ColorConstants.WHITE, 0))
+                    .setMarginBottom(5);
                 
                 calendario.addCell(cabecera);
                 
@@ -151,18 +148,16 @@ public class PDFService {
                 LocalDate finCorte = empleado.getFinCorte();
                 LocalDate primerDia = getDomingoDeLaSemana(inicioCorte);
                 
-                
-                int semanas = getNumeroDeSemanas(inicioCorte, finCorte );
+                int semanas = getNumeroDeSemanas(inicioCorte, finCorte);
                 int celdas = semanas * 7;
                 
                 LocalDate indice = primerDia;
                 
-                
                 for (int i = 0; i < celdas; i++) {
                     
                     Cell celda = new Cell()
-                    .setMinHeight(cellHeight)
-                    .setMinWidth(cellWidth);
+                        .setMinHeight(cellHeight)
+                        .setMinWidth(cellWidth);
                     
                     String aux = indice.format(formatter);
                     
@@ -171,114 +166,95 @@ public class PDFService {
                         if (indice.equals(inicioCorte)) aux += "\nINICIO CORTE";
                         else aux += "\nFIN CORTE";
                     }
-                    Paragraph fechaParrafo = new Paragraph(
-                        // String.format("%s-%s-%s", 
-                        // indice.getDayOfMonth(), 
-                        // indice.getMonthValue(), 
-                        // indice.getYear()
-                        aux
-                    )
-                    .addStyle(fuenteFecha);
                     
+                    Paragraph fechaParrafo = new Paragraph(aux).addStyle(fuenteFecha);
                     celda.add(fechaParrafo);
                     
-                    if (empleado.getLog().getLogs().get(indice) != null && getInBetween(inicioCorte, finCorte, indice)) {
+                    // Si existe log y está dentro del rango visual
+                    if (empleado.getLog() != null && empleado.getLog().getLogs() != null && 
+                        empleado.getLog().getLogs().get(indice) != null && 
+                        getInBetween(inicioCorte, finCorte, indice)) {
+                        
                         DailyLog logDia = empleado.getLog().getLogs().get(indice);                        
-                        if ( logDia.getTotalMinutosTrabajados() > 0) {
+                        
+                        if (logDia.getTotalMinutosTrabajados() > 0) {
                             ArrayList<String> array = new ArrayList<>(); 
                             for(Periodo p : logDia.getPeriodos()) {
                                 array.add(p.toString());
                             }
                             
                             Paragraph periodosParrafo = new Paragraph(Utils.stringArrayToStringSpace(array))
-                            .addStyle(fuentePeriodos);
-                            
+                                .addStyle(fuentePeriodos);
                             celda.add(periodosParrafo);
                             
-                            horas += logDia.getTotalMinutosTrabajados()/60.0;
+                            // Acumuladores internos (opcional, si usas los argumentos pasados no los necesitas)
+                            // horasCalc += logDia.getTotalMinutosTrabajados()/60.0;
+                            // sueldoCalc += logDia.getTotalPagoDia();
                             
                             Paragraph horasParrafo = new Paragraph(
                                 String.format("%,.1f h", logDia.getTotalMinutosTrabajados()/60.0)
-                            )
-                            .addStyle(fuenteHoras);
-                            
+                            ).addStyle(fuenteHoras);
                             celda.add(horasParrafo);
-                            
-                            sueldo += logDia.getTotalPagoDia();
                             
                             Paragraph sueldoParrafo = new Paragraph(
                                 String.format("$%.2f", logDia.getTotalPagoDia())
-                            )
-                            .addStyle(fuenteSueldo);
-                            
+                            ).addStyle(fuenteSueldo);
                             celda.add(sueldoParrafo);   
                         }
                         
-                        if (logDia.getNotas() != null) {
-                            Paragraph notasParrafo = new Paragraph(
-                                logDia.getNotas()
-                            )
-                            .addStyle(fuenteFecha);
-                            
+                        if (logDia.getNotas() != null && !logDia.getNotas().isEmpty()) {
+                            Paragraph notasParrafo = new Paragraph(logDia.getNotas())
+                                .addStyle(fuenteFecha)
+                                .setFontSize(7)
+                                .setFontColor(ColorConstants.DARK_GRAY);
                             celda.add(notasParrafo);
                         }
                     }
                     calendario.addCell(celda);
-                    
                     indice = indice.plusDays(1);
                 }
                 
+                // ==================================
+                // DATOS DEL EMPLEADO Y RESUMEN
+                // ==================================
                 
-                
-                // int espacios = 0;
-                
-                // for (int i = 0; i < espacios; i++) {
-                //     datosEmpleado += "\n";
-                // }
-                
-                // VARIABLES DE LAS COLUMNAS
                 Style fuenteColumna = new Style()
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontSize(15);
-                
-                // ==================================
-                // PARRAFO DE LOS DATOS DEL EMPLEADO.
-                // ==================================
-                
-                
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setFontSize(15);
 
                 MulticolContainer container = new MulticolContainer();
                 container.setProperty(Property.COLUMN_COUNT, 2);
                 container.setNextRenderer(new MultiColRendererAllow10RetriesRenderer(container));
                 
-                float imgSize = (float) 0.25;
+                // --- CORRECCIÓN DE IMAGEN PARA BINARIO (JAR) ---
+                float imgSize = 0.25f;
+                URL urlLogo = PDFService.class.getResource("/Images/logo.jpg");
+                Image logo = null;
                 
-                Image logo = new Image(ImageDataFactory.create("src/main/resources/Images/logo.jpg"))
-                .scale(imgSize, imgSize);
+                if (urlLogo != null) {
+                    logo = new Image(ImageDataFactory.create(urlLogo));
+                    logo.scale(imgSize, imgSize);
+                }
                 
-                String datosEmpleado = "";
+                String datosEmpleado = 
+                    "Nombre del empleado: " + empleado.getNombreCompleto() + "\n"
+                    + String.format("Total de horas trabajadas: %.1f h", totalHorasPeriodo) + "\n"
+                    + String.format("Sueldo a pagar: $%,.2f", totalSueldoPeriodo) + "\n";
                 
-                datosEmpleado +=
-                "Nombre del empleado: " + empleado.getNombreCompleto() +"\n"
-                + String.format("Total de horas trabajadas: %.1f h",horas) + "\n"
-                + String.format("Sueldo a pagar: $%,.2f", sueldo)+ "\n";
+                Paragraph div1 = new Paragraph();
                 
-                Paragraph div1 = new Paragraph()
-                .add(logo)
-                .add("\n")
-                .add(datosEmpleado)
-                .addStyle(fuenteColumna);
+                if (logo != null) {
+                    div1.add(logo);
+                    div1.add("\n");
+                }
+                
+                div1.add(datosEmpleado)
+                    .addStyle(fuenteColumna);
+                
                 container.add(div1);
                 
                 doc.add(container);
-                
-                // Image amogus = new Image(ImageDataFactory.create("src/main/resources/Images/amogus.jpg"));
-                // doc.add(amogus);
-                
-                // for (int i = 0; i < 1; i++) {
-                //     doc.add(new Paragraph("\n"));
-                // }
-                
+                doc.add(new Paragraph("\n")); // Espacio
                 doc.add(calendario);
             }
             
@@ -289,22 +265,13 @@ public class PDFService {
         }
     }
     
+    // --- CLASES INTERNAS DE ITEXT PARA MÚLTIPLES COLUMNAS ---
     
     public static class MultiColRendererAllow10RetriesRenderer extends MulticolRenderer {
-        
-        /**
-        * Creates a DivRenderer from its corresponding layout object.
-        *
-        * @param modelElement the {@link MulticolContainer} which this object should manage
-        */
         public MultiColRendererAllow10RetriesRenderer(MulticolContainer modelElement) {
             super(modelElement);
             setHeightCalculator(new LayoutInInfiniteHeightCalculator());
         }
-        
-        /**
-        * {@inheritDoc}
-        */
         @Override
         public IRenderer getNextRenderer() {
             return new MultiColRendererAllow10RetriesRenderer((MulticolContainer) modelElement);
@@ -312,7 +279,6 @@ public class PDFService {
     }
     
     public static class LayoutInInfiniteHeightCalculator extends MulticolRenderer.LayoutInInfiniteHeightCalculator {
-        
         public LayoutInInfiniteHeightCalculator() {
             super();
             maxRelayoutCount = 10;

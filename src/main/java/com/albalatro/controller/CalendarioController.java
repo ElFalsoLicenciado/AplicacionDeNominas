@@ -456,11 +456,13 @@ public class CalendarioController {
     
     @FXML
     private void generarPDF() {
-        if ( empleado.getInicioCorte() == null || empleado.getFinCorte() == null ) {
+        // 1. Validar que exista un corte seleccionado
+        if (empleado.getInicioCorte() == null || empleado.getFinCorte() == null) {
             Utils.showAlert("Error a exportar PDF", "Selecciona un rango de dias para el corte.", "", Alert.AlertType.ERROR);
             return;
         }
 
+        // 2. Configurar el FileChooser
         Stage stage = (Stage) btnPDF.getScene().getWindow();
         String userDesktop = System.getProperty("user.desktop"); 
         File escritorio = FileSystemView.getFileSystemView().getHomeDirectory();
@@ -479,7 +481,32 @@ public class CalendarioController {
         File file = fc.showSaveDialog(stage);
         if (file == null) return;
         
-        if (PDFService.getPdf(empleado, file.toPath().toString())) {
+        // 3. --- CALCULAR TOTALES DEL PERIODO ---
+        double totalSueldo = 0.0;
+        double totalHoras = 0.0;
+        
+        LocalDate inicio = empleado.getInicioCorte();
+        LocalDate fin = empleado.getFinCorte();
+
+        if (empleado.getLog() != null && empleado.getLog().getLogs() != null) {
+            for (java.util.Map.Entry<LocalDate, DailyLog> entry : empleado.getLog().getLogs().entrySet()) {
+                LocalDate fechaLog = entry.getKey();
+                DailyLog log = entry.getValue();
+                
+                // Verificar si la fecha está dentro del rango del corte (Inclusivo)
+                boolean enRango = !fechaLog.isBefore(inicio) && !fechaLog.isAfter(fin);
+                
+                if (enRango) {
+                    totalSueldo += log.getTotalPagoDia();
+                    if (log.getTotalMinutosTrabajados() != null) {
+                        totalHoras += log.getTotalMinutosTrabajados() / 60.0;
+                    }
+                }
+            }
+        }
+        
+        // 4. Llamar al servicio con los 4 argumentos requeridos
+        if (PDFService.getPdf(empleado, totalHoras, totalSueldo, file.toPath().toString())) {
             Utils.showAlert("PDF creado exitosamente.", "Ya puedes ver tu PDF", "", Alert.AlertType.INFORMATION);
         }
     }
